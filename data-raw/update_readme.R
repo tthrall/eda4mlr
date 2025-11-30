@@ -51,8 +51,9 @@ format_citation <- function(
   # Join parts intelligently
   citation_text <- paste(parts, collapse = " ")
 
-  glue::glue(
-    "**{row$topic}**\n> {citation_text}" )
+  glue::glue("**{row$topic}**
+> {citation_text}
+")
 }
 
 citations_md <- citations |>
@@ -62,7 +63,7 @@ citations_md <- citations |>
   paste(collapse = "\n")
 
 # --- Assemble README ---
-readme_template <- glue('
+readme_template <- glue::glue('
 # eda4mldata
 
 Companion R package for the textbook *Exploratory Data Analysis for Machine Learning* by Tony Thrall.
