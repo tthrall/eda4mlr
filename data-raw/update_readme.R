@@ -52,7 +52,7 @@ format_citation <- function(
   citation_text <- paste(parts, collapse = " ")
 
   glue::glue(
-    "**{row$topic}** > {citation_text}" )
+    "**{row$topic}**\n> {citation_text}" )
 }
 
 citations_md <- citations |>
