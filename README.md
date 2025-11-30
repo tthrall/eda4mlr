@@ -9,7 +9,7 @@ You can install the development version of eda4mldata from GitHub:
 remotes::install_github("tthrall/eda4mldata")
 ```
 
-## Data sets
+## Datasets
 
 The package provides the following datasets:
 
@@ -162,14 +162,19 @@ If you use these datasets, please cite the original sources:
 
 **Handedness by Sex**
 > Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.). W.W. Norton & Company
+
 **MNIST subsets**
 > LeCun, Y., Cortes, C., & Burges, C. J. C. (1998) The MNIST database of handwritten digits http://yann.lecun.com/exdb/mnist/
+
 **OECD Better Life Index**
 > OECD (2015). OECD Better Life Index https://www.oecdbetterlifeindex.org/
+
 **Olympics**
 > tsibbledata: Diverse Datasets for 'tsibble' https://cran.r-project.org/package=tsibbledata
+
 **Wine Quality**
 > Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009) Modeling wine preferences by data mining from physicochemical properties *Decision Support Systems*, 47(4), 547:553 https://doi.org/10.1016/j.dss.2009.05.016
+
 
 ## License
 

@@ -53,6 +53,7 @@ format_citation <- function(
 
   glue::glue("**{row$topic}**
 > {citation_text}
+
 ")
 }
 
