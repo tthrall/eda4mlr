@@ -16,7 +16,8 @@ mnist_example <-
     row_idx = row_dx,
     col_idx = col_dx ) |>
   dplyr::mutate(label = factor(label)) |>
-  dplyr::select(img_idx, row_idx, col_idx, pixel, label)
+  dplyr::select(img_idx, row_idx, col_idx, pixel, label) |>
+  dplyr::arrange(label)
 
 # --- mnist_train: 1K training images ---
 train_images <-
