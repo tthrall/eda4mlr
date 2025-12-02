@@ -1,0 +1,40 @@
+#' UC Berkeley Graduate Admissions
+#'
+#' Admission decisions for applicants to six graduate departments at
+#' UC Berkeley in 1973, a classic example of Simpson's paradox.
+#'
+#' @format A tibble with 24 rows and 4 variables:
+#' \describe{
+#'   \item{dept}{Department (character): A through F}
+#'   \item{sex}{Sex of applicant (character): male or female}
+#'   \item{admit}{Admission decision (character): admitted or rejected}
+#'   \item{count}{Number of applicants (integer)}
+#' }
+#'
+#' @details
+#' Overall, men had a higher admission rate than women (44\% vs. 35\%),
+#' suggesting possible discrimination. However, examining each department
+#' separately reveals that women had equal or higher admission rates in
+#' most departments. The paradox arises because women applied
+#' disproportionately to more competitive departments with lower
+#' admission rates.
+#'
+#' This is a tidy conversion of \code{datasets::UCBAdmissions}.
+#'
+#' @source
+#' Bickel, P. J., Hammel, E. A., & O'Connell, J. W. (1975).
+#'   Sex bias in graduate admissions: Data from Berkeley.
+#'   \emph{Science}, 187(4175), 398-404.
+#'
+#' Freedman, D., Pisani, R., & Purves, R. (2007).
+#'   \emph{Statistics} (4th ed.), Chapter 1, Section 4, p. 17.
+#'   W.W. Norton & Company.
+#'
+#' @examples
+#' data(ucb_admissions)
+#' ucb_admissions
+#'
+#' # Overall admission rates by sex
+#' aggregate(count ~ sex + admit, data = ucb_admissions, FUN = sum)
+#'
+"ucb_admissions"

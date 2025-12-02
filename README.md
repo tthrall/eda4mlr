@@ -30,6 +30,12 @@ The package provides the following datasets:
    <td style="text-align:left;"> Handedness counts by sex for chi-squared independence test </td>
   </tr>
   <tr>
+   <td style="text-align:left;"> `lit_digest` </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 1936 Literary Digest poll predictions vs. actual result </td>
+  </tr>
+  <tr>
    <td style="text-align:left;"> `mnist_example` </td>
    <td style="text-align:right;"> 10 </td>
    <td style="text-align:right;"> 5 </td>
@@ -48,6 +54,12 @@ The package provides the following datasets:
    <td style="text-align:left;"> Subset (1000 images; 784,000 rows in long format) of the MNIST training database of handwritten digits, in long format </td>
   </tr>
   <tr>
+   <td style="text-align:left;"> `nb10` </td>
+   <td style="text-align:right;"> 100 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Repeated weighings of a standard weight (deficit in micrograms below 10g) </td>
+  </tr>
+  <tr>
    <td style="text-align:left;"> `oecd_bli` </td>
    <td style="text-align:right;"> 36 </td>
    <td style="text-align:right;"> 26 </td>
@@ -64,6 +76,48 @@ The package provides the following datasets:
    <td style="text-align:right;"> 312 </td>
    <td style="text-align:right;"> 4 </td>
    <td style="text-align:left;"> Olympic track event winning times (1896:2016) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `portacaval_studies` </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> Study counts by design type and reported improvement level </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `portacaval_survival` </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Survival rates comparing randomized vs. non-randomized designs </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `salk_blind` </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Randomized controlled double-blind trial results </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `salk_nfip` </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> NFIP observed-control design results </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `truman_dewey` </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 1948 election polling predictions vs. actual result </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `ucb_admissions` </td>
+   <td style="text-align:right;"> 24 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> Graduate admissions by department and sex (Simpson's paradox) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `us_elections` </td>
+   <td style="text-align:right;"> 14 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> Gallup poll accuracy for US presidential elections (1952:2004) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> `wine_quality` </td>
@@ -144,13 +198,18 @@ dim(wine_quality)
 
 ## Data Sources
 
-|Topic                  |Source                          |
-|:----------------------|:-------------------------------|
-|Handedness by Sex      |[Freedman, Pisani, Purves (4e)](https://doi.org/10.1177/001316447903900237)|
-|MNIST subsets          |[Yann LeCun's MNIST Database](http://yann.lecun.com/exdb/mnist/)|
-|OECD Better Life Index |[OECD Better Life Index (2015)](https://www.oecdbetterlifeindex.org/)|
-|Olympics               |[Olympics.com via tsibbledata](https://olympics.com/en/sports/athletics/)|
-|Wine Quality           |[UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/wine+quality)|
+|Topic                   |Source                          |
+|:-----------------------|:-------------------------------|
+|Handedness by Sex       |[Freedman, Pisani, Purves (4e)](https://doi.org/10.1177/001316447903900237)|
+|MNIST subsets           |[Yann LeCun's MNIST Database](http://yann.lecun.com/exdb/mnist/)|
+|NB10 Repeated Weighings |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
+|OECD Better Life Index  |[OECD Better Life Index (2015)](https://www.oecdbetterlifeindex.org/)|
+|Olympics                |[Olympics.com via tsibbledata](https://olympics.com/en/sports/athletics/)|
+|Polling and Elections   |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
+|Portacaval Shunt        |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
+|Salk Vaccine Trial      |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
+|UC Berkeley Admissions  |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
+|Wine Quality            |[UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/wine+quality)|
 
 ## Related
 
@@ -166,14 +225,29 @@ If you use these datasets, please cite the original sources:
 **MNIST subsets**
 > LeCun, Y., Cortes, C., & Burges, C. J. C. (1998) The MNIST database of handwritten digits http://yann.lecun.com/exdb/mnist/
 
+**NB10 Repeated Weighings**
+> Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.), Ch. 6, Sec. 1. W.W. Norton & Company
+
 **OECD Better Life Index**
 > OECD (2015). OECD Better Life Index https://www.oecdbetterlifeindex.org/
 
 **Olympics**
 > tsibbledata: Diverse Datasets for 'tsibble' https://cran.r-project.org/package=tsibbledata
 
+**Polling and Elections**
+> Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.), Ch. 19. W.W. Norton & Company
+
+**Portacaval Shunt**
+> Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.), Ch. 1, Sec. 2. W.W. Norton & Company
+
+**Salk Vaccine Trial**
+> Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.), Ch. 1, Sec. 1. W.W. Norton & Company
+
+**UC Berkeley Admissions**
+> Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.), Ch. 1, Sec. 4. W.W. Norton & Company Also: Bickel, P. J., Hammel, E. A., & O'Connell, J. W. (1975) *Science*, 187(4175), 398-404
+
 **Wine Quality**
-> Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009) Modeling wine preferences by data mining from physicochemical properties *Decision Support Systems*, 47(4), 547:553 https://doi.org/10.1016/j.dss.2009.05.016
+> Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009) Modeling wine preferences by data mining from physicochemical properties *Decision Support Systems*, 47(4), 547-553 https://doi.org/10.1016/j.dss.2009.05.016
 
 
 ## License
