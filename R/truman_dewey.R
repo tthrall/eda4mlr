@@ -5,12 +5,12 @@
 #'
 #' @format A tibble with 4 rows and 5 variables:
 #' \describe{
-#'   \item{source}{Source of prediction (character): crossley, gallup, roper,
-#'     or election_result}
-#'   \item{truman}{Predicted or actual percentage for Harry Truman (integer)}
-#'   \item{dewey}{Predicted or actual percentage for Thomas Dewey (integer)}
-#'   \item{thurmond}{Predicted or actual percentage for Strom Thurmond (integer)}
-#'   \item{wallace}{Predicted or actual percentage for Henry Wallace (integer)}
+#'   \item{source}{Source of prediction (character): Crossley, Gallup, Roper,
+#'     or election result}
+#'   \item{Truman}{Predicted or actual percentage for Harry Truman (integer)}
+#'   \item{Dewey}{Predicted or actual percentage for Thomas Dewey (integer)}
+#'   \item{Thurmond}{Predicted or actual percentage for Strom Thurmond (integer)}
+#'   \item{Wallace}{Predicted or actual percentage for Henry Wallace (integer)}
 #' }
 #'
 #' @details
