@@ -1,0 +1,42 @@
+#' US College Statistics (1995)
+#'
+#' Statistics for 777 US colleges from the 1995 issue of US News and
+#' World Report. Includes enrollment, cost, and outcome variables
+#' useful for regression and classification exercises.
+#'
+#' @format A tibble with 777 rows and 19 variables:
+#' \describe{
+#'   \item{college}{College name (character)}
+#'   \item{private}{Private or public institution (character): yes or no}
+#'   \item{apps}{Number of applications received (integer)}
+#'   \item{accept}{Number of applications accepted (integer)}
+#'   \item{enroll}{Number of new students enrolled (integer)}
+#'   \item{top10perc}{Pct. of new students from top 10\% of high school class (numeric)}
+#'   \item{top25perc}{Pct. of new students from top 25\% of high school class (numeric)}
+#'   \item{f_undergrad}{Number of full-time undergraduates (integer)}
+#'   \item{p_undergrad}{Number of part-time undergraduates (integer)}
+#'   \item{outstate}{Out-of-state tuition in USD (numeric)}
+#'   \item{room_board}{Room and board costs in USD (numeric)}
+#'   \item{books}{Estimated book costs in USD (numeric)}
+#'   \item{personal}{Estimated personal spending in USD (numeric)}
+#'   \item{phd}{Pct. of faculty with Ph.D. degrees (numeric)}
+#'   \item{terminal}{Pct. of faculty with terminal degrees (numeric)}
+#'   \item{s_f_ratio}{Student-to-faculty ratio (numeric)}
+#'   \item{perc_alumni}{Pct. of alumni who donate (numeric)}
+#'   \item{expend}{Instructional expenditure per student in USD (numeric)}
+#'   \item{grad_rate}{Graduation rate (numeric, percentage)}
+#' }
+#'
+#' @source US News and World Report (1995).
+#'
+#'   Data obtained via the \code{ISLR2} package.
+#'
+#' @references
+#' James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021).
+#'   \emph{An Introduction to Statistical Learning} (2nd ed.). Springer.
+#'
+#' @examples
+#' data(us_colleges)
+#' summary(us_colleges)
+#'
+"us_colleges"
