@@ -1,0 +1,274 @@
+---
+title: "US Arrests: Violent Crime Rates by State"
+vignette: >
+  %\VignetteIndexEntry{US Arrests: Violent Crime Rates by State}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: true
+  message: false
+  warning: false
+---
+
+## Historical Context
+
+The `USArrests` dataset, compiled by McNeil (1977), contains violent crime 
+arrest rates for the 50 US states in 1973. Despite its age, this dataset 
+remains a staple in introductory statistics and machine learning courses 
+because it provides a compact, interpretable example for:
+ 
+- **Principal Component Analysis**: The four numeric variables (three crime 
+  rates plus urban population) reveal interesting correlation structure
+- **Clustering**: States group into interpretable regional and demographic 
+  patterns
+- **Standardization**: The variables have different scales, making this an 
+  ideal case study for when and why to standardize
+
+The data represent *arrest rates*, rather than estimated rates of crime 
+per se—an important distinction. Arrest rates reflect both underlying 
+crime prevalence and law enforcement practices, which vary by jurisdiction.
+
+## Data Source and Preprocessing
+
+### Original Source
+
+The `eda4mldata::us_arrests` dataset is derived from `datasets::USArrests`, 
+a base R dataset where state names appear as row names rather than a column.
+
+```{r}
+#| label: original-data
+datasets::USArrests |> 
+  utils::head() |> 
+  knitr::kable()
+```
+
+### Preprocessing Decisions
+
+We apply minimal transformations for usability:
+
+1. **State identifiers as columns**: Convert row names to explicit `state` 
+   (two-letter abbreviation) and `state_name` columns for easier joins and 
+   labeling.
+
+2. **Snake_case naming**: Rename `UrbanPop` to `urban_pop` and lowercase 
+   crime variable names for consistency with tidyverse conventions.
+
+3. **No standardization**: We retain original units to let users decide 
+   whether to scale for their analysis.
+
+The preprocessing script (`data-raw/us_arrests.R`):
+
+```{r}
+#| label: preprocessing
+#| eval: false
+us_arrests <- datasets::USArrests |>
+  tibble::as_tibble(rownames = "state_name") |>
+  dplyr::mutate(
+    state = state.abb[match(state_name, state.name)]
+  ) |>
+  dplyr::rename(
+    urban_pop = UrbanPop,
+    murder    = Murder,
+    assault   = Assault,
+    rape      = Rape
+  ) |>
+  dplyr::select(state, state_name, urban_pop, assault, rape, murder)
+```
+
+## The `us_arrests` Dataset
+
+```{r}
+#| label: load-data
+data(us_arrests, package = "eda4mldata")
+```
+
+### Dimensions
+
+```{r}
+#| label: dimensions
+cat("States:", nrow(us_arrests), "\n")
+cat("Variables:", ncol(us_arrests), "\n")
+```
+
+### Variable Descriptions
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `state` | character | Two-letter postal abbreviation |
+| `state_name` | character | Full state name |
+| `urban_pop` | numeric | Percent of population in urban areas |
+| `assault` | numeric | Assault arrests per 100,000 population |
+| `rape` | numeric | Rape arrests per 100,000 population |
+| `murder` | numeric | Murder arrests per 100,000 population |
+
+### Structure
+
+```{r}
+#| label: structure
+dplyr::glimpse(us_arrests)
+```
+
+### Summary Statistics
+
+```{r}
+#| label: summary
+summary(us_arrests[, c("urban_pop", "murder", "assault", "rape")])
+```
+
+Note the different scales: `assault` ranges into the hundreds while `murder` 
+is in single digits. This scale difference strongly affects PCA and 
+clustering if variables are not standardized.
+
+## EDA Snapshot
+
+### Distributions
+
+```{r}
+#| label: fig-distributions
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Distribution of crime rates and urban population across states"
+arrests_long <- us_arrests |>
+  tidyr::pivot_longer(
+    cols = c(urban_pop, murder, assault, rape),
+    names_to = "variable",
+    values_to = "value"
+  ) |>
+  dplyr::mutate(
+    variable = factor(
+      variable, 
+      levels = c("urban_pop", "assault", "rape", "murder"),
+      labels = c("Urban Pop %", "Assault", "Rape", "Murder")
+    )
+  )
+
+ggplot2::ggplot(arrests_long, ggplot2::aes(x = value)) +
+ ggplot2::geom_histogram(bins = 12, fill = "steelblue", color = "white") +
+  ggplot2::facet_wrap(~variable, scales = "free") +
+  ggplot2::labs(x = NULL, y = "Count") +
+  ggplot2::theme_minimal()
+```
+
+### Correlation Structure
+
+```{r}
+#| label: correlation
+us_arrests |>
+  dplyr::select(urban_pop, assault, rape, murder) |>
+  stats::cor() |>
+  round(3) |>
+  knitr::kable()
+```
+
+Assault, rape, and murder are positively correlated with each other. Urban 
+population shows weaker correlations with crime rates—a reminder that 
+urbanization alone does not determine crime levels.
+
+### Pairwise Relationships
+
+```{r}
+#| label: fig-pairs
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: "Scatterplot matrix of crime rates and urban population"
+us_arrests |>
+  dplyr::select(urban_pop, assault, rape, murder) |>
+  graphics::pairs(
+    main = "US Arrests (1973)",
+    pch = 19,
+    col = grDevices::adjustcolor("steelblue", alpha.f = 0.6)
+  )
+```
+
+### Extreme States
+
+```{r}
+#| label: extremes
+cat("Highest murder rate:\n")
+us_arrests |> 
+  dplyr::slice_max(murder, n = 3) |> 
+  dplyr::select(state_name, murder) |>
+  print()
+
+cat("\nLowest murder rate:\n")
+us_arrests |> 
+  dplyr::slice_min(murder, n = 3) |> 
+  dplyr::select(state_name, murder) |>
+  print()
+```
+
+## Usage Examples
+
+### Principal Component Analysis
+
+PCA on standardized variables:
+
+```{r}
+#| label: pca
+arrests_scaled <- us_arrests |>
+  dplyr::select(urban_pop, assault, rape, murder) |>
+  scale()
+
+pca_fit <- stats::prcomp(arrests_scaled)
+summary(pca_fit)
+```
+
+The first two components capture most of the variance:
+
+```{r}
+#| label: fig-pca-biplot
+#| fig-width: 7
+#| fig-height: 6
+#| fig-cap: "PCA biplot of US arrests data"
+stats::biplot(
+  pca_fit, 
+  scale = 0,
+  cex = 0.6,
+  col = c("steelblue", "darkred")
+)
+```
+
+### Hierarchical Clustering
+
+```{r}
+#| label: fig-clustering
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Hierarchical clustering of states by crime rates"
+arrests_dist <- stats::dist(arrests_scaled)
+arrests_hclust <- stats::hclust(arrests_dist, method = "ward.D2")
+
+graphics::plot(
+  arrests_hclust, 
+  labels = us_arrests$state,
+  main = "Hierarchical Clustering of States",
+  xlab = "",
+  sub = ""
+)
+```
+
+## Connections to Textbook
+
+The `us_arrests` dataset appears in:
+
+- **Chapter 9 (Principal Component Analysis)**: Demonstrates PCA on 
+  standardized variables; illustrates the importance of scaling when 
+  variables have different units.
+
+- **Chapter 3 (Clustering)**: Provides a case study for hierarchical 
+  clustering and k-means, with interpretable state-level groupings.
+
+## References
+
+McNeil, D. R. (1977). *Interactive Data Analysis*. Wiley.
+
+## Session Info
+
+```{r}
+#| label: session-info
+utils::sessionInfo()
+```

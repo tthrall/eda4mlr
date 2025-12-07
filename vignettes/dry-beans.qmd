@@ -1,0 +1,341 @@
+---
+title: "Dry Beans: Shape Classification Dataset"
+vignette: >
+  %\VignetteIndexEntry{Dry Beans: Shape Classification Dataset}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: true
+  message: false
+  warning: false
+---
+
+## Historical Context
+
+The Dry Beans dataset, published by Koklu and Ozkan (2020), contains shape 
+measurements for 13,611 dry beans from seven varieties grown in Turkey. 
+Images of individual beans were captured using computer vision, and 16 
+geometric features were extracted from each image.
+
+This dataset has become popular for multiclass classification benchmarks 
+because it offers:
+
+- **Moderate size**: Large enough for machine learning (13,611 samples) 
+  but small enough for quick iteration
+- **Seven classes**: More challenging than binary classification, with 
+  varying class frequencies
+- **Geometric features**: Interpretable measurements (area, perimeter, 
+  eccentricity) that connect to real physical properties
+- **Clean data**: No missing values; features are well-defined
+
+The classification task—identifying bean variety from shape alone—has 
+practical applications in agricultural quality control and automated 
+sorting systems.
+
+## Data Source and Preprocessing
+
+### Original Source
+
+The `eda4mldata::dry_beans` dataset is derived from `beans::beans`, which 
+provides the UCI Machine Learning Repository version of the data.
+
+```{r}
+#| label: original-data
+beans::beans |> 
+  utils::head() |> 
+  knitr::kable()
+```
+
+### Preprocessing Decisions
+
+Minimal transformations for consistency:
+
+1. **Snake_case naming**: Convert `MajorAxisLength` to `major_axis`, 
+   `ConvexArea` to `convex_area`, etc.
+
+2. **Lowercase class labels**: Convert variety names to lowercase.
+
+3. **Fix source typo**: The original data has `AspectRation` (sic); we 
+   rename to `aspect_ratio`.
+
+The preprocessing script (`data-raw/dry_beans.R`):
+
+```{r}
+#| label: preprocessing
+#| eval: false
+dry_beans <- beans::beans |>
+ tibble::as_tibble() |>
+  dplyr::rename(
+    area             = area,
+    perimeter        = perimeter,
+    major_axis       = major_axis_length,
+    minor_axis       = minor_axis_length,
+    aspect_ratio     = aspect_ratio,
+    eccentricity     = eccentricity,
+    convex_area      = convex_area,
+    equiv_diameter   = equiv_diameter,
+    extent           = extent,
+    solidity         = solidity,
+    roundness        = roundness,
+    compactness      = compactness,
+    shape_factor_1   = shape_factor_1,
+    shape_factor_2   = shape_factor_2,
+    shape_factor_3   = shape_factor_3,
+    shape_factor_4   = shape_factor_4,
+    class            = class
+  ) |>
+  dplyr::mutate(class = tolower(class))
+```
+
+## The `dry_beans` Dataset
+
+```{r}
+#| label: load-data
+data(dry_beans, package = "eda4mldata")
+```
+
+### Dimensions
+
+```{r}
+#| label: dimensions
+cat("Beans:", nrow(dry_beans), "\n")
+cat("Features:", ncol(dry_beans) - 1, "\n")
+cat("Classes:", length(unique(dry_beans$class)), "\n")
+```
+
+### Class Distribution
+
+```{r}
+#| label: class-counts
+dry_beans |>
+  dplyr::count(class, sort = TRUE) |>
+  dplyr::mutate(pct = round(n / sum(n) * 100, 1)) |>
+  knitr::kable()
+```
+
+### Variable Descriptions
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `area` | integer | Area of bean zone (pixels) |
+| `perimeter` | numeric | Perimeter of bean (pixels) |
+| `major_axis` | numeric | Length of major axis (pixels) |
+| `minor_axis` | numeric | Length of minor axis (pixels) |
+| `aspect_ratio` | numeric | Ratio of major to minor axis |
+| `eccentricity` | numeric | Eccentricity of fitted ellipse |
+| `convex_area` | integer | Area of smallest convex hull (pixels) |
+| `equiv_diameter` | numeric | Diameter of circle with same area |
+| `extent` | numeric | Ratio of bean area to bounding box |
+| `solidity` | numeric | Ratio of bean area to convex hull |
+| `roundness` | numeric | Roundness measure |
+| `compactness` | numeric | Compactness measure |
+| `shape_factor_1` | numeric | Shape factor 1 |
+| `shape_factor_2` | numeric | Shape factor 2 |
+| `shape_factor_3` | numeric | Shape factor 3 |
+| `shape_factor_4` | numeric | Shape factor 4 |
+| `class` | character | Bean variety (7 levels) |
+
+### Structure
+
+```{r}
+#| label: structure
+dplyr::glimpse(dry_beans)
+```
+
+### Summary Statistics
+
+```{r}
+#| label: summary
+dry_beans |>
+  dplyr::select(area, perimeter, major_axis, minor_axis, eccentricity) |>
+  summary()
+```
+
+## EDA Snapshot
+
+### Feature Distributions by Class
+
+```{r}
+#| label: fig-area-by-class
+#| fig-width: 8
+#| fig-height: 5
+#| fig-cap: "Distribution of bean area by variety"
+ggplot2::ggplot(dry_beans, ggplot2::aes(x = area, fill = class)) +
+  ggplot2::geom_density(alpha = 0.5) +
+  ggplot2::labs(x = "Area (pixels)", y = "Density", fill = "Variety") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "right")
+```
+
+```{r}
+#| label: fig-shape-by-class
+#| fig-width: 8
+#| fig-height: 5
+#| fig-cap: "Eccentricity vs aspect ratio by variety"
+ggplot2::ggplot(
+  dry_beans, 
+  ggplot2::aes(x = aspect_ratio, y = eccentricity, color = class)
+) +
+  ggplot2::geom_point(alpha = 0.3, size = 0.8) +
+  ggplot2::labs(
+    x = "Aspect Ratio", 
+    y = "Eccentricity", 
+    color = "Variety"
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "right")
+```
+
+### Class Centroids
+
+```{r}
+#| label: centroids
+dry_beans |>
+  dplyr::group_by(class) |>
+  dplyr::summarise(
+    mean_area = round(mean(area)),
+    mean_perimeter = round(mean(perimeter), 1),
+    mean_aspect_ratio = round(mean(aspect_ratio), 3),
+    mean_eccentricity = round(mean(eccentricity), 3),
+    .groups = "drop"
+  ) |>
+  knitr::kable()
+```
+
+The `bombay` variety stands out with the largest area and perimeter, 
+while `dermason` beans are the smallest. Shape characteristics 
+(aspect ratio, eccentricity) help distinguish elongated varieties 
+like `barbunya` from rounder ones like `seker`.
+
+### Correlation Structure
+
+```{r}
+#| label: correlation
+beans_numeric <- dry_beans |>
+  dplyr::select(-class)
+
+cor_matrix <- stats::cor(beans_numeric)
+
+# Show highest correlations
+cor_pairs <- which(upper.tri(cor_matrix), arr.ind = TRUE)
+cor_df <- data.frame(
+  var1 = colnames(cor_matrix)[cor_pairs[, 1]],
+  var2 = colnames(cor_matrix)[cor_pairs[, 2]],
+  cor = cor_matrix[cor_pairs]
+)
+cor_df |>
+  dplyr::arrange(dplyr::desc(abs(cor))) |>
+  utils::head(10) |>
+  dplyr::mutate(cor = round(cor, 3)) |>
+  knitr::kable(caption = "Highest pairwise correlations")
+```
+
+Many features are highly correlated (e.g., `area` with `perimeter`, 
+`convex_area`, `equiv_diameter`). This multicollinearity suggests 
+dimension reduction may be beneficial before classification.
+
+### PCA Overview
+
+```{r}
+#| label: fig-pca
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "First two principal components of bean shape features"
+beans_scaled <- scale(beans_numeric)
+pca_fit <- stats::prcomp(beans_scaled)
+
+# Variance explained
+var_explained <- summary(pca_fit)$importance[2, 1:5]
+cat("Variance explained by first 5 PCs:", 
+    paste(round(var_explained * 100, 1), "%", collapse = ", "), "\n")
+
+# PC1 vs PC2
+pca_df <- data.frame(
+  PC1 = pca_fit$x[, 1],
+  PC2 = pca_fit$x[, 2],
+  class = dry_beans$class
+)
+
+ggplot2::ggplot(pca_df, ggplot2::aes(x = PC1, y = PC2, color = class)) +
+  ggplot2::geom_point(alpha = 0.4, size = 0.8) +
+  ggplot2::labs(color = "Variety") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "right")
+```
+
+The first two principal components capture substantial variance and 
+show reasonable class separation, though considerable overlap remains.
+
+## Usage Examples
+
+### Linear Discriminant Analysis
+
+```{r}
+#| label: lda
+# Fit LDA
+lda_fit <- MASS::lda(class ~ ., data = dry_beans)
+
+# Confusion matrix on training data
+lda_pred <- stats::predict(lda_fit)$class
+table(Predicted = lda_pred, Actual = dry_beans$class) |>
+  knitr::kable()
+```
+
+Training accuracy:
+
+```{r}
+#| label: lda-accuracy
+mean(lda_pred == dry_beans$class) |>
+  round(3) |>
+  paste("training accuracy") |>
+  cat()
+```
+
+### K-Nearest Neighbors (Example Setup)
+
+```{r}
+#| label: knn-setup
+# Split data
+set.seed(42)
+train_idx <- sample(nrow(dry_beans), size = 0.8 * nrow(dry_beans))
+
+train_data <- dry_beans[train_idx, ]
+test_data <- dry_beans[-train_idx, ]
+
+cat("Training set:", nrow(train_data), "\n")
+cat("Test set:", nrow(test_data), "\n")
+```
+
+## Connections to Textbook
+
+The `dry_beans` dataset appears in:
+
+- **Chapter 9 (Principal Component Analysis)**: High-dimensional feature 
+  space with strong correlations; demonstrates variance concentration in 
+  leading components.
+
+- **Chapter 10 (Linear Discriminant Analysis)**: Multiclass classification 
+  benchmark; comparison with PCA for supervised dimension reduction.
+
+- **Chapter 11 (Clustering)**: Unsupervised discovery of variety groupings; 
+  comparison of k-means clusters with true labels.
+
+## References
+
+Koklu, M. & Ozkan, I. A. (2020). Multiclass classification of dry beans 
+using computer vision and machine learning techniques. *Computers and 
+Electronics in Agriculture*, 174, 105507.
+
+UCI Machine Learning Repository: 
+[Dry Bean Dataset](https://archive.ics.uci.edu/ml/datasets/Dry+Bean+Dataset)
+
+## Session Info
+
+```{r}
+#| label: session-info
+utils::sessionInfo()
+```

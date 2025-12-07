@@ -12,3 +12,5 @@ data-raw/*.txt
 # OS files
 .DS_Store
 Thumbs.db
+/doc/
+/Meta/

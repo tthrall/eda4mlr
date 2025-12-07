@@ -9,4 +9,17 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 4.0)
+Suggests: 
+    beans, 
+    dplyr, 
+    ggplot2, 
+    gridExtra, 
+    HistData, 
+    ISLR2, 
+    knitr, 
+    MASS, 
+    quarto,
+    scales,
+    tidyr
+VignetteBuilder: quarto
 RoxygenNote: 7.3.3

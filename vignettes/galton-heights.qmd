@@ -1,0 +1,274 @@
+---
+title: "Galton Heights: Family Height Data"
+vignette: >
+  %\VignetteIndexEntry{Galton Heights: Family Height Data}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: true
+  message: false
+  warning: false
+---
+
+## Historical Context
+
+In 1885, Sir Francis Galton examined the heights of parents and their adult 
+children to investigate the heritability of human stature. This work, 
+published as "Regression Towards Mediocrity in Hereditary Stature," 
+introduced the statistical concept of *regression*---a term Galton coined 
+to describe the phenomenon that children of unusually tall or short parents 
+tend to be closer to the population average than their parents were.
+
+Galton's protégé Karl Pearson extended this work, collecting additional data 
+and developing the correlation coefficient as a measure of association. The 
+dataset available in `HistData::GaltonFamilies` derives from Pearson's 
+expanded study.
+
+This dataset is historically significant for several reasons:
+
+1. **Birth of regression analysis**: Galton's analysis introduced the 
+   regression line as a predictive tool
+2. **Correlation coefficient**: Pearson developed the product-moment 
+   correlation ($r$) to quantify the parent-child height relationship
+3. **Regression to the mean**: The tendency for extreme values to be 
+   followed by less extreme values was first characterized here
+4. **Bivariate normal distribution**: The joint distribution of parent 
+   and child heights became a canonical example
+
+## Data Source and Preprocessing
+
+### Original Source
+
+The `eda4mldata::galton_families` dataset is derived from 
+`HistData::GaltonFamilies`, which contains Galton's original records of 
+934 children from 205 families.
+
+```{r}
+#| label: original-data
+HistData::GaltonFamilies |> 
+  utils::head() |> 
+  knitr::kable()
+```
+
+### Preprocessing Decisions
+
+We make several preprocessing choices for pedagogical clarity:
+ 
+1. **One child per family**: To avoid correlated observations (siblings 
+   share parents), we retain only the oldest child from each family. This 
+   yields independent family units suitable for regression.
+
+2. **Column renaming**: We use `child` rather than `childHeight` for brevity, 
+   and lowercase `gender` values.
+
+3. **No midparent transformation**: Galton famously used "midparent height" 
+   (average of father and 1.08 × mother) to collapse parental heights into 
+   a single predictor. We retain separate `father` and `mother` columns to 
+   support multivariate regression examples.
+
+The preprocessing script (`data-raw/galton_families.R`):
+
+```{r}
+#| label: preprocessing
+#| eval: false
+galton_families <- HistData::GaltonFamilies |>
+  tibble::as_tibble() |>
+  dplyr::group_by(family) |>
+  dplyr::slice_head(n = 1) |>
+  dplyr::ungroup() |>
+  dplyr::transmute(
+    family = as.integer(family),
+    father = father,
+    mother = mother,
+    child  = childHeight,
+    gender = tolower(gender)
+  )
+```
+
+## The `galton_families` Dataset
+
+```{r}
+#| label: load-data
+data(galton_families, package = "eda4mldata")
+```
+
+### Dimensions
+
+```{r}
+#| label: dimensions
+cat("Families:", nrow(galton_families), "\n")
+cat("Sons:", sum(galton_families$gender == "male"), "\n")
+cat("Daughters:", sum(galton_families$gender == "female"), "\n")
+```
+
+### Variable Descriptions
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `family` | integer | Family identifier (1--205) |
+| `father` | numeric | Father's height in inches |
+| `mother` | numeric | Mother's height in inches |
+| `child` | numeric | Adult child's height in inches |
+| `gender` | character | Child's gender: `"male"` or `"female"` |
+
+### Structure
+
+```{r}
+#| label: structure
+dplyr::glimpse(galton_families)
+```
+
+### Summary Statistics
+
+```{r}
+#| label: summary
+summary(galton_families[, c("father", "mother", "child")])
+```
+
+## EDA Snapshot
+
+### Height Distributions
+
+```{r}
+#| label: fig-distributions
+#| fig-width: 8
+#| fig-height: 3
+#| fig-cap: "Distribution of heights for fathers, mothers, and children"
+galton_long <- galton_families |>
+  tidyr::pivot_longer(
+    cols = c(father, mother, child),
+    names_to = "person",
+    values_to = "height"
+  ) |>
+  dplyr::mutate(
+    person = factor(person, levels = c("father", "mother", "child"))
+  )
+
+ggplot2::ggplot(galton_long, ggplot2::aes(x = height)) +
+  ggplot2::geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  ggplot2::facet_wrap(~person, scales = "free_y") +
+  ggplot2::labs(x = "Height (inches)", y = "Count") +
+  ggplot2::theme_minimal()
+```
+
+### Parent-Child Relationships
+
+```{r}
+#| label: fig-scatter
+#| fig-width: 8
+#| fig-height: 4
+#| fig-cap: "Child height versus father and mother height, by gender"
+p1 <- ggplot2::ggplot(
+  galton_families, 
+  ggplot2::aes(x = father, y = child, color = gender)
+) +
+  ggplot2::geom_point(alpha = 0.6) +
+  ggplot2::geom_smooth(method = "lm", se = FALSE) +
+  ggplot2::labs(x = "Father height (in)", y = "Child height (in)") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+
+p2 <- ggplot2::ggplot(
+  galton_families, 
+  ggplot2::aes(x = mother, y = child, color = gender)
+) +
+  ggplot2::geom_point(alpha = 0.6) +
+  ggplot2::geom_smooth(method = "lm", se = FALSE) +
+  ggplot2::labs(x = "Mother height (in)", y = "Child height (in)") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+### Correlation Matrix
+
+```{r}
+#| label: correlation
+galton_families |>
+  dplyr::select(father, mother, child) |>
+  stats::cor() |>
+  round(3) |>
+  knitr::kable()
+```
+
+### Gender Differences
+
+```{r}
+#| label: gender-differences
+galton_families |>
+  dplyr::group_by(gender) |>
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean_child = round(mean(child), 2),
+    sd_child = round(stats::sd(child), 2),
+    .groups = "drop"
+  ) |>
+  knitr::kable()
+```
+
+## Usage Examples
+
+### Simple Linear Regression
+
+Regressing child height on father height:
+
+```{r}
+#| label: simple-regression
+fit_father <- stats::lm(child ~ father, data = galton_families)
+summary(fit_father)
+```
+
+### Multiple Regression
+
+Including both parents:
+
+```{r}
+#| label: multiple-regression
+fit_both <- stats::lm(child ~ father + mother, data = galton_families)
+summary(fit_both)
+```
+### Gender-Adjusted Model
+
+Including gender as a predictor:
+
+```{r}
+#| label: gender-model
+fit_gender <- stats::lm(child ~ father + mother + gender, data = galton_families)
+summary(fit_gender)
+```
+
+## Connections to Textbook
+
+The `galton_families` dataset appears in:
+
+- **Chapter 8 (Linear Regression)**: Introduces regression as orthogonal 
+  projection; the father-child relationship provides the simplest bivariate 
+  case before extending to multiple predictors.
+
+- **Chapter 9 (Principal Component Analysis)**: The correlation structure 
+  among father, mother, and child heights illustrates how PCA extracts 
+  dominant modes of variation.
+
+## References
+ 
+Galton, F. (1886). Regression towards mediocrity in hereditary stature. 
+*Journal of the Anthropological Institute of Great Britain and Ireland*, 
+15, 246--263.
+
+Hanley, J. A. (2004). "Transmuting" women into men: Galton's family data 
+on human stature. *The American Statistician*, 58(3), 237--243.
+
+Stigler, S. M. (1989). Francis Galton's account of the invention of 
+correlation. *Statistical Science*, 4(2), 73--79.
+
+## Session Info
+
+```{r}
+#| label: session-info
+utils::sessionInfo()
+```

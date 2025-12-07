@@ -1,0 +1,333 @@
+---
+title: "US Colleges: Higher Education Statistics"
+vignette: >
+  %\VignetteIndexEntry{US Colleges: Higher Education Statistics}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: true
+  message: false
+  warning: false
+---
+
+## Historical Context
+
+The `College` dataset, distributed with the *Introduction to Statistical 
+Learning* textbook (James et al., 2021), contains statistics for 777 US 
+colleges and universities from the 1995 issue of *US News and World Report*. 
+This dataset has become a standard teaching example because it offers:
+
+- **Mixed variable types**: One binary predictor (`private`) alongside 
+  continuous enrollment, cost, and outcome variables
+- **Natural prediction targets**: Graduation rate, applications, enrollment
+- **Interpretable features**: Students can reason about what drives college 
+  outcomes
+- **Realistic messiness**: Some variables are highly correlated; others 
+  have skewed distributions
+
+The data predate the modern explosion in college applications and tuition 
+costs, but the relationships between selectivity, resources, and outcomes 
+remain instructive.
+
+## Data Source and Preprocessing
+
+### Original Source
+
+The `eda4mldata::us_colleges` dataset is derived from `ISLR2::College`, 
+where college names appear as row names.
+
+```{r}
+#| label: original-data
+ISLR2::College |> 
+  utils::head() |> 
+  knitr::kable()
+```
+
+### Preprocessing Decisions
+
+1. **College names as column**: Convert row names to an explicit `college` 
+   column.
+
+2. **Snake_case naming**: Convert `F.Undergrad` to `f_undergrad`, 
+   `Room.Board` to `room_board`, etc.
+
+3. **Lowercase factor levels**: Convert `Private` from `"Yes"/"No"` to 
+   `"yes"/"no"` for consistency.
+
+The preprocessing script (`data-raw/us_colleges.R`):
+
+```{r}
+#| label: preprocessing
+#| eval: false
+us_colleges <- ISLR2::College |>
+  tibble::as_tibble(rownames = "college") |>
+  dplyr::rename(
+    private        = Private,
+    apps           = Apps,
+    accept         = Accept,
+    enroll         = Enroll,
+    top10perc      = Top10perc,
+    top25perc      = Top25perc,
+    f_undergrad    = F.Undergrad,
+    p_undergrad    = P.Undergrad,
+    outstate       = Outstate,
+    room_board     = Room.Board,
+    books          = Books,
+    personal       = Personal,
+    phd            = PhD,
+    terminal       = Terminal,
+    s_f_ratio      = S.F.Ratio,
+    perc_alumni    = perc.alumni,
+    expend         = Expend,
+    grad_rate      = Grad.Rate
+  ) |>
+  dplyr::mutate(
+    private = ifelse(private == "Yes", "yes", "no")
+  )
+```
+
+## The `us_colleges` Dataset
+
+```{r}
+#| label: load-data
+data(us_colleges, package = "eda4mldata")
+```
+
+### Dimensions
+
+```{r}
+#| label: dimensions
+cat("Colleges:", nrow(us_colleges), "\n")
+cat("Variables:", ncol(us_colleges), "\n")
+cat("Private:", sum(us_colleges$private == "yes"), "\n")
+cat("Public:", sum(us_colleges$private == "no"), "\n")
+```
+
+### Variable Descriptions
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `college` | character | College name |
+| `private` | character | Private institution (`"yes"` or `"no"`) |
+| `apps` | integer | Number of applications received |
+| `accept` | integer | Number of applications accepted |
+| `enroll` | integer | Number of new students enrolled |
+| `top10perc` | numeric | Pct. new students from top 10% of HS class |
+| `top25perc` | numeric | Pct. new students from top 25% of HS class |
+| `f_undergrad` | integer | Number of full-time undergraduates |
+| `p_undergrad` | integer | Number of part-time undergraduates |
+| `outstate` | numeric | Out-of-state tuition (USD) |
+| `room_board` | numeric | Room and board costs (USD) |
+| `books` | numeric | Estimated book costs (USD) |
+| `personal` | numeric | Estimated personal spending (USD) |
+| `phd` | numeric | Pct. faculty with Ph.D. |
+| `terminal` | numeric | Pct. faculty with terminal degree |
+| `s_f_ratio` | numeric | Student-to-faculty ratio |
+| `perc_alumni` | numeric | Pct. alumni who donate |
+| `expend` | numeric | Instructional expenditure per student (USD) |
+| `grad_rate` | numeric | Graduation rate (%) |
+
+### Structure
+
+```{r}
+#| label: structure
+dplyr::glimpse(us_colleges)
+```
+
+### Summary Statistics
+
+```{r}
+#| label: summary
+us_colleges |>
+  dplyr::select(apps, accept, enroll, outstate, grad_rate, expend) |>
+  summary()
+```
+
+## EDA Snapshot
+
+### Acceptance and Graduation Rates
+
+```{r}
+#| label: derived-rates
+us_colleges <- us_colleges |>
+  dplyr::mutate(
+    accept_rate = accept / apps * 100
+  )
+```
+
+```{r}
+#| label: fig-rates
+#| fig-width: 8
+#| fig-height: 4
+#| fig-cap: "Distribution of acceptance and graduation rates by institution type"
+p1 <- ggplot2::ggplot(
+  us_colleges, 
+  ggplot2::aes(x = accept_rate, fill = private)
+) +
+  ggplot2::geom_histogram(bins = 25, alpha = 0.7, position = "identity") +
+  ggplot2::labs(x = "Acceptance Rate (%)", y = "Count", fill = "Private") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+
+p2 <- ggplot2::ggplot(
+  us_colleges, 
+  ggplot2::aes(x = grad_rate, fill = private)
+) +
+  ggplot2::geom_histogram(bins = 25, alpha = 0.7, position = "identity") +
+  ggplot2::labs(x = "Graduation Rate (%)", y = "Count", fill = "Private") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+### Tuition and Expenditure
+
+```{r}
+#| label: fig-cost-expend
+#| fig-width: 7
+#| fig-height: 5
+#| fig-cap: "Relationship between tuition and instructional expenditure"
+ggplot2::ggplot(
+  us_colleges, 
+  ggplot2::aes(x = outstate, y = expend, color = private)
+) +
+  ggplot2::geom_point(alpha = 0.5) +
+  ggplot2::scale_x_continuous(labels = scales::dollar) +
+  ggplot2::scale_y_continuous(labels = scales::dollar) +
+  ggplot2::labs(
+    x = "Out-of-State Tuition",
+    y = "Expenditure per Student",
+    color = "Private"
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+### Correlation Among Numeric Variables
+
+```{r}
+#| label: fig-correlation
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: "Correlation heatmap for selected college variables"
+college_numeric <- us_colleges |>
+  dplyr::select(
+    apps, accept, enroll, top10perc, f_undergrad,
+    outstate, expend, grad_rate, phd, s_f_ratio
+  )
+
+cor_matrix <- stats::cor(college_numeric, use = "complete.obs")
+
+# Simple heatmap using base R
+graphics::image(
+  1:ncol(cor_matrix), 
+  1:nrow(cor_matrix), 
+  t(cor_matrix)[, nrow(cor_matrix):1],
+  axes = FALSE,
+  xlab = "", 
+  ylab = "",
+  col = grDevices::hcl.colors(20, "RdBu", rev = TRUE)
+)
+graphics::axis(1, at = 1:ncol(cor_matrix), labels = colnames(cor_matrix), las = 2, cex.axis = 0.8)
+graphics::axis(2, at = 1:nrow(cor_matrix), labels = rev(colnames(cor_matrix)), las = 1, cex.axis = 0.8)
+```
+
+### Private vs Public Comparison
+
+```{r}
+#| label: private-public
+us_colleges |>
+  dplyr::group_by(private) |>
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean_outstate = round(mean(outstate)),
+    mean_grad_rate = round(mean(grad_rate, na.rm = TRUE), 1),
+    mean_expend = round(mean(expend)),
+    mean_s_f_ratio = round(mean(s_f_ratio), 1),
+    .groups = "drop"
+  ) |>
+  knitr::kable()
+```
+
+## Usage Examples
+
+### Predicting Graduation Rate
+
+```{r}
+#| label: regression
+fit <- stats::lm(
+  grad_rate ~ private + outstate + top10perc + s_f_ratio + expend,
+  data = us_colleges
+)
+summary(fit)
+```
+
+### Classification: Private vs Public
+
+```{r}
+#| label: classification-setup
+# Prepare data for classification
+college_class <- us_colleges |>
+  dplyr::select(
+    private, apps, accept, enroll, top10perc, 
+    outstate, expend, grad_rate, s_f_ratio
+  ) |>
+  stats::na.omit() |>
+  dplyr::mutate(private = factor(private))
+```
+
+Logistic regression:
+
+```{r}
+#| label: logistic
+fit_logistic <- stats::glm(
+  private ~ outstate + expend + s_f_ratio + top10perc,
+  data = college_class,
+  family = "binomial"
+)
+summary(fit_logistic)
+```
+
+## Data Quality Notes
+
+1. **Graduation rates > 100%**: A few colleges report graduation rates 
+   exceeding 100%, likely due to transfer students. Consider capping or 
+   filtering for some analyses.
+
+```{r}
+#| label: grad-rate-check
+us_colleges |>
+  dplyr::filter(grad_rate > 100) |>
+  dplyr::select(college, grad_rate) |>
+  knitr::kable()
+```
+
+2. **Vintage**: The 1995 data reflects a different higher education 
+   landscape. Tuition figures are not inflation-adjusted.
+
+## Connections to Textbook
+
+The `us_colleges` dataset appears in:
+
+- **Chapter 8 (Linear Regression)**: Multiple regression with mixed 
+  predictor types; prediction of graduation rates.
+
+- **Chapter 10 (Linear Discriminant Analysis)**: Classification of 
+  private vs. public institutions.
+
+## References
+
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). 
+*An Introduction to Statistical Learning* (2nd ed.). Springer.
+
+## Session Info
+
+```{r}
+#| label: session-info
+utils::sessionInfo()
+```
