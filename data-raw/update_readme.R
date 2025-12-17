@@ -68,6 +68,7 @@ readme_template <- glue::glue('
 # eda4mldata
 
 Companion R package for the textbook *Exploratory Data Analysis for Machine Learning* by Tony Thrall.
+
 ## Installation
 
 You can install the development version of eda4mldata from GitHub:
@@ -99,6 +100,40 @@ handedness
 #> 4 female right  1070
 #> 5 female left     92
 #> 6 female ambi      8
+```
+
+### LearningGraph Knowledge Graph
+
+The `learning_graph` object is a knowledge graph for skills-based learning in data science, based on the IC Data Science Competency Resource Guide (2023) with structure inspired by Workera.ai\\\'s skills intelligence platform. It demonstrates graph theory concepts including directed acyclic graphs, bipartite structures, weighted edges, and path algorithms.
+
+The knowledge graph contains five node types (skills, courses, learners, work roles, competencies) and five edge types (has_skill, requires_skill, prerequisite, course_prereq, teaches). The complete object is available as `learning_graph`, with individual components exported as `lg_*` tibbles for convenience.
+```r
+data(learning_graph)
+
+# Structure overview
+names(learning_graph)
+#> [1] "metadata"           "proficiency_levels" "nodes"              "edges"
+
+# Access nodes
+names(learning_graph$nodes)
+#> [1] "competencies" "skills"       "work_roles"   "courses"      "learners"
+
+# Access edges
+names(learning_graph$edges)
+#> [1] "has_skill"      "requires_skill" "prerequisite"   "course_prereq"  "teaches"
+
+# Example: view skills
+learning_graph$nodes$skills
+#> # A tibble: 18 × 6
+#>    skill_id skill_tag          skill_name             cmp_id k_or_s description
+#>       <int> <chr>              <chr>                   <int> <chr>  <chr>
+#>  1        1 algorithms         Algorithms                  1 k      Knowledge of designing...
+#>  2        2 programming        Programming                 1 s      Skill in programming...
+#> ...
+
+# Or use individual exports
+data(lg_skills)
+data(lg_prerequisite)
 ```
 
 ### MNIST Handwritten Digits
@@ -173,8 +208,7 @@ MIT License
 # Write README
 writeLines(readme_template, here::here("README.md"))
 
-cat("README.md updated successfully.\
-")
+cat("README.md updated successfully.\n")
 
 ##
 #  EOF

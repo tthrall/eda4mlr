@@ -1,6 +1,7 @@
 # eda4mldata
 
 Companion R package for the textbook *Exploratory Data Analysis for Machine Learning* by Tony Thrall.
+
 ## Installation
 
 You can install the development version of eda4mldata from GitHub:
@@ -28,6 +29,78 @@ The package provides the following datasets:
    <td style="text-align:right;"> 6 </td>
    <td style="text-align:right;"> 3 </td>
    <td style="text-align:left;"> Handedness counts by sex for chi-squared independence test </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_competencies` </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> Seven data science competency areas from the IC CRG framework </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_course_prereq` </td>
+   <td style="text-align:right;"> 19 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Course prerequisite edges (course → course) with rationale </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_courses` </td>
+   <td style="text-align:right;"> 15 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Fifteen courses providing complete coverage of all skills </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_has_skill` </td>
+   <td style="text-align:right;"> 41 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Learner skill edges (learner → skill) with proficiency level </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_learners` </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> Six fictional learner profiles with varying backgrounds </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_prerequisite` </td>
+   <td style="text-align:right;"> 22 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Skill prerequisite edges (skill → skill) for conceptual dependencies </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_proficiency_levels` </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> Five-level proficiency scale (None through Master) with guidance </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_requires_skill` </td>
+   <td style="text-align:right;"> 25 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Work role skill requirements (role → skill) with minimum proficiency </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_schema` </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> Knowledge graph schema defining node types, edge types, and constraints </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_skills` </td>
+   <td style="text-align:right;"> 18 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> Eighteen knowledge and skill areas (KSAs) from the data science competency framework </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_teaches` </td>
+   <td style="text-align:right;"> 19 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> Course teaching edges (course → skill) with proficiency ceiling </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `lg_work_roles` </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> Three work roles: Data Analyst, Data Scientist, AI/ML Specialist </td>
   </tr>
   <tr>
    <td style="text-align:left;"> `lit_digest` </td>
@@ -146,6 +219,40 @@ handedness
 #> 6 female ambi      8
 ```
 
+### LearningGraph Knowledge Graph
+
+The `learning_graph` object is a knowledge graph for skills-based learning in data science, based on the IC Data Science Competency Resource Guide (2023) with structure inspired by Workera.ai\'s skills intelligence platform. It demonstrates graph theory concepts including directed acyclic graphs, bipartite structures, weighted edges, and path algorithms.
+
+The knowledge graph contains five node types (skills, courses, learners, work roles, competencies) and five edge types (has_skill, requires_skill, prerequisite, course_prereq, teaches). The complete object is available as `learning_graph`, with individual components exported as `lg_*` tibbles for convenience.
+```r
+data(learning_graph)
+
+# Structure overview
+names(learning_graph)
+#> [1] "metadata"           "proficiency_levels" "nodes"              "edges"
+
+# Access nodes
+names(learning_graph$nodes)
+#> [1] "competencies" "skills"       "work_roles"   "courses"      "learners"
+
+# Access edges
+names(learning_graph$edges)
+#> [1] "has_skill"      "requires_skill" "prerequisite"   "course_prereq"  "teaches"
+
+# Example: view skills
+learning_graph$nodes$skills
+#> # A tibble: 18 × 6
+#>    skill_id skill_tag          skill_name             cmp_id k_or_s description
+#>       <int> <chr>              <chr>                   <int> <chr>  <chr>
+#>  1        1 algorithms         Algorithms                  1 k      Knowledge of designing...
+#>  2        2 programming        Programming                 1 s      Skill in programming...
+#> ...
+
+# Or use individual exports
+data(lg_skills)
+data(lg_prerequisite)
+```
+
 ### MNIST Handwritten Digits
 
 Sample images from the MNIST database of handwritten digits, useful for demonstrating image data and dimension reduction.
@@ -201,6 +308,7 @@ dim(wine_quality)
 |Topic                   |Source                          |
 |:-----------------------|:-------------------------------|
 |Handedness by Sex       |[Freedman, Pisani, Purves (4e)](https://doi.org/10.1177/001316447903900237)|
+|LearningGraph           |[IC DSci-CRG & Workera.ai](https://www.dni.gov/)|
 |MNIST subsets           |[Yann LeCun's MNIST Database](http://yann.lecun.com/exdb/mnist/)|
 |NB10 Repeated Weighings |[Freedman, Pisani, Purves (4e)](https://wwnorton.com/books/9780393929720)|
 |OECD Better Life Index  |[OECD Better Life Index (2015)](https://www.oecdbetterlifeindex.org/)|
@@ -221,6 +329,9 @@ If you use these datasets, please cite the original sources:
 
 **Handedness by Sex**
 > Freedman, D., Pisani, R., & Purves, R. (2007) *Statistics* (4th ed.). W.W. Norton & Company
+
+**LearningGraph**
+> Office of the Director of National Intelligence (2023) *Competency Resource Guide for Data Science* (UNCLASSIFIED) Structure inspired by Workera.ai skills intelligence platform https://workera.ai/
 
 **MNIST subsets**
 > LeCun, Y., Cortes, C., & Burges, C. J. C. (1998) The MNIST database of handwritten digits http://yann.lecun.com/exdb/mnist/
