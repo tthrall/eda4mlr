@@ -1,0 +1,262 @@
+---
+title: "Chapter 12 Workbook: Time Series Data"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(astsa)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Describe the difference between time domain and frequency domain perspectives on time series.
+2. Explain why time series data requires specialized methods (dependence structure, autocorrelation).
+3. Decompose a time series visually into trend, seasonality, and residual components.
+4. Assess whether a time series is approximately stationary.
+5. In time series analysis, define and explain the role of the time-shift operator.
+
+## The Big Picture
+
+> What makes time series different from other data—and why do we need specialized tools to analyze it?
+
+---
+
+## Choosing Your Time Series
+
+For this workbook, you'll need a time series with:
+
+- At least 100 observations
+- Regular time spacing (daily, monthly, quarterly, etc.)
+- Visible structure (trend, seasonality, or interesting patterns)
+- Something you're genuinely interested in
+
+**Suggested sources from `astsa` package:**
+
+- `astsa::jj` — Johnson & Johnson quarterly earnings (84 obs)
+- `astsa::globtemp` — global temperature deviations (142 obs)
+- `astsa::soi` — Southern Oscillation Index (453 obs)
+- `astsa::rec` — recruitment (fish population, 453 obs)
+
+**Alternative:** `datasets::AirPassengers` (144 monthly observations)
+
+```{r}
+#| label: load-data
+
+# Load your time series here
+# Example: my_ts <- astsa::jj
+
+```
+
+---
+
+## Exercise 1: Why Time Series Is Different
+
+### Task 1.1: Visualize Your Series
+
+Plot your time series. What features do you observe (trend, seasonality, cycles, outliers)?
+
+```{r}
+#| label: ex1-plot
+
+# Your code here
+
+```
+
+*Describe the main features you see:*
+
+
+
+### Task 1.2: Dependence Structure
+
+In standard regression, we assume observations are independent. Time series violates this. 
+
+Plot the value at time t against the value at time t-1 (a lag-1 scatter plot). Is there a relationship?
+
+```{r}
+#| label: ex1-lag-scatter
+
+# Your code here
+
+```
+
+*What does this plot tell you about the dependence between consecutive observations?*
+
+
+
+### Task 1.3: Autocorrelation
+
+Compute and plot the autocorrelation function (ACF) using `stats::acf()` or `astsa::acf1()`.
+
+```{r}
+#| label: ex1-acf
+
+# Your code here
+
+```
+
+*Interpret the ACF: How far back in time does the dependence extend?*
+
+
+
+---
+
+## Exercise 2: Decomposition
+
+### Task 2.1: Trend
+
+Estimate the trend by computing a moving average or fitting a smooth curve (e.g., loess).
+
+```{r}
+#| label: ex2-trend
+
+# Your code here
+
+```
+
+### Task 2.2: Seasonality
+
+If your series has seasonality, estimate the seasonal component. Plot the detrended series and look for repeating patterns.
+
+```{r}
+#| label: ex2-seasonality
+
+# Your code here
+
+```
+
+### Task 2.3: Classical Decomposition
+
+Use `stats::decompose()` or `stats::stl()` to decompose your series into trend, seasonal, and residual components.
+
+```{r}
+#| label: ex2-decompose
+
+# Your code here
+
+```
+
+*How much of the variation is captured by each component?*
+
+
+
+---
+
+## Exercise 3: Stationarity
+
+### Task 3.1: What Is Stationarity?
+
+A time series is (weakly) stationary if its mean and autocovariance do not depend on time.
+
+Examine your series: Does the mean appear constant over time? Does the variance?
+
+```{r}
+#| label: ex3-visual-check
+
+# Your code here
+
+```
+
+*Is your series stationary? What transformations might help?*
+
+
+
+### Task 3.2: Transformations for Stationarity
+
+If your series has:
+
+- Increasing variance → try a log transform
+- A trend → try differencing
+
+Apply appropriate transformations and reassess.
+
+```{r}
+#| label: ex3-transform
+
+# Your code here
+
+```
+
+*Does the transformed series look more stationary?*
+
+
+
+---
+
+## Exercise 4: Time Domain vs. Frequency Domain
+
+### Task 4.1: Two Perspectives
+
+The time domain focuses on autocorrelation—how values at different times relate.
+The frequency domain focuses on cycles—what periodic components are present.
+
+In your own words, explain when you might prefer each perspective.
+
+*Your explanation:*
+
+
+
+### Task 4.2: The Time-Shift Operator
+
+The backshift operator B is defined by: $B x_t = x_{t-1}$
+
+Express the first difference $(1 - B)x_t$ and verify it equals $x_t - x_{t-1}$.
+
+*Your derivation:*
+
+
+
+Why is this notation useful for describing time series models?
+
+*Your explanation:*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Find a time series that appears stationary. Verify by:
+
+1. Plotting the series
+2. Examining the ACF
+3. Comparing means and variances of the first half vs. second half
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Your assessment:*
+
+
+
+### Problem 2
+
+Explain why you cannot simply apply standard linear regression to time series data without accounting for autocorrelation. What goes wrong with inference?
+
+*Your explanation:*
+
+

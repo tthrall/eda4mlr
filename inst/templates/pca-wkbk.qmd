@@ -1,0 +1,248 @@
+---
+title: "Chapter 8 Workbook: Principal Component Analysis"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Describe the goal and method of Principal Component Analysis (PCA).
+2. Compute principal components via eigendecomposition of the covariance matrix.
+3. Interpret loadings as the contribution of original variables to each principal component.
+4. Use the scree plot to determine how many components to retain.
+5. Project high-dimensional data onto principal components for visualization.
+6. Explain when one should simply center the data, and when one should also re-scale the data, prior to PCA.
+
+## The Big Picture
+
+> How do you reduce the dimensionality of data while preserving the most important structure—and what does "important" mean?
+
+---
+
+## Choosing Your Dataset
+
+For this workbook, you'll need a dataset with:
+
+- At least 30 observations
+- At least 4 numeric variables (to make dimension reduction meaningful)
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `datasets::USArrests` — 4 variables (Murder, Assault, UrbanPop, Rape) across 50 states
+- `datasets::iris` — 4 measurements across 150 flowers (with species labels for visualization)
+- `MASS::crabs` — 5 morphometric measurements across 200 crabs
+
+**Reference:** The `LearnPCA` package provides excellent vignettes on PCA fundamentals.
+
+```{r}
+#| label: load-data
+
+# Load your dataset here
+# Example: my_data <- datasets::USArrests
+
+```
+
+---
+
+## Exercise 1: Preparing for PCA
+
+### Task 1.1: Center vs. Scale
+
+Examine the means and standard deviations of your numeric variables. Are they on similar scales?
+
+```{r}
+#| label: ex1-examine-scales
+
+# Your code here
+
+```
+
+*Based on these values, should you center only, or center and scale?*
+
+
+
+### Task 1.2: The Effect of Scaling
+
+Run PCA twice: once on centered-only data, once on centered-and-scaled data. Compare the proportion of variance explained by PC1.
+
+```{r}
+#| label: ex1-scaling-effect
+
+# Your code here
+
+```
+
+*How does scaling change the results? Which approach is more appropriate for your data?*
+
+
+
+---
+
+## Exercise 2: Computing PCA
+
+### Task 2.1: PCA via prcomp()
+
+Run PCA using `stats::prcomp()`. Examine the output object.
+
+```{r}
+#| label: ex2-prcomp
+
+# Your code here
+
+```
+
+*What does each component of the output represent?*
+
+
+
+### Task 2.2: PCA via Eigendecomposition
+
+Verify the results by computing PCA manually:
+
+1. Center (and optionally scale) the data
+2. Compute the covariance matrix
+3. Find eigenvalues and eigenvectors
+4. Compare to `prcomp()` output
+
+```{r}
+#| label: ex2-eigen
+
+# Your code here
+
+```
+
+*Do your eigenvectors match the loadings from prcomp()? (Watch for sign flips.)*
+
+
+
+---
+
+## Exercise 3: Interpreting Components
+
+### Task 3.1: The Scree Plot
+
+Create a scree plot showing the variance explained by each principal component. Also plot the cumulative variance explained.
+
+```{r}
+#| label: ex3-scree
+
+# Your code here
+
+```
+
+*How many components would you retain? What criteria did you use?*
+
+
+
+### Task 3.2: Interpreting Loadings
+
+Examine the loadings for the first two principal components. Which original variables contribute most strongly to each?
+
+```{r}
+#| label: ex3-loadings
+
+# Your code here
+
+```
+
+*Describe PC1 and PC2 in substantive terms (e.g., "PC1 captures overall size" or "PC2 contrasts X with Y").*
+
+
+
+### Task 3.3: Biplot
+
+Create a biplot showing both the scores (observations) and loadings (variables) together.
+
+```{r}
+#| label: ex3-biplot
+
+# Your code here
+
+```
+
+*What does the biplot reveal about the relationship between observations and variables?*
+
+
+
+---
+
+## Exercise 4: Visualization and Reconstruction
+
+### Task 4.1: Projection onto Principal Components
+
+Plot your observations in the space of PC1 vs. PC2. If you have group labels (e.g., species), color by group.
+
+```{r}
+#| label: ex4-projection
+
+# Your code here
+
+```
+
+*Do the groups separate in the reduced space?*
+
+
+
+### Task 4.2: Reconstruction Error
+
+Reconstruct the original data using only the first k principal components. Compute the reconstruction error for k = 1, 2, ..., p.
+
+```{r}
+#| label: ex4-reconstruction
+
+# Your code here
+
+```
+
+*How does reconstruction error relate to variance explained?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+PCA finds directions of maximum variance. But variance isn't always the right criterion. Describe a scenario where the directions of maximum variance are not the most useful for your analysis.
+
+*Your response:*
+
+
+
+### Problem 2
+
+A colleague argues that PCA "removes correlation" between variables. Is this true? Verify by computing the correlation matrix of the principal component scores.
+
+```{r}
+#| label: practice-2
+
+# Your code here
+
+```
+
+*Your explanation:*
+
+

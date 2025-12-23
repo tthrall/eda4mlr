@@ -1,0 +1,246 @@
+---
+title: "Chapter 11 Workbook: Topic Models"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(tidytext)
+library(topicmodels)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Describe the generative model underlying Latent Dirichlet Allocation (LDA).
+2. Interpret word mixtures per topic (β) and topic mixtures per document (γ).
+3. Fit a topic model to a corpus of text documents.
+4. Qualitatively evaluate a fitted topic model using the criteria of coherence and interpretability.
+5. Select the number of topics using: (1) held-out likelihood; and (2) domain judgment.
+6. Describe Latent Dirichlet Allocation, Linear Discriminant Analysis, and the difference between the two.
+7. Apply topic models to discover thematic structure in document collections.
+
+## The Big Picture
+
+> Can an algorithm discover what a collection of documents is "about"—without being told in advance?
+
+---
+
+## Choosing Your Corpus
+
+For this workbook, you'll need a collection of text documents:
+
+- At least 20 documents (more is better for topic modeling)
+- Documents with diverse content (so topics can emerge)
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `topicmodels::AssociatedPress` — 2,246 AP news articles (pre-formatted as DTM)
+- `janeaustenr::austen_books()` — chapters from 6 novels
+- `gutenbergr::gutenberg_download()` — multiple books on different subjects
+
+**Note:** Topic modeling requires a document-term matrix. Review Chapter 10 if needed.
+
+```{r}
+#| label: load-data
+
+# Load your corpus and prepare a document-term matrix
+# Example using Associated Press data:
+# data("AssociatedPress", package = "topicmodels")
+# my_dtm <- AssociatedPress
+
+```
+
+---
+
+## Exercise 1: The Generative Model
+
+### Task 1.1: LDA's Story
+
+Latent Dirichlet Allocation imagines documents are generated as follows:
+
+1. Each document has a mixture of topics (γ)
+2. Each topic has a mixture of words (β)
+3. To generate a word: pick a topic according to γ, then pick a word according to β
+
+Draw a simple diagram or write pseudocode describing this generative process.
+
+*Your description:*
+
+
+
+### Task 1.2: LDA vs. LDA
+
+Both "Latent Dirichlet Allocation" and "Linear Discriminant Analysis" are abbreviated LDA. Explain the key differences:
+
+- What is the input?
+- What is the output?
+- Is it supervised or unsupervised?
+
+*Your comparison:*
+
+
+
+---
+
+## Exercise 2: Fitting a Topic Model
+
+### Task 2.1: Fit LDA
+
+Use `topicmodels::LDA()` to fit a topic model with K topics (start with K = 4 or 5).
+
+```{r}
+#| label: ex2-fit-lda
+
+# Your code here
+
+```
+
+### Task 2.2: Extract β (Word-Topic Probabilities)
+
+Extract the per-topic word probabilities. For each topic, list the top 10 words.
+
+```{r}
+#| label: ex2-beta
+
+# Your code here
+
+```
+
+*Can you assign an interpretable label to each topic based on its top words?*
+
+
+
+### Task 2.3: Extract γ (Document-Topic Probabilities)
+
+Extract the per-document topic probabilities. Examine a few documents.
+
+```{r}
+#| label: ex2-gamma
+
+# Your code here
+
+```
+
+*Do the topic mixtures make sense for documents you can inspect?*
+
+
+
+---
+
+## Exercise 3: Evaluating Topic Quality
+
+### Task 3.1: Coherence and Interpretability
+
+For each topic, ask:
+
+- Do the top words "belong together"?
+- Can you describe what the topic is "about"?
+- Are there intruder words that don't fit?
+
+*Your assessment of each topic:*
+
+
+
+### Task 3.2: Choosing K
+
+Fit topic models for K = 2, 4, 6, 8, 10. Compare using:
+
+1. Perplexity on held-out data (if available)
+2. Your own judgment of topic interpretability
+
+```{r}
+#| label: ex3-choosing-k
+
+# Your code here
+
+```
+
+*What value of K gives the best balance of fit and interpretability?*
+
+
+
+---
+
+## Exercise 4: Exploring Your Corpus
+
+### Task 4.1: Topic Prevalence
+
+Which topics are most common across your corpus? Create a bar plot of average topic proportions.
+
+```{r}
+#| label: ex4-prevalence
+
+# Your code here
+
+```
+
+### Task 4.2: Topic Trends
+
+*(Skip if your documents lack a time dimension.)*
+
+If your documents have timestamps, examine how topic prevalence changes over time.
+
+```{r}
+#| label: ex4-trends
+
+# Your code here
+
+```
+
+*What trends do you observe?*
+
+
+
+### Task 4.3: Document Similarity via Topics
+
+Choose a document and find other documents with similar topic mixtures. Are they semantically related?
+
+```{r}
+#| label: ex4-similarity
+
+# Your code here
+
+```
+
+*Does topic-based similarity capture meaningful relationships?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Topic models are unsupervised—they discover structure without labels. Describe a scenario where you would prefer topic modeling over supervised classification, and vice versa.
+
+*Your response:*
+
+
+
+### Problem 2
+
+A colleague fits a 100-topic model and reports high held-out likelihood. But when you examine the topics, many are uninterpretable or redundant. How would you advise them?
+
+*Your response:*
+
+

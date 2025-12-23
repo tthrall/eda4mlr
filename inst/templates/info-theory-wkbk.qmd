@@ -1,0 +1,254 @@
+---
+title: "Chapter 6 Workbook: Information Theory"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Define, describe, and calculate entropy for finite probability distributions.
+2. Define and describe mutual information.
+3. Define and describe KL divergence.
+4. Describe how entropy is related to decision tree splitting.
+5. Give an example in which mutual information measures a nonlinear relationship that correlation does not measure.
+6. Describe the relationship between cross-entropy and KL divergence.
+
+## The Big Picture
+
+> How do you measure the information content of a variable—and how much one variable tells you about another?
+
+---
+
+## Choosing Your Dataset
+
+For this workbook, you'll need a dataset with:
+
+- At least 50 observations
+- At least 1 categorical variable (for entropy calculations)
+- At least 2 variables that may have a relationship (for mutual information)
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `datasets::Titanic` — survival, class, sex, age (categorical)
+- `datasets::HairEyeColor` — categorical cross-tabulation
+- `palmerpenguins::penguins` — species, island, numeric measurements
+
+**Fallback option:** Create a simple categorical variable by binning a numeric variable from any dataset.
+
+```{r}
+#| label: load-data
+
+# Load your dataset here
+
+```
+
+---
+ 
+## Exercise 1: Entropy
+
+### Task 1.1: Computing Entropy
+
+Write a function to compute the entropy of a discrete probability distribution:
+
+$$H(X) = -\sum_{i} p_i \log_2(p_i)$$
+
+Apply it to a categorical variable from your dataset.
+
+```{r}
+#| label: ex1-entropy-function
+
+# Your code here
+
+```
+
+*What is the entropy? What does this value tell you about the "uncertainty" in this variable?*
+
+
+
+### Task 1.2: Maximum and Minimum Entropy
+
+For a variable with K categories:
+
+- What distribution maximizes entropy?
+- What distribution minimizes entropy?
+
+Verify your answers by computing entropy for both cases.
+
+```{r}
+#| label: ex1-max-min-entropy
+
+# Your code here
+
+```
+
+*Your explanation:*
+
+
+
+### Task 1.3: Entropy and Decision Trees
+
+Explain in your own words how entropy is used to choose splits in a decision tree. Why do we prefer splits that reduce entropy?
+
+*Your explanation:*
+
+
+
+---
+
+## Exercise 2: Mutual Information
+
+### Task 2.1: Computing Mutual Information
+
+Mutual information measures how much knowing one variable reduces uncertainty about another:
+
+$$I(X; Y) = H(X) + H(Y) - H(X, Y)$$
+
+Choose two categorical variables and compute their mutual information.
+
+```{r}
+#| label: ex2-mutual-info
+
+# Your code here
+
+```
+
+*Interpret the result: How much information does one variable provide about the other?*
+
+
+
+### Task 2.2: Mutual Information vs. Correlation
+
+Create or find an example where two variables have:
+
+- Zero (or near-zero) correlation
+- Positive mutual information
+
+(Hint: Consider nonlinear relationships, such as Y = X².)
+
+```{r}
+#| label: ex2-mi-vs-corr
+
+# Your code here
+
+```
+
+*Why does mutual information capture this relationship when correlation does not?*
+
+
+
+---
+
+## Exercise 3: KL Divergence and Cross-Entropy
+
+### Task 3.1: KL Divergence
+
+KL divergence measures how one probability distribution differs from another:
+
+$$D_{KL}(P \| Q) = \sum_{i} p_i \log_2\left(\frac{p_i}{q_i}\right)$$
+
+Choose a categorical variable and compare its empirical distribution to:
+
+1. A uniform distribution
+2. A different empirical distribution (e.g., from a subset of your data)
+
+```{r}
+#| label: ex3-kl-divergence
+
+# Your code here
+
+```
+
+*What do the KL divergence values tell you?*
+
+
+
+### Task 3.2: Cross-Entropy
+
+Cross-entropy is defined as:
+
+$$H(P, Q) = -\sum_{i} p_i \log_2(q_i)$$
+
+Show that: $H(P, Q) = H(P) + D_{KL}(P \| Q)$
+
+Verify this relationship numerically using your distributions from Task 3.1.
+
+```{r}
+#| label: ex3-cross-entropy
+
+# Your code here
+
+```
+
+*Why is cross-entropy used as a loss function in classification?*
+
+
+
+---
+
+## Exercise 4: Application to Feature Selection
+
+### Task 4.1: Ranking Features by Mutual Information
+
+If your dataset has multiple features and a target variable, compute the mutual information between each feature and the target. Rank the features by their informativeness.
+
+*(Skip if your dataset lacks a natural target variable.)*
+
+```{r}
+#| label: ex4-feature-ranking
+
+# Your code here
+
+```
+
+*Which features are most informative? Does this match your intuition?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+A fair coin has entropy of 1 bit. A biased coin with P(heads) = 0.9 has lower entropy. Compute the entropy for coins with P(heads) = 0.5, 0.7, 0.9, 0.99, and 1.0. Plot entropy as a function of P(heads).
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*What is the shape of this curve? What does it tell you?*
+
+
+
+### Problem 2
+
+Explain in your own words why KL divergence is not symmetric: $D_{KL}(P \| Q) \neq D_{KL}(Q \| P)$. Give an intuitive example of when this asymmetry matters.
+
+*Your explanation:*
+
+

@@ -1,0 +1,278 @@
+---
+title: "Chapter 13 Workbook: Time Domain Methods"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(astsa)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Identify AR, MA, and ARMA processes from their ACF and PACF signatures.
+2. Fit ARIMA models and interpret their parameters.
+3. Use differencing to remove a trend from a time series.
+4. Generate forecasts with prediction intervals and explain why intervals widen over time.
+5. Diagnose model adequacy by checking that residuals approximate white noise.
+6. Compare models using information criteria AIC and BIC.
+
+## The Big Picture
+
+> How do you model the dependence structure of a time series—and use it to forecast the future?
+
+---
+
+## Choosing Your Time Series
+
+For this workbook, use the same series from Chapter 12, or select a new one:
+
+**Suggested sources from `astsa` package:**
+
+- `astsa::rec` — recruitment series (good for AR modeling)
+- `astsa::varve` — annual varve thickness (needs transformation)
+- `astsa::gnp` — US GNP (needs differencing)
+- `astsa::flu` — pneumonia/influenza deaths
+
+```{r}
+#| label: load-data
+
+# Load your time series here
+# Example: my_ts <- astsa::rec
+
+```
+
+---
+
+## Exercise 1: ACF and PACF Signatures
+
+### Task 1.1: The ACF
+
+Plot the autocorrelation function. What pattern do you see (slow decay, cutoff, oscillation)?
+
+```{r}
+#| label: ex1-acf
+
+# Your code here
+
+```
+
+*Describe the ACF pattern:*
+
+
+
+### Task 1.2: The PACF
+
+Plot the partial autocorrelation function using `stats::pacf()` or `astsa::acf2()`.
+
+```{r}
+#| label: ex1-pacf
+
+# Your code here
+
+```
+
+*At what lag does the PACF cut off (if at all)?*
+
+
+
+### Task 1.3: Identifying the Process
+
+Based on the ACF and PACF patterns:
+
+| Pattern | ACF | PACF | Suggests |
+|---------|-----|------|----------|
+| AR(p) | Tails off | Cuts off at lag p | Autoregressive |
+| MA(q) | Cuts off at lag q | Tails off | Moving average |
+| ARMA(p,q) | Tails off | Tails off | Mixed |
+
+*What model does the pattern suggest for your series?*
+
+
+
+---
+
+## Exercise 2: Differencing and ARIMA
+
+### Task 2.1: Differencing to Remove Trend
+
+If your series has a trend, apply first differencing: $\nabla x_t = x_t - x_{t-1}$
+
+Plot the differenced series and its ACF.
+
+```{r}
+#| label: ex2-differencing
+
+# Your code here
+
+```
+
+*Does differencing make the series stationary?*
+
+
+
+### Task 2.2: Fit an ARIMA Model
+
+Based on your analysis, fit an ARIMA(p, d, q) model using `stats::arima()` or `astsa::sarima()`.
+
+```{r}
+#| label: ex2-fit-arima
+
+# Your code here
+
+```
+
+*What values did you choose for p, d, and q? Why?*
+
+
+
+### Task 2.3: Interpret the Parameters
+
+Examine the fitted coefficients. For AR terms, what do the coefficients tell you about how past values influence the present?
+
+```{r}
+#| label: ex2-interpret
+
+# Your code here
+
+```
+
+*Your interpretation:*
+
+
+
+---
+
+## Exercise 3: Model Diagnostics
+
+### Task 3.1: Residual Analysis
+
+Extract the residuals from your fitted model. They should resemble white noise if the model is adequate.
+
+Check:
+
+1. Plot the residuals over time
+2. Plot the ACF of residuals
+3. Histogram or Q-Q plot of residuals
+
+```{r}
+#| label: ex3-residuals
+
+# Your code here
+
+```
+
+*Do the residuals look like white noise? Are there any remaining patterns?*
+
+
+
+### Task 3.2: Ljung-Box Test
+
+Apply the Ljung-Box test to formally check for remaining autocorrelation.
+
+```{r}
+#| label: ex3-ljung-box
+
+# Your code here
+
+```
+
+*What does the test conclude?*
+
+
+
+---
+
+## Exercise 4: Model Selection and Forecasting
+
+### Task 4.1: Compare Models with AIC/BIC
+
+Fit several candidate models (varying p and q) and compare using AIC and BIC.
+
+```{r}
+#| label: ex4-model-selection
+
+# Your code here
+
+```
+
+*Which model is selected by AIC? By BIC? Do they agree?*
+
+
+
+### Task 4.2: Generate Forecasts
+
+Use your chosen model to forecast the next 10–20 time points. Plot the forecasts with prediction intervals.
+
+```{r}
+#| label: ex4-forecast
+
+# Your code here
+
+```
+
+*Why do the prediction intervals widen as the forecast horizon increases?*
+
+
+
+### Task 4.3: Forecast Evaluation
+
+*(Skip if you don't have a holdout set.)*
+
+If possible, hold out the last portion of your series, fit the model on the training portion, and evaluate forecast accuracy.
+
+```{r}
+#| label: ex4-evaluation
+
+# Your code here
+
+```
+
+*How well did the model forecast the held-out observations?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Simulate an AR(1) process with φ = 0.8 and an MA(1) process with θ = 0.8. Plot the ACF and PACF of each. Verify they match the theoretical signatures.
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Your observations:*
+
+
+
+### Problem 2
+
+Explain in your own words why forecasts from ARIMA models eventually converge to the mean of the series. What does this imply about long-term forecasting?
+
+*Your explanation:*
+
+

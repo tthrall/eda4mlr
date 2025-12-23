@@ -1,0 +1,211 @@
+---
+title: "Chapter 3 Workbook: Clustering: EDA in Higher Dimensions"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Explain why standardization (z-scores) is necessary before computing distances across variables with different scales.
+2. Apply K-means clustering and interpret the resulting cluster assignments.
+3. Use the elbow method to guide selection of the number of clusters.
+4. Profile clusters by examining variable means and distributions within each group.
+5. Evaluate clustering results using metrics such as within-cluster sum of squares and Jaccard similarity.
+6. Distinguish between clustering for exploration versus clustering for comparison to a proposed classification.
+
+## The Big Picture
+
+> When you have many variables, how do you discover natural groupings in your data—and how do you know if those groupings are meaningful?
+
+---
+
+## Choosing Your Dataset
+
+For this workbook, you'll need a dataset with:
+
+- At least 50 observations
+- At least 3 numeric variables (for meaningful high-dimensional clustering)
+- Optionally, a categorical variable representing a "true" classification (for comparison)
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `datasets::iris` — 4 measurements, 3 species (known labels for comparison)
+- `palmerpenguins::penguins` — bill/flipper measurements, 3 species
+- `datasets::USArrests` — 4 crime/demographic variables, 50 states
+
+**Fallback option:** `datasets::mtcars` provides 11 numeric variables across 32 cars.
+
+```{r}
+#| label: load-data
+
+# Load your dataset here
+# Example: my_data <- datasets::iris
+
+```
+
+---
+
+## Exercise 1: Preparing for Clustering
+
+### Task 1.1: Why Standardize?
+
+Select three numeric variables with different scales (e.g., one measured in inches, another in thousands). Compute the Euclidean distance between two observations using raw values, then using z-scores.
+
+```{r}
+#| label: ex1-standardize
+
+# Your code here
+
+```
+
+*How does standardization change which observations appear "close" to each other?*
+
+
+
+### Task 1.2: Standardize Your Data
+
+Create a standardized version of your numeric variables using `scale()`.
+
+```{r}
+#| label: ex1-scale
+
+# Your code here
+
+```
+
+---
+
+## Exercise 2: K-Means Clustering
+
+### Task 2.1: Fit K-Means
+
+Apply K-means clustering with K = 3 (or another reasonable starting value). Examine the cluster assignments.
+
+```{r}
+#| label: ex2-kmeans
+
+# Your code here
+
+```
+
+### Task 2.2: The Elbow Method
+
+Fit K-means for K = 1 through K = 10. Plot the total within-cluster sum of squares against K. Where does the "elbow" appear?
+
+```{r}
+#| label: ex2-elbow
+
+# Your code here
+
+```
+
+*What value of K would you choose, and why?*
+
+
+
+### Task 2.3: Visualize Clusters
+
+Create a scatter plot of two variables, colored by cluster assignment. If you have more than two variables, consider using the first two principal components.
+
+```{r}
+#| label: ex2-visualize
+
+# Your code here
+
+```
+
+---
+
+## Exercise 3: Profiling and Evaluation
+
+### Task 3.1: Cluster Profiles
+
+For each cluster, compute the mean of each variable. Which variables most distinguish the clusters?
+
+```{r}
+#| label: ex3-profiles
+
+# Your code here
+
+```
+
+*Describe each cluster in substantive terms (e.g., "Cluster 1 contains observations with high X and low Y").*
+
+
+
+### Task 3.2: Compare to Known Labels
+
+*(Skip if your dataset lacks a categorical variable representing a "true" classification.)*
+
+If your data has known group labels (e.g., species), compare the cluster assignments to the true labels. Create a confusion matrix and compute the Jaccard similarity or adjusted Rand index.
+
+```{r}
+#| label: ex3-compare
+
+# Your code here
+
+```
+
+*How well do the clusters recover the known groups?*
+
+
+
+### Task 3.3: Exploration vs. Comparison
+
+Reflect on the difference between:
+
+- Using clustering to *discover* structure (exploration)
+- Using clustering to *validate* a proposed classification (comparison)
+
+*When would you use each approach?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Run K-means multiple times with different random seeds. Do you get the same cluster assignments each time? What does this tell you about the stability of K-means?
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Your observations:*
+
+
+
+### Problem 2
+
+Describe a real-world scenario where clustering would be more appropriate than classification, and vice versa.
+
+*Your response:*
+
+

@@ -1,0 +1,211 @@
+---
+title: "Chapter 2 Workbook: Conditional Distributions"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Define conditional expectation and the graph of averages. Explain their relevance to prediction.
+2. Define z-score as the number of SDs above or below the mean. Convert a vector of numeric values to a vector of sample z-scores.
+3. Distinguish between the SD line and the regression line and explain why the regression line is less steep.
+4. Compute and interpret the correlation coefficient as a measure of linear association.
+5. Explain why correlation does not imply causation and why zero correlation does not imply independence.
+6. Recognize Simpson's paradox and identify when aggregated patterns may reverse upon disaggregation.
+7. Apply the chi-squared test to assess independence of categorical variables.
+
+## The Big Picture
+
+> How does knowing one variable help you predict another—and when does it mislead you?
+
+---
+
+## Choosing Your Dataset
+
+For this workbook, you'll need a dataset with:
+
+- At least 50 observations
+- At least 2 numeric variables (for correlation and regression)
+- At least 1 categorical variable (for grouping and chi-squared tests)
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `datasets::mtcars` — miles per gallon, horsepower, weight, cylinders
+- `palmerpenguins::penguins` — bill length, flipper length, species
+- `ggplot2::mpg` — fuel economy, engine size, vehicle class
+
+**Fallback option:** `datasets::iris` provides numeric measurements with species labels.
+
+```{r}
+#| label: load-data
+
+# Load your dataset here
+# Example: my_data <- palmerpenguins::penguins
+
+```
+
+---
+
+## Exercise 1: Standardization and the Graph of Averages
+
+### Task 1.1: Computing Z-Scores
+
+Choose a numeric variable. Compute its z-scores manually (subtract the mean, divide by SD). Verify your result using `scale()`.
+
+```{r}
+#| label: ex1-zscores
+
+# Your code here
+
+```
+
+*What does a z-score of 2 mean in the context of your variable?*
+
+
+
+### Task 1.2: The Graph of Averages
+
+Choose two numeric variables (one predictor, one response). Bin the predictor into groups (e.g., quartiles or deciles) and compute the mean of the response within each bin. Plot these conditional means.
+
+```{r}
+#| label: ex1-graph-of-averages
+
+# Your code here
+
+```
+
+*What pattern do you see? Is the relationship approximately linear?*
+
+
+
+---
+
+## Exercise 2: Correlation and Regression
+
+### Task 2.1: Correlation Coefficient
+
+Compute the correlation between your two numeric variables. Interpret the sign and magnitude.
+
+```{r}
+#| label: ex2-correlation
+
+# Your code here
+
+```
+
+*Your interpretation:*
+
+
+
+### Task 2.2: SD Line vs. Regression Line
+
+Create a scatter plot with both:
+
+- The SD line (passes through the point of averages with slope = SD_y / SD_x, adjusted for sign of correlation)
+- The regression line (fitted via `lm()`)
+
+```{r}
+#| label: ex2-lines
+
+# Your code here
+
+```
+
+*Why is the regression line less steep than the SD line?*
+
+
+
+### Task 2.3: Correlation Is Not Causation
+
+Propose a plausible confounding variable that might explain the association you observed. How would you test for confounding?
+
+*Your response:*
+
+
+
+---
+
+## Exercise 3: Grouping and Independence
+
+### Task 3.1: Simpson's Paradox Exploration
+
+*(Skip if your dataset lacks a natural grouping variable.)*
+
+Compute the correlation between your two numeric variables for the full dataset, then separately within each level of a categorical variable. Do the within-group correlations differ from the overall correlation?
+
+```{r}
+#| label: ex3-simpsons
+
+# Your code here
+
+```
+
+*Could aggregation reverse or obscure the true relationship?*
+
+
+
+### Task 3.2: Chi-Squared Test
+
+*(Skip if your dataset does not contain two categorical variables, or create a categorical variable by binning a numeric variable.)*
+
+Choose two categorical variables. Create a contingency table and perform a chi-squared test for independence.
+
+```{r}
+#| label: ex3-chisq
+
+# Your code here
+
+```
+
+*What does the test tell you about the relationship between these variables?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Find or construct an example where two variables have zero correlation but are clearly not independent. (Hint: think about nonlinear relationships.)
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Your explanation:*
+
+
+
+### Problem 2
+
+Explain to a non-statistician why "regression to the mean" is not a causal phenomenon. Use an example from your dataset or from everyday life.
+
+*Your response:*
+
+

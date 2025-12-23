@@ -1,0 +1,190 @@
+---
+title: "Chapter 5 Workbook: Sampling and Study Design"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+set.seed(42)  # For reproducibility
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Explain why sample size alone does not guarantee valid inference.
+2. Give an example of selection bias in an observational study and its consequences.
+3. Distinguish between observational and experimental study designs.
+4. Define a sampling frame. Explain how it affects generalizability to a target population.
+5. Define and give examples of bias, chance error, and measurement uncertainty.
+
+## The Big Picture
+
+> Before you analyze data, you need to ask: Where did it come from? How was it collected? And what population can it actually tell you about?
+
+---
+
+## Note on This Workbook
+
+This workbook emphasizes critical thinking about data provenance rather than computation. You will analyze the design behind datasets and reason about what conclusions they can support.
+
+---
+
+## Exercise 1: Sample Size Is Not Enough
+
+### Task 1.1: The Literary Digest Debacle
+
+In 1936, *Literary Digest* surveyed 2.4 million people and predicted Alf Landon would defeat Franklin Roosevelt. Roosevelt won in a landslide. Research this case (or use what you know) and answer:
+
+*What went wrong? How did a sample of 2.4 million produce such a bad prediction?*
+
+
+
+### Task 1.2: Simulation of Selection Bias
+
+Create a population of 10,000 individuals with a variable of interest (e.g., income, opinion). Introduce selection bias by sampling in a way that over-represents one group. Compare the sample mean to the population mean.
+
+```{r}
+#| label: ex1-selection-bias
+
+# Your code here
+
+```
+
+*How large would your biased sample need to be to match the accuracy of a smaller random sample?*
+
+
+
+---
+
+## Exercise 2: Observational vs. Experimental
+
+### Task 2.1: Identify the Design
+
+For each scenario below, identify whether it is observational or experimental. Explain your reasoning.
+ 
+1. Researchers compare lung cancer rates between smokers and non-smokers.
+2. Patients are randomly assigned to receive a new drug or a placebo.
+3. A company analyzes which website design leads to more purchases by tracking user behavior.
+4. Students are randomly assigned to study with or without background music, then tested.
+
+*Your answers:*
+
+
+
+### Task 2.2: Confounding in Observational Studies
+
+Choose a dataset you've worked with (or a hypothetical example). Identify a relationship that might appear causal but could be explained by confounding.
+
+*Describe the potential confounder and how it could create a spurious association:*
+
+
+
+### Task 2.3: When Experiments Aren't Possible
+
+Give an example of a research question where randomized experiments would be unethical or impractical. How might researchers still draw useful conclusions?
+
+*Your example and approach:*
+
+
+
+---
+
+## Exercise 3: Sampling Frames and Generalizability
+
+### Task 3.1: Define the Sampling Frame
+
+For a dataset you've used in this course, answer:
+
+- What is the sampling frame (the list or mechanism from which observations were drawn)?
+- What is the target population (the group you want to generalize to)?
+- Are there systematic differences between the sampling frame and target population?
+
+*Your analysis:*
+
+
+
+### Task 3.2: Coverage Error
+
+Imagine you want to survey public opinion in your country. Consider three sampling frames:
+
+1. Landline telephone numbers
+2. Social media users
+3. Registered voters
+
+*For each, describe who might be excluded and how this could bias results:*
+
+
+
+---
+
+## Exercise 4: Sources of Error
+
+### Task 4.1: Decomposing Error
+
+Choose a measurement from a dataset or study you're familiar with. Decompose the potential error into:
+
+- **Bias** (systematic error that shifts all measurements in one direction)
+- **Chance error** (random variation from sample to sample)
+- **Measurement uncertainty** (imprecision in the measurement process itself)
+
+*Your decomposition:*
+
+
+
+### Task 4.2: Simulation of Measurement Error
+
+Generate a "true" variable, then add measurement error. Compare analyses using the error-prone variable to analyses using the true variable.
+
+```{r}
+#| label: ex4-measurement-error
+
+# Your code here
+
+```
+
+*How does measurement error affect your conclusions?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Find a news article or study that makes a causal claim based on observational data. Critique the claim: What alternative explanations exist? What would a stronger study design look like?
+
+*Your critique:*
+
+
+
+### Problem 2
+
+You are designing a study to understand student satisfaction at your university. Describe:
+
+- Your target population
+- Your sampling frame
+- Your sampling method
+- Potential sources of bias
+
+*Your study design:*
+
+

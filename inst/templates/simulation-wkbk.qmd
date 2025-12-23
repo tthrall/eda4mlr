@@ -1,0 +1,238 @@
+---
+title: "Chapter 4 Workbook: Statistical Simulation"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(eda4mlr)
+
+set.seed(42)  # For reproducibility
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. For a given family of probability distributions, distinguish R's 4 types of function: d/p/q/r.
+2. Generate a pseudo-random sample from common families of probability distributions.
+3. Design and implement Monte Carlo simulations to estimate quantities of interest.
+4. Compare estimators (e.g., mean vs. median) by examining their sampling distributions.
+5. Apply the bootstrap to construct confidence intervals without relying on parametric formulas.
+6. Explain when and why importance sampling is needed for rare event estimation.
+
+## The Big Picture
+
+> How can you use randomness to understand uncertainty—and to compare the quality of statistical methods?
+
+---
+
+## Note on Datasets
+
+This workbook differs from others: simulation generates its own data. You will create synthetic datasets to explore the behavior of statistical procedures. Where relevant, you may also apply bootstrap methods to a real dataset of your choosing.
+
+---
+
+## Exercise 1: R's Distribution Functions
+
+### Task 1.1: The d/p/q/r Family
+
+For the normal distribution, demonstrate what each function returns:
+
+- `dnorm()` — density
+- `pnorm()` — cumulative probability
+- `qnorm()` — quantile
+- `rnorm()` — random sample
+
+```{r}
+#| label: ex1-dpqr
+
+# Your code here
+
+```
+
+*In your own words, explain what each function computes.*
+
+
+
+### Task 1.2: Generating Random Samples
+
+Generate 1,000 observations from each of the following distributions and plot histograms:
+
+- Normal(mean = 0, sd = 1)
+- Uniform(min = 0, max = 1)
+- Exponential(rate = 1)
+
+```{r}
+#| label: ex1-samples
+
+# Your code here
+
+```
+
+*How do the shapes differ? What does the shape tell you about the underlying process?*
+
+
+
+---
+
+## Exercise 2: Monte Carlo Simulation
+
+### Task 2.1: Estimating a Probability
+
+Use simulation to estimate P(X > 2) where X ~ Normal(0, 1). Compare your Monte Carlo estimate to the exact value from `pnorm()`.
+
+```{r}
+#| label: ex2-probability
+
+# Your code here
+
+```
+
+*How close is your estimate? How does the accuracy change with sample size?*
+
+
+
+### Task 2.2: Comparing Estimators
+
+Generate 1,000 samples of size n = 30 from an Exponential(rate = 1) distribution. For each sample, compute both the sample mean and sample median. Plot the sampling distributions of both estimators.
+
+```{r}
+#| label: ex2-estimators
+
+# Your code here
+
+```
+
+*Which estimator has lower variance? Which is closer to the true mean (which equals 1 for Exponential(1))?*
+
+
+
+### Task 2.3: The Effect of Sample Size
+
+Repeat Task 2.2 for n = 10, 30, 100, and 500. How do the sampling distributions change?
+
+```{r}
+#| label: ex2-sample-size
+
+# Your code here
+
+```
+
+*What happens to bias and variance as n increases?*
+
+
+
+---
+
+## Exercise 3: The Bootstrap
+
+### Task 3.1: Bootstrap Confidence Interval
+
+Choose a real dataset (or generate one). Compute a 95% bootstrap confidence interval for the mean using the percentile method:
+
+1. Resample with replacement B = 1,000 times
+2. Compute the mean for each resample
+3. Take the 2.5th and 97.5th percentiles
+
+```{r}
+#| label: ex3-bootstrap-ci
+
+# Your code here
+
+```
+
+*Compare this to the classical confidence interval based on the t-distribution.*
+
+
+
+### Task 3.2: Bootstrap for a Non-Standard Statistic
+
+Use the bootstrap to construct a confidence interval for a statistic that lacks a simple formula—for example, the ratio of two means, or the median absolute deviation.
+
+```{r}
+#| label: ex3-bootstrap-nonstandard
+
+# Your code here
+
+```
+
+*Why is the bootstrap especially valuable for statistics like this?*
+
+
+
+---
+
+## Exercise 4: Rare Events and Importance Sampling
+
+### Task 4.1: The Rare Event Problem
+
+Estimate P(X > 4) where X ~ Normal(0, 1) using naive Monte Carlo. How many samples do you need before you see even one event?
+
+```{r}
+#| label: ex4-rare-naive
+
+# Your code here
+
+```
+
+*What is the exact probability? Why is naive simulation inefficient here?*
+
+
+
+### Task 4.2: Importance Sampling (Conceptual)
+
+Importance sampling shifts the sampling distribution to make rare events more common, then reweights the results. Explain in your own words why this approach works.
+ 
+*Your explanation:*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+Use simulation to verify the Central Limit Theorem: show that the sampling distribution of the mean approaches normality as n increases, even when sampling from a non-normal distribution (e.g., Exponential or Uniform).
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Your observations:*
+
+
+
+### Problem 2
+
+A colleague claims that the median is always more robust than the mean. Design a simulation to test this claim under different conditions (normal data, heavy-tailed data, data with outliers).
+
+```{r}
+#| label: practice-2
+
+# Your code here
+
+```
+
+*What did you find?*
+
+

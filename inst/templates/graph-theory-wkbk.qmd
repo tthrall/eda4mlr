@@ -1,0 +1,309 @@
+---
+title: "Chapter 15 Workbook: Graph Theory for Machine Learning"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(igraph)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Represent relational data as a graph composed of nodes and edges.
+2. Compute and interpret centrality measures: degree, betweenness, and PageRank.
+3. Apply community detection algorithms and interpret modularity scores.
+4. Project bipartite graphs onto single-mode networks and interpret the resulting structure.
+5. Extract graph-derived features for use in downstream machine learning models.
+6. Describe differences between graph analysis for understanding (what structure exists?) versus prediction (what will happen?).
+
+## The Big Picture
+
+> When your data is about relationships between entities, how do you represent, measure, and learn from that structure?
+
+---
+
+## Choosing Your Network
+
+For this workbook, you'll need a network (graph) dataset:
+
+- At least 20 nodes
+- A meaningful set of edges representing relationships
+- Something you're genuinely interested in
+
+**Suggested sources from `igraphdata` package:**
+
+- `igraphdata::karate` — Zachary's karate club (34 nodes, classic social network)
+- `igraphdata::UKfaculty` — friendship among UK faculty (81 nodes)
+- `igraphdata::USairports` — US airport connections (755 nodes, large)
+- `igraphdata::enron` — Enron email network (184 nodes)
+
+**Note:** You may need to install `igraphdata` separately: `install.packages("igraphdata")`
+
+```{r}
+#| label: load-data
+
+# Load your network here
+# Example:
+# library(igraphdata)
+# data("karate")
+# my_graph <- karate
+
+```
+
+---
+
+## Exercise 1: Graph Basics
+
+### Task 1.1: Explore the Graph
+
+Examine your graph's basic properties:
+
+- Number of nodes (vertices)
+- Number of edges
+- Directed or undirected?
+- Weighted or unweighted?
+
+```{r}
+#| label: ex1-basics
+
+# Your code here
+
+```
+
+*Describe your network in substantive terms (what do nodes and edges represent?).*
+
+
+
+### Task 1.2: Visualize the Network
+
+Create a visualization of your network using `igraph::plot()` or a similar function.
+
+```{r}
+#| label: ex1-visualize
+
+# Your code here
+
+```
+ 
+*What structure do you observe? Are there clusters, hubs, or isolated nodes?*
+
+
+
+### Task 1.3: The Adjacency Matrix
+
+Extract the adjacency matrix. What do the entries represent?
+
+```{r}
+#| label: ex1-adjacency
+
+# Your code here
+
+```
+
+*How sparse is the matrix? What does sparsity tell you about the network?*
+
+
+
+---
+
+## Exercise 2: Centrality Measures
+
+### Task 2.1: Degree Centrality
+
+Compute the degree of each node (number of connections). Who are the most connected nodes?
+
+```{r}
+#| label: ex2-degree
+
+# Your code here
+
+```
+
+*List the top 5 nodes by degree. Do they make sense as "central" actors?*
+
+
+
+### Task 2.2: Betweenness Centrality
+
+Betweenness measures how often a node lies on the shortest path between other nodes.
+
+```{r}
+#| label: ex2-betweenness
+
+# Your code here
+
+```
+
+*Which nodes have high betweenness? How do they differ from high-degree nodes?*
+
+
+
+### Task 2.3: PageRank
+
+PageRank assigns importance based on the importance of a node's neighbors (recursive centrality).
+
+```{r}
+#| label: ex2-pagerank
+
+# Your code here
+
+```
+
+*Compare the top nodes by PageRank to those by degree and betweenness.*
+
+
+
+### Task 2.4: When to Use Each Measure
+
+Describe a scenario where you would prefer:
+
+- Degree centrality
+- Betweenness centrality
+- PageRank
+
+*Your response:*
+
+
+
+---
+
+## Exercise 3: Community Detection
+
+### Task 3.1: Detect Communities
+
+Apply a community detection algorithm (e.g., `igraph::cluster_louvain()`, `cluster_walktrap()`, or `cluster_edge_betweenness()`).
+
+```{r}
+#| label: ex3-communities
+
+# Your code here
+
+```
+
+*How many communities were found? How large is each?*
+
+
+
+### Task 3.2: Modularity
+
+Modularity measures how well a community partition separates the network (higher is better).
+
+```{r}
+#| label: ex3-modularity
+
+# Your code here
+
+```
+
+*What is the modularity of your partition? Compare to a random partition.*
+
+
+
+### Task 3.3: Visualize Communities
+
+Re-plot your network, coloring nodes by community membership.
+
+```{r}
+#| label: ex3-visualize-communities
+
+# Your code here
+
+```
+
+*Do the detected communities correspond to meaningful groups?*
+
+
+
+---
+
+## Exercise 4: Graph Features for ML
+
+### Task 4.1: Node-Level Features
+
+Extract features for each node that could be used in a machine learning model:
+
+- Degree
+- Clustering coefficient
+- Centrality measures
+- Community membership
+
+```{r}
+#| label: ex4-node-features
+
+# Your code here
+
+```
+
+### Task 4.2: Bipartite Projection
+
+*(Skip if your network is not bipartite.)*
+
+If your network is bipartite (two types of nodes), project it onto a single-mode network. Interpret the resulting edge weights.
+
+```{r}
+#| label: ex4-bipartite
+
+# Your code here
+
+```
+
+*What does an edge in the projected network represent?*
+
+
+
+### Task 4.3: Understanding vs. Prediction
+
+Describe the difference between using graph analysis to:
+
+1. Understand structure (descriptive): What communities exist? Who is central?
+2. Predict outcomes (predictive): Will this user churn? Will these nodes connect in the future?
+
+*Your response:*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+The "friendship paradox" states that, on average, your friends have more friends than you do. Verify this empirically in your network: compare each node's degree to the average degree of its neighbors.
+
+```{r}
+#| label: practice-1
+
+# Your code here
+
+```
+
+*Does the paradox hold in your network?*
+
+
+
+### Problem 2
+
+A colleague suggests using only degree centrality to identify important nodes. Construct (or find) an example where degree centrality gives a misleading answer, but betweenness or PageRank does not.
+
+*Your example:*
+
+

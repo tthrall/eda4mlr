@@ -1,0 +1,251 @@
+---
+title: "Chapter 9 Workbook: Linear Discriminant Analysis"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(MASS)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Explain the difference between LDA and PCA (maximizing variance versus maximizing class separation).
+2. Explain Fisher's LDA criterion as the ratio of between-class to within-class variance.
+3. Derive linear discriminant functions from multivariate normal class distributions.
+4. Apply LDA for classification and interpret the resulting decision boundaries.
+5. Explain how to determine when the equal-covariance assumption fails and QDA may be preferred.
+6. Describe how discriminant directions are related to the eigenvalue problem involving within- and between-class covariance matrices.
+
+## The Big Picture
+
+> When you have labeled groups, how do you find the projection that best separates them—and how does this differ from PCA?
+
+---
+
+## Choosing Your Dataset
+
+For this workbook, you'll need a dataset with:
+
+- At least 50 observations
+- At least 2 numeric predictor variables
+- A categorical response variable with 2 or more classes
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `datasets::iris` — 4 measurements, 3 species
+- `MASS::crabs` — 5 measurements, species × sex (4 groups)
+- `MASS::fgl` — forensic glass fragments, 9 measurements, 6 types
+
+**Fallback option:** `palmerpenguins::penguins` provides 4 measurements across 3 species.
+
+```{r}
+#| label: load-data
+
+# Load your dataset here
+# Example: my_data <- datasets::iris
+
+```
+
+---
+
+## Exercise 1: LDA vs. PCA
+
+### Task 1.1: PCA Ignores Labels
+
+Run PCA on your numeric variables (ignoring the class labels). Plot PC1 vs. PC2, colored by class.
+
+```{r}
+#| label: ex1-pca
+
+# Your code here
+
+```
+
+*How well does PCA separate the classes? Is this guaranteed?*
+
+
+
+### Task 1.2: LDA Uses Labels
+
+Run LDA using `MASS::lda()`. Plot the first two linear discriminants, colored by class.
+
+```{r}
+#| label: ex1-lda
+
+# Your code here
+
+```
+
+*How does the separation compare to PCA?*
+
+
+
+### Task 1.3: The Fundamental Difference
+
+Explain in your own words: What criterion does PCA optimize? What criterion does LDA optimize? Why might these give different results?
+
+*Your explanation:*
+
+
+
+---
+
+## Exercise 2: Fisher's Criterion
+
+### Task 2.1: Within-Class and Between-Class Variance
+
+For a single variable, compute:
+
+- The within-class variance (pooled variance within each group)
+- The between-class variance (variance of group means)
+- Fisher's ratio: between / within
+
+```{r}
+#| label: ex2-fisher-univariate
+
+# Your code here
+
+```
+
+*Which variable has the highest Fisher ratio? Is this the best variable for separating classes?*
+
+
+
+### Task 2.2: Multivariate Extension
+
+In the multivariate case, LDA finds directions that maximize the ratio of between-class to within-class scatter. The discriminant directions are eigenvectors of $S_W^{-1} S_B$.
+
+Examine the coefficients (loadings) from your LDA fit. Which original variables contribute most to the first discriminant direction?
+
+```{r}
+#| label: ex2-lda-coefficients
+
+# Your code here
+
+```
+
+*Interpret the first linear discriminant in terms of the original variables.*
+
+
+
+---
+
+## Exercise 3: Classification and Decision Boundaries
+
+### Task 3.1: Classification
+
+Use your LDA model to classify observations. Create a confusion matrix comparing predicted vs. actual classes.
+
+```{r}
+#| label: ex3-classification
+
+# Your code here
+
+```
+
+*What is the overall accuracy? Which classes are most often confused?*
+
+
+
+### Task 3.2: Visualizing Decision Boundaries
+
+*(For 2 predictors, or use the first 2 linear discriminants.)*
+
+Create a plot showing the decision boundaries. Overlay the actual observations, colored by true class.
+
+```{r}
+#| label: ex3-boundaries
+
+# Your code here
+
+```
+
+*Are the boundaries linear? Why must they be for LDA?*
+
+
+
+---
+ 
+## Exercise 4: The Equal-Covariance Assumption
+
+### Task 4.1: Check the Assumption
+
+LDA assumes all classes have the same covariance matrix. Compute the covariance matrix for each class separately and compare.
+
+```{r}
+#| label: ex4-covariance-check
+
+# Your code here
+
+```
+
+*Do the covariance matrices look similar? How would you quantify this?*
+
+
+
+### Task 4.2: LDA vs. QDA
+
+Fit a Quadratic Discriminant Analysis model using `MASS::qda()`. Compare its predictions to LDA.
+
+```{r}
+#| label: ex4-qda
+
+# Your code here
+
+```
+
+*When does QDA outperform LDA? What is the cost of using QDA?*
+
+
+
+### Task 4.3: When to Use Which
+
+Describe scenarios where you would prefer:
+
+- LDA over QDA
+- QDA over LDA
+- Neither (a different method entirely)
+
+*Your response:*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+With only 2 classes, LDA produces a single discriminant direction. With K classes, it produces at most K-1 directions. Explain why this is the case.
+
+*Your explanation:*
+
+
+
+### Problem 2
+
+A colleague suggests using PCA for dimension reduction before applying a classifier. Another suggests using LDA. Under what circumstances would each approach be preferable?
+
+*Your response:*
+
+

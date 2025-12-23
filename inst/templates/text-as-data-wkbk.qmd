@@ -1,0 +1,259 @@
+---
+title: "Chapter 10 Workbook: Text as Data"
+subtitle: "EDA for Machine Learning"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+    df-print: paged
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+library(tidytext)
+library(eda4mlr)
+
+```
+
+## Learning Objectives
+
+Here are the learning goals for this chapter:
+
+1. Transform raw text into structured numerical representations suitable for analysis.
+2. Apply standard preprocessing steps: tokenization, case normalization, stop word removal, and stemming.
+3. Construct and interpret document-term matrices.
+4. Calculate TF-IDF weights and explain what they capture that raw counts do not.
+5. Explain how structured text representations enable machine learning on unstructured data.
+
+## The Big Picture
+
+> How do you convert words into numbers—and what information is preserved or lost in the process?
+
+---
+
+## Choosing Your Corpus
+
+For this workbook, you'll need a collection of text documents:
+
+- At least 10 documents (chapters, articles, reviews, etc.)
+- Enough text per document to yield meaningful term frequencies
+- Something you're genuinely interested in
+
+**Suggested sources:**
+
+- `janeaustenr::austen_books()` — 6 novels by Jane Austen (use chapters as documents)
+- `gutenbergr::gutenberg_download()` — public domain books from Project Gutenberg
+- Your own collection of articles, emails, or reviews
+
+**Reference:** The workflow follows `tidytextmining.com` conventions using the `tidytext` package.
+
+```{r}
+#| label: load-data
+
+# Load your text data here
+# Example using Jane Austen:
+# library(janeaustenr)
+# my_text <- austen_books()
+
+```
+
+---
+
+## Exercise 1: Tokenization
+
+### Task 1.1: From Text to Tokens
+
+Use `tidytext::unnest_tokens()` to convert your text into a one-token-per-row format.
+
+```{r}
+#| label: ex1-tokenize
+
+# Your code here
+
+```
+
+*How many total tokens? How many unique tokens (types)?*
+
+
+
+### Task 1.2: Word Frequencies
+
+Count the frequency of each word. What are the 20 most common words?
+
+```{r}
+#| label: ex1-frequencies
+
+# Your code here
+
+```
+
+*Are these the most "informative" words? Why or why not?*
+
+
+
+---
+
+## Exercise 2: Preprocessing
+
+### Task 2.1: Stop Word Removal
+
+Remove stop words using `tidytext::stop_words`. How does the list of most common words change?
+
+```{r}
+#| label: ex2-stopwords
+
+# Your code here
+
+```
+
+*Compare the top 20 words before and after stop word removal.*
+
+
+
+### Task 2.2: The Effect of Preprocessing Choices
+
+Experiment with different preprocessing steps:
+
+- Case normalization (already done by `unnest_tokens()`)
+- Removing numbers
+- Stemming (using `SnowballC::wordStem()` if available)
+
+```{r}
+#| label: ex2-preprocessing
+
+# Your code here
+
+```
+
+*How do these choices affect your vocabulary size and word frequencies?*
+
+
+
+---
+
+## Exercise 3: Document-Term Matrix
+
+### Task 3.1: Construct a DTM
+
+Create a document-term matrix where rows are documents and columns are terms. Use `tidytext::cast_dtm()` or construct it manually.
+
+```{r}
+#| label: ex3-dtm
+
+# Your code here
+
+```
+
+*What are the dimensions? What does sparsity mean in this context?*
+
+
+
+### Task 3.2: Interpreting the DTM
+
+Examine a few rows (documents) of your DTM. What do the values represent?
+
+```{r}
+#| label: ex3-interpret
+
+# Your code here
+
+```
+
+*Can you identify the "topic" of a document from its term frequencies?*
+
+
+
+---
+
+## Exercise 4: TF-IDF
+
+### Task 4.1: Compute TF-IDF
+
+Calculate TF-IDF weights using `tidytext::bind_tf_idf()`.
+
+```{r}
+#| label: ex4-tfidf
+
+# Your code here
+
+```
+
+*For a specific document, compare the top words by raw count vs. top words by TF-IDF.*
+
+
+
+### Task 4.2: What TF-IDF Captures
+
+Find words with:
+
+- High TF, low IDF (common everywhere)
+- Low TF, high IDF (rare overall)
+- High TF-IDF (distinctive to specific documents)
+
+```{r}
+#| label: ex4-tfidf-analysis
+
+# Your code here
+
+```
+
+*Why is TF-IDF often more useful than raw counts for distinguishing documents?*
+
+
+
+---
+
+## Exercise 5: From Text to Features
+
+### Task 5.1: Ready for Machine Learning
+
+Your document-term matrix (or TF-IDF matrix) is now a numeric representation suitable for ML algorithms.
+
+Choose two documents and compute their cosine similarity using their TF-IDF vectors.
+
+```{r}
+#| label: ex5-similarity
+
+# Your code here
+
+```
+
+*Does the similarity score match your intuition about how related the documents are?*
+
+
+
+---
+
+## Practice Problems
+
+### Problem 1
+
+The "bag of words" representation discards word order. Construct an example where two sentences have identical bag-of-words representations but very different meanings.
+
+*Your example:*
+
+
+
+### Problem 2
+
+N-grams (bigrams, trigrams) capture some word order. Tokenize your text into bigrams and examine the most common ones. What information do bigrams capture that unigrams miss?
+
+```{r}
+#| label: practice-2
+
+# Your code here
+
+```
+
+*Your observations:*
+
+
