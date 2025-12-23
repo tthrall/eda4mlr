@@ -36,7 +36,7 @@ Here are the learning goals for this chapter:
 
 ## The Big Picture
 
-> When you have many variables, how do you discover natural groupings in your data—and how do you know if those groupings are meaningful?
+> How do you discover natural groupings in your data—and how do you assess whether those groupings are meaningful?
 
 ---
 
@@ -204,7 +204,7 @@ Run K-means multiple times with different random seeds. Do you get the same clus
 
 ### Problem 2
 
-Describe a real-world scenario where clustering would be more appropriate than classification, and vice versa.
+Describe a real-world scenario where clustering would be more appropriate than pre-defined classification, and vice versa.
 
 *Your response:*
 

@@ -139,10 +139,10 @@ Imagine you want to survey public opinion in your country. Consider three sampli
 
 ### Task 4.1: Decomposing Error
 
-Choose a measurement from a dataset or study you're familiar with. Decompose the potential error into:
+Choose a measurement from a dataset or study you're familiar with, where "measurement" means any aspect of the data (for example, a physical measurement, or a survey response) that can be summarized numerically. Decompose the potential error into:
 
 - **Bias** (systematic error that shifts all measurements in one direction)
-- **Chance error** (random variation from sample to sample)
+- **Sampling error** (random variation from sample to sample)
 - **Measurement uncertainty** (imprecision in the measurement process itself)
 
 *Your decomposition:*

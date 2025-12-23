@@ -36,7 +36,7 @@ Here are the learning goals for this chapter:
 
 ## The Big Picture
 
-> How do you measure the information content of a variable—and how much one variable tells you about another?
+> How do you measure uncertainty about the current state of a variable—and how much one variable tells you about another?
 
 ---
 
@@ -111,7 +111,7 @@ Verify your answers by computing entropy for both cases.
 
 Explain in your own words how entropy is used to choose splits in a decision tree. Why do we prefer splits that reduce entropy?
 
-*Your explanation:*
+*How would you explain this idea to a friend?*
 
 
 
@@ -164,7 +164,7 @@ Create or find an example where two variables have:
 
 ### Task 3.1: KL Divergence
 
-KL divergence measures how one probability distribution differs from another:
+KL divergence measures how one probability distribution Q diverges from a reference probability distribution P:
 
 $$D_{KL}(P \| Q) = \sum_{i} p_i \log_2\left(\frac{p_i}{q_i}\right)$$
 

@@ -38,7 +38,7 @@ Here are the learning goals for this chapter:
 
 ## The Big Picture
 
-> How can you use randomness to understand uncertainty—and to compare the quality of statistical methods?
+> How can you use random simulations to understand the uncertainty of sample estimates, and the performance of statistical methods?
 
 ---
 
@@ -50,7 +50,7 @@ This workbook differs from others: simulation generates its own data. You will c
 
 ## Exercise 1: R's Distribution Functions
 
-### Task 1.1: The d/p/q/r Family
+### Task 1.1: The d/p/q/r Suite of Distribution Functions
 
 For the normal distribution, demonstrate what each function returns:
 
@@ -110,7 +110,7 @@ Use simulation to estimate P(X > 2) where X ~ Normal(0, 1). Compare your Monte C
 
 ### Task 2.2: Comparing Estimators
 
-Generate 1,000 samples of size n = 30 from an Exponential(rate = 1) distribution. For each sample, compute both the sample mean and sample median. Plot the sampling distributions of both estimators.
+Generate 1,000 samples, each of size n = 30, from an Exponential(rate = 1) distribution. For each sample, compute both the sample mean and sample median. Plot the sampling distributions of both estimators.
 
 ```{r}
 #| label: ex2-estimators
@@ -148,7 +148,7 @@ Choose a real dataset (or generate one). Compute a 95% bootstrap confidence inte
 
 1. Resample with replacement B = 1,000 times
 2. Compute the mean for each resample
-3. Take the 2.5th and 97.5th percentiles
+3. Take the 2.5th and 97.5th percentiles of the bootstrapped means
 
 ```{r}
 #| label: ex3-bootstrap-ci
@@ -157,7 +157,7 @@ Choose a real dataset (or generate one). Compute a 95% bootstrap confidence inte
 
 ```
 
-*Compare this to the classical confidence interval based on the t-distribution.*
+*Compare this to the classical confidence interval based on the normal approximation of the sampling distribution of the mean.*
 
 
 
@@ -172,7 +172,7 @@ Use the bootstrap to construct a confidence interval for a statistic that lacks 
 
 ```
 
-*Why is the bootstrap especially valuable for statistics like this?*
+*How does this exercise change or confirm your thinking about using the bootstrap method?*
 
 
 
@@ -197,7 +197,7 @@ Estimate P(X > 4) where X ~ Normal(0, 1) using naive Monte Carlo. How many sampl
 
 ### Task 4.2: Importance Sampling (Conceptual)
 
-Importance sampling shifts the sampling distribution to make rare events more common, then reweights the results. Explain in your own words why this approach works.
+Importance sampling shifts the sampling distribution to make rare events more common, then reweights the results. How would you explain this in your own words to a friend?
  
 *Your explanation:*
 
@@ -209,7 +209,7 @@ Importance sampling shifts the sampling distribution to make rare events more co
 
 ### Problem 1
 
-Use simulation to verify the Central Limit Theorem: show that the sampling distribution of the mean approaches normality as n increases, even when sampling from a non-normal distribution (e.g., Exponential or Uniform).
+Use simulation to demonstrate the Central Limit Theorem: show that the sampling distribution of the mean approaches normality as n increases, even when sampling from a non-normal distribution (e.g., Exponential or Uniform).
 
 ```{r}
 #| label: practice-1
@@ -224,7 +224,7 @@ Use simulation to verify the Central Limit Theorem: show that the sampling distr
 
 ### Problem 2
 
-A colleague claims that the median is always more robust than the mean. Design a simulation to test this claim under different conditions (normal data, heavy-tailed data, data with outliers).
+A colleague claims that the median is always more robust than the mean. Design a simulation to test this claim under different conditions (normal data, heavy-tailed data, skewed data, data with outliers).
 
 ```{r}
 #| label: practice-2
@@ -233,6 +233,6 @@ A colleague claims that the median is always more robust than the mean. Design a
 
 ```
 
-*What did you find?*
+*How would you use your findings to respond to your colleague?*
 
 
