@@ -32,11 +32,11 @@ Here are the learning goals for this chapter:
 2. Explain why time series data requires specialized methods (dependence structure, autocorrelation).
 3. Decompose a time series visually into trend, seasonality, and residual components.
 4. Assess whether a time series is approximately stationary.
-5. In time series analysis, define and explain the role of the time-shift operator.
+5. Define and explain the role of the time-shift operator.
 
 ## The Big Picture
 
-> What makes time series different from other data—and why do we need specialized tools to analyze it?
+> What makes time series different from other data, and why do we need specialized data analysis tools?
 
 ---
 

@@ -37,7 +37,7 @@ Here are the learning goals for this chapter:
 
 ## The Big Picture
 
-> How do you model the dependence structure of a time series—and use it to forecast the future?
+> How can the dependence structure of a time series be modeled and used to forecast future values?
 
 ---
 

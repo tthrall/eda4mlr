@@ -97,9 +97,9 @@ Find the frequency with the highest spectral power. Convert this frequency to a 
 
 ### Task 1.3: The Periodogram Is Inconsistent
 
-The raw periodogram is a poor estimator of the true spectral density—it doesn't become more accurate as sample size increases.
+The raw periodogram is a poor estimator of the true spectral density—it fails to become more precise as sample size increases.
 
-Explain in your own words why smoothing is necessary.
+In your own words, how would you explain the necessity of smoothing to a friend?
 
 *Your explanation:*
 
@@ -138,7 +138,7 @@ Demonstrate this tradeoff by plotting spectra with different bandwidths.
 
 ```
 
-*What bandwidth gives the best balance for your series?*
+*If a friend had to choose a bandwidth for this data, how would you advise them?*
 
 
 
@@ -236,7 +236,7 @@ High coherence at a specific frequency means the series share a common cycle at 
 
 ### Problem 1
 
-A colleague claims they found a 7-day cycle in their data. The spectral peak is at frequency 0.143. Verify that this corresponds to a 7-day period. What would the frequency be for a 30-day cycle?
+A colleague claims they found a 7-day cycle in their data. The spectral peak is at frequency 0.143. How would you confirm or correct your colleague? What would the frequency be for a 30-day cycle?
 
 *Your calculation:*
 
@@ -244,7 +244,7 @@ A colleague claims they found a 7-day cycle in their data. The spectral peak is 
 
 ### Problem 2
 
-Explain in your own words why the frequency domain and time domain perspectives are complementary. Give an example of a question better answered in each domain.
+Suppose a friend is just beginning to study time series analysis.  How would you explain to them the benefits of these two perspectives: time domain and frequency domain? What examples would you give them of a question better answered in each domain?
 
 *Your response:*
 
