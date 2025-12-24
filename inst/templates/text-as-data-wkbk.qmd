@@ -48,11 +48,19 @@ For this workbook, you'll need a collection of text documents:
 - Enough text per document to yield meaningful term frequencies
 - Something you're genuinely interested in
 
-**Suggested sources:**
+**Built-in (no download required):**
 
-- `janeaustenr::austen_books()` — 6 novels by Jane Austen (use chapters as documents)
-- `gutenbergr::gutenberg_download()` — public domain books from Project Gutenberg
-- Your own collection of articles, emails, or reviews
+- `janeaustenr::austen_books()` — 6 novels, ~700K words (use chapters as documents)
+- `hcandersenr::hca_fairytales()` — 150+ tales, multilingual option
+
+**Cached on first use:**
+
+- `textdata::dataset_imdb()` — 50K movie reviews with sentiment labels
+- `quanteda.corpora::data_corpus_inaugural` — US inaugural addresses
+
+**Not recommended for classwork:** `gutenbergr` requires network access and can be slow or unreliable. Use it only for independent projects where you can cache results locally.
+
+**Fallback:** The chapter examples use `janeaustenr`, which works well if you want to follow along directly.
 
 **Reference:** The workflow follows `tidytextmining.com` conventions using the `tidytext` package.
 
@@ -61,8 +69,7 @@ For this workbook, you'll need a collection of text documents:
 
 # Load your text data here
 # Example using Jane Austen:
-# library(janeaustenr)
-# my_text <- austen_books()
+# my_text <- janeaustenr::austen_books()
 
 ```
 

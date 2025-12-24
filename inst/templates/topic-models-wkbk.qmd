@@ -51,11 +51,19 @@ For this workbook, you'll need a collection of text documents:
 - Documents with diverse content (so topics can emerge)
 - Something you're genuinely interested in
 
-**Suggested sources:**
+**Built-in (no download required):**
 
 - `topicmodels::AssociatedPress` — 2,246 AP news articles (pre-formatted as DTM)
 - `janeaustenr::austen_books()` — chapters from 6 novels
-- `gutenbergr::gutenberg_download()` — multiple books on different subjects
+- `quanteda.corpora::data_corpus_inaugural` — US inaugural addresses (good temporal span)
+
+**Cached on first use:**
+
+- `textdata::dataset_ag_news()` — 120K news articles with category labels (allows comparison of discovered vs. known topics)
+
+**Not recommended for classwork:** `gutenbergr` requires network access and can be slow or unreliable.
+
+**Fallback:** The `AssociatedPress` data is pre-formatted as a DTM and works well for following the chapter examples.
 
 **Note:** Topic modeling requires a document-term matrix. Review Chapter 10 if needed.
 
