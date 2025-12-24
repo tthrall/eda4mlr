@@ -28,7 +28,7 @@ library(eda4mlr)
 
 Here are the learning goals for this chapter:
 
-1. Transform raw text into structured numerical representations suitable for analysis.
+1. Transform raw text into structured numerical representations suitable for data analysis.
 2. Apply standard preprocessing steps: tokenization, case normalization, stop word removal, and stemming.
 3. Construct and interpret document-term matrices.
 4. Calculate TF-IDF weights and explain what they capture that raw counts do not.
@@ -81,7 +81,7 @@ Use `tidytext::unnest_tokens()` to convert your text into a one-token-per-row fo
 
 ```
 
-*How many total tokens? How many unique tokens (types)?*
+*How many total tokens? How many unique tokens?*
 
 
 
@@ -206,7 +206,7 @@ Find words with:
 
 ```
 
-*Why is TF-IDF often more useful than raw counts for distinguishing documents?*
+*Why might TF-IDF be more useful than raw counts for distinguishing documents?*
 
 
 

@@ -239,7 +239,7 @@ Topic models are unsupervised—they discover structure without labels. Describe
 
 ### Problem 2
 
-A colleague fits a 100-topic model and reports high held-out likelihood. But when you examine the topics, many are uninterpretable or redundant. How would you advise them?
+A colleague fits a 100-topic model and reports high held-out likelihood. But when you examine the topics, many are uninterpretable or redundant. How would you advise your colleague?
 
 *Your response:*
 
