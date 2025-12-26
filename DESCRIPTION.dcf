@@ -24,6 +24,7 @@ Suggests:
     quarto,
     scales,
     tidyr, 
-    tidytext
+    tidytext,
+    topicmodels
 VignetteBuilder: quarto
 RoxygenNote: 7.3.3
