@@ -17,9 +17,13 @@ execute:
 #| label: setup
 #| include: false
 
-library(ggplot2)
+# CRAN libraries
 library(dplyr)
+library(ggplot2)
+library(janeaustenr)
 library(tidytext)
+
+# local library
 library(eda4mlr)
 
 ```
@@ -264,3 +268,9 @@ N-grams (bigrams, trigrams) capture some word order. Tokenize your text into big
 *Your observations:*
 
 
+
+---
+
+## Looking Ahead
+
+The document-term matrices and TF-IDF representations you constructed here are the foundation for topic modeling in Chapter 11. There, you'll use these same representations to discover latent thematic structure in document collections.

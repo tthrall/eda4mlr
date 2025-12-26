@@ -17,10 +17,14 @@ execute:
 #| label: setup
 #| include: false
 
-library(ggplot2)
+# CRAN libraries
 library(dplyr)
+library(ggplot2)
+library(janeaustenr)
 library(tidytext)
 library(topicmodels)
+
+# local library
 library(eda4mlr)
 
 ```
@@ -250,5 +254,4 @@ Topic models are unsupervised—they discover structure without labels. Describe
 A colleague fits a 100-topic model and reports high held-out likelihood. But when you examine the topics, many are uninterpretable or redundant. How would you advise your colleague?
 
 *Your response:*
-
 
