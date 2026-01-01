@@ -2,28 +2,29 @@ Package: eda4mlr
 Title: Datasets and Workbooks for "Exploratory Data Analysis for Machine Learning"
 Version: 1.1.1
 Authors@R: person("Tony", "Thrall", email = "tthrall@Alumni.Stanford.edu", role = c("aut", "cre"))
-Description: Companion datasets for the textbook Exploratory Data Analysis 
+Description: Companion datasets for the textbook Exploratory Data Analysis
     for Machine Learning.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: 
+Depends:
     R (>= 4.0)
-Suggests: 
-    astsa, 
-    beans, 
-    dplyr, 
-    ggplot2, 
-    gridExtra, 
-    HistData, 
-    igraphdata, 
-    ISLR2, 
-    janeaustenr, 
-    knitr, 
-    MASS, 
+Suggests:
+    astsa,
+    beans,
+    dplyr,
+    ggplot2,
+    gridExtra,
+    HistData,
+    igraphdata,
+    ISLR2,
+    janeaustenr,
+    knitr,
+    MASS,
+    plot3D,
     quarto,
     scales,
-    tidyr, 
+    tidyr,
     tidytext,
     topicmodels
 VignetteBuilder: quarto
