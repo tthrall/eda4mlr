@@ -34,12 +34,11 @@ library(eda4mlr)
 Here are the learning goals for this chapter:
 
 1. Describe the generative model underlying Latent Dirichlet Allocation (LDA).
-2. Interpret word mixtures per topic (β) and topic mixtures per document (γ).
-3. Fit a topic model to a corpus of text documents.
-4. Qualitatively evaluate a fitted topic model using the criteria of coherence and interpretability.
-5. Select the number of topics using: (1) held-out likelihood; and (2) domain judgment.
-6. Describe Latent Dirichlet Allocation, Linear Discriminant Analysis, and the difference between the two.
-7. Apply topic models to discover thematic structure in document collections.
+2. Interpret beta (word distributions per topic) and gamma (topic distributions per document).
+3. Fit an LDA model in R and extract topic-word and document-topic distributions.
+4. Select and justify the number of topics (K) using coherence metrics or domain knowledge.
+5. Evaluate topic quality through inspection of top words and representative documents.
+6. Distinguish Latent Dirichlet Allocation (topic model) from Linear Discriminant Analysis (classification method).
 
 ## The Big Picture
 

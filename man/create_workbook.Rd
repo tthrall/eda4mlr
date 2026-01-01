@@ -4,7 +4,7 @@
 \alias{create_workbook}
 \title{Create a workbook from template}
 \usage{
-create_workbook(chapter, overwrite = FALSE)
+create_workbook(chapter, overwrite = FALSE, open = TRUE)
 }
 \arguments{
 \item{chapter}{Chapter identifier. Either an integer chapter number or a
@@ -12,6 +12,9 @@ character slug. Use \code{list_workbooks()} to see available options.}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite existing file with same
 name. Default is \code{FALSE}.}
+
+\item{open}{Logical. If \code{TRUE} and RStudio is available, open the file
+automatically. Default is \code{TRUE}.}
 }
 \value{
 Invisibly returns the path to the created file.

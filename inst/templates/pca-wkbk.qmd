@@ -28,7 +28,7 @@ library(eda4mlr)
 Here are the learning goals for this chapter:
 
 1. Describe the goal and method of Principal Component Analysis (PCA).
-2. Compute principal components via eigen-decomposition of the covariance matrix.
+2. Compute principal components via eigendecomposition of the covariance matrix.
 3. Interpret loadings as the contribution of original variables to each principal component.
 4. Use the scree plot to determine how many components to retain.
 5. Project high-dimensional data onto principal components for visualization.

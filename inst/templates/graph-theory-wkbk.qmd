@@ -28,12 +28,14 @@ library(eda4mlr)
 
 Here are the learning goals for this chapter:
 
-1. Represent relational data as a graph composed of nodes and edges.
-2. Compute and interpret centrality measures: degree, betweenness, and PageRank.
-3. Apply community detection algorithms and interpret modularity scores.
-4. Project bipartite graphs onto single-mode networks and interpret the resulting structure.
-5. Extract graph-derived features for use in downstream machine learning models.
-6. Describe differences between graph analysis for understanding (what structure exists?) versus prediction (what will happen?).
+1. Define the basic vocabulary of graph theory: nodes, edges, directed/undirected, weighted/unweighted.
+2. Construct adjacency matrices and edge lists from graph descriptions.
+3. Calculate degree, betweenness, and closeness centrality measures.
+4. Interpret centrality measures in the context of real-world networks.
+5. Apply community detection algorithms and interpret the results.
+6. Explain how graph structure can be converted into features for machine learning.
+7. Analyze bipartite graphs and construct projections.
+8. Describe differences between graph analysis for understanding versus prediction.
 
 ## The Big Picture
 

@@ -28,12 +28,12 @@ library(eda4mlr)
 
 Here are the learning goals for this chapter:
 
-1. Interpret the spectrum as the decomposition of variance across frequencies.
-2. Estimate the spectral density function using the periodogram.
-3. Explain why the periodogram must be smoothed to obtain a consistent estimator of the spectral density function.
-4. Identify periodic components from spectral peaks and convert frequency to period.
-5. Explain the bias-variance tradeoff in spectral estimation (bandwidth selection).
-6. Apply coherence analysis to assess the relationship between two time series across frequencies.
+1. Interpret the spectrum as a decomposition of variance by frequency.
+2. Compute and interpret the periodogram of a time series.
+3. Explain the relationship between the spectrum and the autocorrelation function.
+4. Apply spectral smoothing to obtain consistent spectral estimates.
+5. Identify dominant frequencies in a time series using spectral analysis.
+6. Compute coherence between two series and interpret what it reveals about shared periodicity.
 7. Describe the spectral density function of an AR(1) or MA(1) model.
 
 ## The Big Picture

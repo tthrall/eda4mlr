@@ -31,7 +31,7 @@ Here are the learning goals for this chapter:
 2. Apply K-means clustering and interpret the resulting cluster assignments.
 3. Use the elbow method to guide selection of the number of clusters.
 4. Profile clusters by examining variable means and distributions within each group.
-5. Evaluate clustering results using metrics such as within-cluster sum of squares and Jaccard similarity.
+5. Evaluate clustering results using within-cluster sum of squares and Jaccard similarity.
 6. Distinguish between clustering for exploration versus clustering for comparison to a proposed classification.
 
 ## The Big Picture

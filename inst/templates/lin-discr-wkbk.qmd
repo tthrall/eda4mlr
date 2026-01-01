@@ -28,12 +28,13 @@ library(eda4mlr)
 
 Here are the learning goals for this chapter:
 
-1. Explain the difference between LDA and PCA (maximizing variance versus maximizing class separation).
-2. Explain Fisher's LDA criterion as the ratio of between-class to within-class variance.
-3. Derive linear discriminant functions from multivariate normal distributions per class.
-4. Apply LDA and interpret the resulting decision boundaries.
-5. Explain how to determine when the equal-covariance assumption fails and QDA may be preferred.
-6. Describe how discriminant directions are related to the eigenvalue problem involving within- and between-class covariance matrices.
+1. Distinguish supervised from unsupervised methods, and dimension reduction from classification.
+2. Explain how LDA differs from PCA in its objective function.
+3. Interpret Fisher's criterion for LDA.
+4. Describe the relationship between LDA and logistic regression.
+5. Apply LDA in R to classify observations into groups.
+6. Evaluate classification accuracy using a confusion matrix.
+7. Distinguish between LDA and QDA and identify when each is appropriate.
 
 ## The Big Picture
 

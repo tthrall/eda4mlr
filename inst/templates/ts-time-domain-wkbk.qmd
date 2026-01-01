@@ -28,12 +28,12 @@ library(eda4mlr)
 
 Here are the learning goals for this chapter:
 
-1. Identify AR, MA, and ARMA processes from their ACF and PACF signatures.
-2. Fit ARIMA models and interpret their parameters.
-3. Use differencing to remove a trend from a time series.
-4. Generate forecasts with prediction intervals and explain why intervals widen over time.
+1. Define AR(p) and MA(q) processes and identify their ACF/PACF signatures.
+2. Fit an ARIMA model and interpret its parameters.
+3. Generate forecasts from a fitted ARIMA model and explain prediction intervals.
+4. Apply differencing to achieve stationarity.
 5. Diagnose model adequacy by checking that residuals approximate white noise.
-6. Compare models using information criteria AIC and BIC.
+6. Compare models using information criteria (AIC, BIC).
 
 ## The Big Picture
 

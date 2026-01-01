@@ -7,7 +7,7 @@
 list_workbooks()
 }
 \value{
-A data frame with columns:
+A tibble with columns:
   \describe{
     \item{chapter}{Integer chapter number}
     \item{slug}{Character identifier used in \code{create_workbook()}}
