@@ -8,6 +8,7 @@ create_project(
   path,
   student_name = "Student Name",
   chapters = 1:5,
+  positron = TRUE,
   open = TRUE
 )
 }
@@ -19,23 +20,57 @@ Defaults to "Student Name".}
 
 \item{chapters}{Integer vector. Which chapters to include. Defaults to 1:5.}
 
-\item{open}{Logical. Whether to open the new project in RStudio. Defaults to TRUE.}
+\item{positron}{Logical. Whether to include Positron IDE configuration
+for the EDA Companion agent. Defaults to TRUE.}
+
+\item{open}{Logical. Whether to open the new project in RStudio/Positron.
+Defaults to TRUE.}
 }
 \value{
 Invisibly returns the path to the created project.
 }
 \description{
 Scaffolds a complete student workspace with chapter folders,
-workbook templates, and companion logs for documenting interactions
-with the EDA Companion.
+workbook templates, companion logs, and (optionally) Positron IDE
+configuration for the EDA Companion agent.
+}
+\details{
+The created project includes:
+\itemize{
+  \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
+  \item Chapter folders with work and companion log templates
+  \item A portfolio `index.qmd` with progress tracking
+  \item A `.gitignore` configured for R/Quarto projects
+  \item A `README.md` describing the portfolio (suitable for GitHub)
+}
+
+When \code{positron = TRUE}, the project additionally includes:
+\itemize{
+  \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
+    Companion agent configuration
+  \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
+    content knowledge files (all 15 chapters, regardless of \code{chapters})
+  \item `.vscode/positron/instructions/learner-profile.instructions.md`:
+    a template for the student to describe their background and goals
+}
 }
 \examples{
 \dontrun{
-# Create project with default chapters (1:5)
+# Create project with default chapters (1-5) and Positron support
 eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 
-# Create project with all chapters
-eda4mlr::create_project("~/eda4ml-portfolio", chapters = 1:15)
+# Create project with all chapters, no Positron
+eda4mlr::create_project("~/eda4ml-portfolio",
+                        student_name = "Jane Doe",
+                        chapters = 1:15,
+                        positron = FALSE)
+
+# Add Positron support to an existing project later
+eda4mlr::setup_positron("~/eda4ml-portfolio", student_name = "Jane Doe")
 }
 
+}
+\seealso{
+[setup_positron()] to add Positron configuration to an existing
+  project.
 }

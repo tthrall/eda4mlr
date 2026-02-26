@@ -1,34 +1,67 @@
 #' Create a Student Project for EDA for Machine Learning
 #'
 #' Scaffolds a complete student workspace with chapter folders,
-#' workbook templates, and companion logs for documenting interactions
-#' with the EDA Companion.
+#' workbook templates, companion logs, and (optionally) Positron IDE
+#' configuration for the EDA Companion agent.
 #'
 #' @param path Character. Path where the project should be created.
 #' @param student_name Character. Student's name for the portfolio index.
 #'   Defaults to "Student Name".
 #' @param chapters Integer vector. Which chapters to include. Defaults to 1:5.
-#' @param open Logical. Whether to open the new project in RStudio. Defaults to TRUE.
+#' @param positron Logical. Whether to include Positron IDE configuration
+#'   for the EDA Companion agent. Defaults to TRUE.
+#' @param open Logical. Whether to open the new project in RStudio/Positron.
+#'   Defaults to TRUE.
 #'
 #' @return Invisibly returns the path to the created project.
 #'
+#' @details
+#' The created project includes:
+#' \itemize{
+#'   \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
+#'   \item Chapter folders with work and companion log templates
+#'   \item A portfolio `index.qmd` with progress tracking
+#'   \item A `.gitignore` configured for R/Quarto projects
+#'   \item A `README.md` describing the portfolio (suitable for GitHub)
+#' }
+#'
+#' When \code{positron = TRUE}, the project additionally includes:
+#' \itemize{
+#'   \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
+#'     Companion agent configuration
+#'   \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
+#'     content knowledge files (all 15 chapters, regardless of \code{chapters})
+#'   \item `.vscode/positron/instructions/learner-profile.instructions.md`:
+#'     a template for the student to describe their background and goals
+#' }
+#'
 #' @examples
 #' \dontrun{
-#' # Create project with default chapters (1:5)
+#' # Create project with default chapters (1-5) and Positron support
 #' eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 #'
-#' # Create project with all chapters
-#' eda4mlr::create_project("~/eda4ml-portfolio", chapters = 1:15)
+#' # Create project with all chapters, no Positron
+#' eda4mlr::create_project("~/eda4ml-portfolio",
+#'                         student_name = "Jane Doe",
+#'                         chapters = 1:15,
+#'                         positron = FALSE)
+#'
+#' # Add Positron support to an existing project later
+#' eda4mlr::setup_positron("~/eda4ml-portfolio", student_name = "Jane Doe")
 #' }
+#'
+#' @seealso [setup_positron()] to add Positron configuration to an existing
+#'   project.
 #'
 #' @export
 create_project <- function(path,
                            student_name = "Student Name",
                            chapters = 1:5,
+                           positron = TRUE,
                            open = TRUE) {
 
 
-  # Chapter metadata
+  # --- Chapter metadata ----------------------------------------------------
 
   chapter_info <- list(
     list(num = 1,  slug = "eda",              title = "Exploratory Data Analysis"),
@@ -49,7 +82,7 @@ create_project <- function(path,
   )
 
 
-  # Validate chapters
+  # --- Validate inputs -----------------------------------------------------
 
   valid_chapters <- 1:15
 
@@ -57,21 +90,37 @@ create_project <- function(path,
     stop("chapters must be integers between 1 and 15")
   }
 
-
-  # Create base directory
-
   if (dir.exists(path)) {
     stop("Directory already exists: ", path)
   }
+
+
+  # --- Create base directory -----------------------------------------------
+
   dir.create(path, recursive = TRUE)
-
-
-  # Get project name from path
-
   project_name <- basename(path)
 
 
-  # Create .Rproj file
+  # --- .gitignore ----------------------------------------------------------
+
+  gitignore_lines <- c(
+    "# R",
+    ".Rproj.user",
+    ".Rhistory",
+    ".RData",
+    ".Ruserdata",
+    "",
+    "# Quarto",
+    "/.quarto/",
+    "_book/",
+    "*_cache/",
+    "*_files/"
+  )
+  writeLines(gitignore_lines, file.path(path, ".gitignore"))
+
+
+  # --- .Rproj file ---------------------------------------------------------
+
   rproj_content <- c(
     "Version: 1.0",
     "",
@@ -92,7 +141,9 @@ create_project <- function(path,
   )
   writeLines(rproj_content, file.path(path, paste0(project_name, ".Rproj")))
 
-  # Create _quarto.yml
+
+  # --- _quarto.yml ---------------------------------------------------------
+
   quarto_yml <- c(
     "project:",
     "  type: book",
@@ -100,14 +151,11 @@ create_project <- function(path,
     "",
     "book:",
     paste0("  title: \"EDA for ML Portfolio: ", student_name, "\""),
-    "  author: \"", student_name, "\"",
+    paste0("  author: \"", student_name, "\""),
     "  date: today",
     "  chapters:",
     "    - index.qmd"
   )
-
-
-  # Add chapter files to quarto.yml
 
   for (ch in chapter_info[chapters]) {
     ch_num <- sprintf("%02d", ch$num)
@@ -116,7 +164,6 @@ create_project <- function(path,
       paste0("    - ch", ch_num, "-", ch$slug, "/ch", ch_num, "-work.qmd")
     )
   }
-
 
   quarto_yml <- c(
     quarto_yml,
@@ -129,17 +176,102 @@ create_project <- function(path,
   )
   writeLines(quarto_yml, file.path(path, "_quarto.yml"))
 
-  # Create index.qmd
+
+  # --- README.md -----------------------------------------------------------
+
+  readme_lines <- c(
+    paste0("# ", project_name),
+    "",
+    paste0("**", student_name, "** | ",
+           "[Exploratory Data Analysis for Machine Learning]",
+           "(https://tthrall.github.io/eda4ml/)"),
+    "",
+    "## About This Portfolio",
+    "",
+    "This portfolio documents my work through *Exploratory Data Analysis",
+    "for Machine Learning* by Tony Thrall. Each chapter folder contains my",
+    "analysis code, written responses, and a log of my conversations with",
+    "the EDA Companion, an AI-enhanced Socratic tutor designed to support",
+    "independent reasoning rather than provide direct answers.",
+    "",
+    "The portfolio is structured as a Quarto book that can be rendered to",
+    "HTML for sharing with instructors, collaborators, or prospective",
+    "employers.",
+    "",
+    "## Structure",
+    "",
+    "Each chapter folder contains two files:",
+    "",
+    "- `chNN-work.qmd`: R code, analysis, and written responses to",
+    "  exercises and discussion questions",
+    "- `chNN-companion.qmd`: A log of interactions with the EDA Companion,",
+    "  documenting the reasoning process and key insights",
+    "",
+    "## Chapters",
+    "",
+    "| Chapter | Topic | Status |",
+    "|---------|-------|--------|"
+  )
+
+  for (ch in chapter_info[chapters]) {
+    readme_lines <- c(
+      readme_lines,
+      paste0("| ", ch$num, " | ", ch$title, " | Not started |")
+    )
+  }
+
+  readme_lines <- c(
+    readme_lines,
+    "",
+    "## Getting Started",
+    "",
+    "This project requires the",
+    "[eda4mlr](https://github.com/tthrall/eda4mlr) R package:",
+    "",
+    "```r",
+    "# install.packages(\"pak\")",
+    "pak::pak(\"tthrall/eda4mlr\")",
+    "```",
+    "",
+    "Open the `.Rproj` file in RStudio or Positron to begin."
+  )
+
+  if (positron) {
+    readme_lines <- c(
+      readme_lines,
+      "",
+      "## EDA Companion (Positron)",
+      "",
+      "This project includes configuration for the EDA Companion agent in",
+      "[Positron IDE](https://positron.posit.co/). The Companion provides",
+      "Socratic tutoring: it asks questions and challenges your reasoning",
+      "rather than giving direct answers. To use it, open this project in",
+      "Positron and start a conversation with the EDA Companion agent in",
+      "the assistant panel.",
+      "",
+      "Before your first session, edit",
+      "`.vscode/positron/instructions/learner-profile.instructions.md`",
+      "to describe your background and goals. This helps the Companion",
+      "calibrate its questions to your experience level."
+    )
+  }
+
+  writeLines(readme_lines, file.path(path, "README.md"))
+
+
+  # --- index.qmd -----------------------------------------------------------
+
   index_qmd <- c(
     "---",
-    paste0("title: \"EDA for ML Portfolio\""),
+    "title: \"EDA for ML Portfolio\"",
     paste0("author: \"", student_name, "\""),
     "date: today",
     "---",
     "",
     "## About This Portfolio",
     "",
-    "This portfolio documents my work through *Exploratory Data Analysis for Machine Learning*.",
+    "This portfolio documents my work through *Exploratory Data Analysis",
+    "for Machine Learning*.",
     "",
     "**Textbook:** <https://tthrall.github.io/eda4ml/>",
     "",
@@ -165,7 +297,9 @@ create_project <- function(path,
 
   writeLines(index_qmd, file.path(path, "index.qmd"))
 
-  # Create chapter folders and files
+
+  # --- Chapter folders and files -------------------------------------------
+
   for (ch in chapter_info[chapters]) {
     ch_num <- sprintf("%02d", ch$num)
     ch_dir <- file.path(path, paste0("ch", ch_num, "-", ch$slug))
@@ -220,9 +354,11 @@ create_project <- function(path,
       "",
       "## About This Log",
       "",
-      "This document records my interactions with the EDA Companion while working",
-      "through Chapter ", ch$num, ". Each session captures the context, conversation,",
-      "and what I learned.",
+      paste0(
+        "This document records my interactions with the EDA Companion while ",
+        "working through Chapter ", ch$num, ". Each session captures the ",
+        "context, conversation, and what I learned."
+      ),
       "",
       "---",
       "",
@@ -251,12 +387,34 @@ create_project <- function(path,
     writeLines(companion_qmd, file.path(ch_dir, paste0("ch", ch_num, "-companion.qmd")))
   }
 
+
+  # --- Positron scaffolding ------------------------------------------------
+
+  if (positron) {
+    setup_positron(path, student_name = student_name, quiet = TRUE)
+  }
+
+
+  # --- Done ----------------------------------------------------------------
+
   message("Created EDA for ML portfolio at: ", path)
   message("Chapters included: ", paste(chapters, collapse = ", "))
 
-  # Open in RStudio if requested
-  if (open && rstudioapi::isAvailable()) {
-    rstudioapi::openProject(file.path(path, paste0(project_name, ".Rproj")))
+  if (positron) {
+    message("Positron EDA Companion: configured")
+    message(
+      "  -> Edit .vscode/positron/instructions/learner-profile.instructions.md",
+      "\n     to describe your background before your first Companion session."
+    )
+  }
+
+  # Open in RStudio/Positron if requested
+  if (open && requireNamespace("rstudioapi", quietly = TRUE)) {
+    if (rstudioapi::isAvailable()) {
+      rstudioapi::openProject(
+        file.path(path, paste0(project_name, ".Rproj"))
+      )
+    }
   }
 
   invisible(path)
