@@ -34,7 +34,7 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
     stop("No workbook templates are currently available.", call. = FALSE)
   }
 
-  # Resolve chapter to slug
+  # Resolve chapter to a row in the registry
   if (is.numeric(chapter)) {
     row <- available[available$chapter == chapter, ]
     if (nrow(row) == 0) {
@@ -44,12 +44,11 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
         call. = FALSE
       )
     }
-    slug <- row$slug
   } else if (is.character(chapter)) {
-    slug <- chapter
-    if (!slug %in% available$slug) {
+    row <- available[available$slug == chapter, ]
+    if (nrow(row) == 0) {
       stop(
-        "Template '", slug, "' not found.\n",
+        "Template '", chapter, "' not found.\n",
         "Use list_workbooks() to see available options.",
         call. = FALSE
       )
@@ -57,6 +56,8 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
   } else {
     stop("'chapter' must be a number or character string.", call. = FALSE)
   }
+
+  slug <- row$slug
 
   # Construct template filename
   template_name <- paste0(slug, "-wkbk.qmd")
@@ -93,13 +94,9 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
     stop("Failed to copy template to '", dest_path, "'.", call. = FALSE)
   }
 
-  # Get chapter info for message
-  chapter_num <- available$chapter[available$slug == slug]
-  title <- available$title[available$slug == slug]
-
   message(
     "Created: ", template_name, "\n",
-    "Chapter ", chapter_num, ": ", title, "\n",
+    "Chapter ", row$chapter, ": ", row$title, "\n",
     "Open in RStudio and begin working through the exercises."
   )
 
@@ -117,6 +114,8 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
 #' List available workbooks
 #'
 #' Shows all workbook templates available in the eda4mlr package.
+#' Reads chapter metadata from the package's authoritative registry
+#' and checks which corresponding template files exist on disk.
 #'
 #' @return A tibble with columns:
 #'   \describe{
@@ -131,36 +130,16 @@ create_workbook <- function(chapter, overwrite = FALSE, open = TRUE) {
 #' @export
 list_workbooks <- function() {
 
-  # Read metadata
-  metadata_path <- system.file(
-    "templates", "workbook-metadata.txt",
-    package = "eda4mlr",
-    mustWork = FALSE
-  )
+  registry <- get_chapter_registry()
 
-  if (metadata_path == "") {
-    return(
-      tibble::tibble(
-        chapter = integer(0),
-        slug = character(0),
-        title = character(0)
-      )
-    )
-  }
-
-  metadata <- utils::read.delim(metadata_path, stringsAsFactors = FALSE)
-
-  # Check which templates actually exist
+  # Check which templates actually exist on disk
   template_dir <- system.file("templates", package = "eda4mlr")
   existing_files <- list.files(template_dir, pattern = "-wkbk\\.qmd$")
   existing_slugs <- sub("-wkbk\\.qmd$", "", existing_files)
 
-  # Filter metadata to only available templates
-  available <- metadata[metadata$slug %in% existing_slugs, , drop = FALSE]
-
-  # Sort by chapter number and convert to tibble
+  # Filter registry to chapters with available templates
+  available <- registry[registry$slug %in% existing_slugs, , drop = FALSE]
   available <- available[order(available$chapter), , drop = FALSE]
-  available <- tibble::as_tibble(available)
 
-  return(available)
+  tibble::as_tibble(available)
 }

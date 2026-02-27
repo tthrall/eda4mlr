@@ -35,6 +35,10 @@
 #'     a template for the student to describe their background and goals
 #' }
 #'
+#' Chapter metadata (numbers, slugs, titles) is read from the registry file
+#' \code{inst/templates/book-chapters.txt}, which is the single source of
+#' truth for chapter organization across the eda4ml ecosystem.
+#'
 #' @examples
 #' \dontrun{
 #' # Create project with default chapters (1-5) and Positron support
@@ -61,38 +65,25 @@ create_project <- function(path,
                            open = TRUE) {
 
 
-  # --- Chapter metadata ----------------------------------------------------
+  # --- Chapter metadata (from registry) ------------------------------------
 
-  chapter_info <- list(
-    list(num = 1,  slug = "eda",              title = "Exploratory Data Analysis"),
-    list(num = 2,  slug = "conditioning",     title = "Conditional Distributions"),
-    list(num = 3,  slug = "clustering",       title = "Clustering"),
-    list(num = 4,  slug = "simulation",       title = "Statistical Simulation"),
-    list(num = 5,  slug = "study-design",     title = "Sampling and Study Design"),
-    list(num = 6,  slug = "information",      title = "Information Theory"),
-    list(num = 7,  slug = "regression",       title = "Linear Regression"),
-    list(num = 8,  slug = "pca",              title = "Principal Component Analysis"),
-    list(num = 9,  slug = "lda",              title = "Linear Discriminant Analysis"),
-    list(num = 10, slug = "text",             title = "Text as Data"),
-    list(num = 11, slug = "topics",           title = "Topic Models"),
-    list(num = 12, slug = "timeseries-intro", title = "Time Series Data"),
-    list(num = 13, slug = "timeseries-time",  title = "Time Domain Methods"),
-    list(num = 14, slug = "timeseries-freq",  title = "Frequency Domain Methods"),
-    list(num = 15, slug = "graphs",           title = "Graph Theory for Machine Learning")
-  )
+  chapter_registry <- get_chapter_registry()
 
 
   # --- Validate inputs -----------------------------------------------------
 
-  valid_chapters <- 1:15
+  valid_chapters <- chapter_registry$chapter
 
   if (!all(chapters %in% valid_chapters)) {
-    stop("chapters must be integers between 1 and 15")
+    stop("chapters must be integers between 1 and ", max(valid_chapters))
   }
 
   if (dir.exists(path)) {
     stop("Directory already exists: ", path)
   }
+
+  # Subset to requested chapters
+  selected <- chapter_registry[chapter_registry$chapter %in% chapters, ]
 
 
   # --- Create base directory -----------------------------------------------
@@ -157,11 +148,12 @@ create_project <- function(path,
     "    - index.qmd"
   )
 
-  for (ch in chapter_info[chapters]) {
-    ch_num <- sprintf("%02d", ch$num)
+  for (i in seq_len(nrow(selected))) {
+    ch_num <- sprintf("%02d", selected$chapter[i])
+    slug <- selected$slug[i]
     quarto_yml <- c(
       quarto_yml,
-      paste0("    - ch", ch_num, "-", ch$slug, "/ch", ch_num, "-work.qmd")
+      paste0("    - ch", ch_num, "-", slug, "/ch", ch_num, "-work.qmd")
     )
   }
 
@@ -213,10 +205,11 @@ create_project <- function(path,
     "|---------|-------|--------|"
   )
 
-  for (ch in chapter_info[chapters]) {
+  for (i in seq_len(nrow(selected))) {
     readme_lines <- c(
       readme_lines,
-      paste0("| ", ch$num, " | ", ch$title, " | Not started |")
+      paste0("| ", selected$chapter[i], " | ", selected$title[i],
+             " | Not started |")
     )
   }
 
@@ -288,10 +281,11 @@ create_project <- function(path,
     "|---------|-------|--------|"
   )
 
-  for (ch in chapter_info[chapters]) {
+  for (i in seq_len(nrow(selected))) {
     index_qmd <- c(
       index_qmd,
-      paste0("| ", ch$num, " | ", ch$title, " | Not started |")
+      paste0("| ", selected$chapter[i], " | ", selected$title[i],
+             " | Not started |")
     )
   }
 
@@ -300,15 +294,17 @@ create_project <- function(path,
 
   # --- Chapter folders and files -------------------------------------------
 
-  for (ch in chapter_info[chapters]) {
-    ch_num <- sprintf("%02d", ch$num)
-    ch_dir <- file.path(path, paste0("ch", ch_num, "-", ch$slug))
+  for (i in seq_len(nrow(selected))) {
+    ch_num <- sprintf("%02d", selected$chapter[i])
+    slug <- selected$slug[i]
+    title <- selected$title[i]
+    ch_dir <- file.path(path, paste0("ch", ch_num, "-", slug))
     dir.create(ch_dir)
 
     # Work file
     work_qmd <- c(
       "---",
-      paste0("title: \"Chapter ", ch$num, ": ", ch$title, "\""),
+      paste0("title: \"Chapter ", selected$chapter[i], ": ", title, "\""),
       paste0("author: \"", student_name, "\""),
       "date: today",
       "format:",
@@ -344,7 +340,7 @@ create_project <- function(path,
     # Companion log file
     companion_qmd <- c(
       "---",
-      paste0("title: \"Chapter ", ch$num, " Companion Log\""),
+      paste0("title: \"Chapter ", selected$chapter[i], " Companion Log\""),
       paste0("author: \"", student_name, "\""),
       "date: today",
       "format:",
@@ -356,8 +352,8 @@ create_project <- function(path,
       "",
       paste0(
         "This document records my interactions with the EDA Companion while ",
-        "working through Chapter ", ch$num, ". Each session captures the ",
-        "context, conversation, and what I learned."
+        "working through Chapter ", selected$chapter[i], ". Each session ",
+        "captures the context, conversation, and what I learned."
       ),
       "",
       "---",
@@ -384,7 +380,8 @@ create_project <- function(path,
       "",
       "<!-- Copy the session template above for additional sessions -->"
     )
-    writeLines(companion_qmd, file.path(ch_dir, paste0("ch", ch_num, "-companion.qmd")))
+    writeLines(companion_qmd,
+               file.path(ch_dir, paste0("ch", ch_num, "-companion.qmd")))
   }
 
 
@@ -418,4 +415,49 @@ create_project <- function(path,
   }
 
   invisible(path)
+}
+
+
+#' Read the chapter registry
+#'
+#' Returns the chapter metadata table from the package's authoritative
+#' registry file. This is the single source of truth for chapter numbers,
+#' slugs, and titles across the eda4ml ecosystem.
+#'
+#' @return A data frame with columns: \code{chapter} (integer),
+#'   \code{slug} (character), \code{title} (character).
+#'
+#' @keywords internal
+get_chapter_registry <- function() {
+
+  registry_path <- system.file(
+    "templates", "book-chapters.txt",
+    package = "eda4mlr",
+    mustWork = FALSE
+  )
+
+  if (registry_path == "") {
+    stop(
+      "Chapter registry file not found. ",
+      "Ensure inst/templates/book-chapters.txt exists in the package.",
+      call. = FALSE
+    )
+  }
+
+  registry <- utils::read.delim(registry_path, stringsAsFactors = FALSE)
+
+  # Validate expected columns
+  expected <- c("chapter", "slug", "title")
+  if (!all(expected %in% names(registry))) {
+    stop(
+      "Chapter registry must contain columns: ",
+      paste(expected, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  registry$chapter <- as.integer(registry$chapter)
+  registry <- registry[order(registry$chapter), ]
+
+  registry
 }

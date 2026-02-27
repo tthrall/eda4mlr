@@ -16,6 +16,8 @@ A tibble with columns:
 }
 \description{
 Shows all workbook templates available in the eda4mlr package.
+Reads chapter metadata from the package's authoritative registry
+and checks which corresponding template files exist on disk.
 }
 \examples{
 list_workbooks()

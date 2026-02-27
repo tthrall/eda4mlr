@@ -53,6 +53,10 @@ When \code{positron = TRUE}, the project additionally includes:
   \item `.vscode/positron/instructions/learner-profile.instructions.md`:
     a template for the student to describe their background and goals
 }
+
+Chapter metadata (numbers, slugs, titles) is read from the registry file
+\code{inst/templates/book-chapters.txt}, which is the single source of
+truth for chapter organization across the eda4ml ecosystem.
 }
 \examples{
 \dontrun{
