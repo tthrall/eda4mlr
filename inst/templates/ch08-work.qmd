@@ -1,10 +1,10 @@
 ---
-title: "Chapter 8 Workbook: Principal Component Analysis"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 8: Principal Component Analysis"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -20,29 +20,29 @@ execute:
 library(ggplot2)
 library(dplyr)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Describe the goal and method of Principal Component Analysis (PCA).
-2. Compute principal components via eigendecomposition of the covariance matrix.
-3. Interpret loadings as the contribution of original variables to each principal component.
-4. Use the scree plot to determine how many components to retain.
-5. Project high-dimensional data onto principal components for visualization.
-6. Explain when one should simply center the data, and when one should also re-scale the data, prior to PCA.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> How do you reduce the dimensionality of data while preserving the most important structure—and what does "important" mean?
+> How do you reduce the dimensionality of data while preserving the most important structure---and what does "important" mean?
 
 ---
 
 ## Choosing Your Dataset
 
-For this workbook, you'll need a dataset with:
+For this chapter, you'll need a dataset with:
 
 - At least 30 observations
 - At least 4 numeric variables (to make dimension reduction meaningful)
@@ -50,9 +50,9 @@ For this workbook, you'll need a dataset with:
 
 **Suggested sources:**
 
-- `datasets::USArrests` — 4 variables (Murder, Assault, UrbanPop, Rape) across 50 states
-- `datasets::iris` — 4 measurements across 150 flowers (with species labels for visualization)
-- `MASS::crabs` — 5 morphometric measurements across 200 crabs
+- `datasets::USArrests` --- 4 variables (Murder, Assault, UrbanPop, Rape) across 50 states
+- `datasets::iris` --- 4 measurements across 150 flowers (with species labels for visualization)
+- `MASS::crabs` --- 5 morphometric measurements across 200 crabs
 
 **Reference:** The `LearnPCA` package provides excellent vignettes on PCA fundamentals.
 
@@ -61,7 +61,6 @@ For this workbook, you'll need a dataset with:
 
 # Load your dataset here
 # Example: my_data <- datasets::USArrests
-
 ```
 
 ---
@@ -76,7 +75,6 @@ Examine the means and standard deviations of your numeric variables. Are they on
 #| label: ex1-examine-scales
 
 # Your code here
-
 ```
 
 *Based on these values, should you center only, or center and scale?*
@@ -91,7 +89,6 @@ Run PCA twice: once on centered-only data, once on centered-and-scaled data. Com
 #| label: ex1-scaling-effect
 
 # Your code here
-
 ```
 
 *How does scaling change the results? Which approach is more appropriate for your data?*
@@ -110,7 +107,6 @@ Run PCA using `stats::prcomp()`. Examine the output object.
 #| label: ex2-prcomp
 
 # Your code here
-
 ```
 
 *What does each component of the output represent?*
@@ -130,7 +126,6 @@ Verify the results by computing PCA manually:
 #| label: ex2-eigen
 
 # Your code here
-
 ```
 
 *Do your eigenvectors match the loadings from prcomp()? (Watch for sign flips.)*
@@ -149,7 +144,6 @@ Create a scree plot showing the variance explained by each principal component. 
 #| label: ex3-scree
 
 # Your code here
-
 ```
 
 *How many components would you retain? What criteria did you use?*
@@ -164,7 +158,6 @@ Examine the loadings for the first two principal components. Which original vari
 #| label: ex3-loadings
 
 # Your code here
-
 ```
 
 *Describe PC1 and PC2 in substantive terms (e.g., "PC1 captures overall size" or "PC2 contrasts X with Y").*
@@ -179,7 +172,6 @@ Create a biplot showing both the scores (observations) and loadings (variables) 
 #| label: ex3-biplot
 
 # Your code here
-
 ```
 
 *What does the biplot reveal about the relationship between observations and variables?*
@@ -198,7 +190,6 @@ Plot your observations in the space of PC1 vs. PC2. If you have group labels (e.
 #| label: ex4-projection
 
 # Your code here
-
 ```
 
 *Do the groups separate in the reduced space?*
@@ -213,7 +204,6 @@ Reconstruct the original data using only the first k principal components. Compu
 #| label: ex4-reconstruction
 
 # Your code here
-
 ```
 
 *How does reconstruction error relate to variance explained?*
@@ -240,9 +230,15 @@ A colleague argues that PCA "removes correlation" between variables. Is this tru
 #| label: practice-2
 
 # Your code here
-
 ```
 
 *Your explanation:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

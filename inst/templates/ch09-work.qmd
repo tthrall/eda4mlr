@@ -1,10 +1,10 @@
 ---
-title: "Chapter 9 Workbook: Linear Discriminant Analysis (LDA)"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 9: Linear Discriminant Analysis"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -21,30 +21,29 @@ library(ggplot2)
 library(dplyr)
 library(MASS)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Distinguish supervised from unsupervised methods, and dimension reduction from classification.
-2. Explain how LDA differs from PCA in its objective function.
-3. Interpret Fisher's criterion for LDA.
-4. Describe the relationship between LDA and logistic regression.
-5. Apply LDA in R to classify observations into groups.
-6. Evaluate classification accuracy using a confusion matrix.
-7. Distinguish between LDA and QDA and identify when each is appropriate.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> When you have labeled groups, how do you find the projection that best separates them—and how does this differ from PCA?
+> When you have labeled groups, how do you find the projection that best separates them---and how does this differ from PCA?
 
 ---
 
 ## Choosing Your Dataset
 
-For this workbook, you'll need a dataset with:
+For this chapter, you'll need a dataset with:
 
 - At least 50 observations
 - At least 2 numeric predictor variables
@@ -53,9 +52,9 @@ For this workbook, you'll need a dataset with:
 
 **Suggested sources:**
 
-- `datasets::iris` — 4 measurements, 3 species
-- `MASS::crabs` — 5 measurements, species × sex (4 groups)
-- `MASS::fgl` — forensic glass fragments, 9 measurements, 6 types
+- `datasets::iris` --- 4 measurements, 3 species
+- `MASS::crabs` --- 5 measurements, species x sex (4 groups)
+- `MASS::fgl` --- forensic glass fragments, 9 measurements, 6 types
 
 **Fallback option:** `palmerpenguins::penguins` provides 4 measurements across 3 species.
 
@@ -64,7 +63,6 @@ For this workbook, you'll need a dataset with:
 
 # Load your dataset here
 # Example: my_data <- datasets::iris
-
 ```
 
 ---
@@ -79,7 +77,6 @@ Run PCA on your numeric variables (ignoring the class labels). Plot PC1 vs. PC2,
 #| label: ex1-pca
 
 # Your code here
-
 ```
 
 *How well does PCA separate the classes? Is this guaranteed?*
@@ -94,7 +91,6 @@ Run LDA using `MASS::lda()`. Plot the first two linear discriminants, (LD1, LD2)
 #| label: ex1-lda
 
 # Your code here
-
 ```
 
 *How does the separation compare to PCA?*
@@ -125,7 +121,6 @@ For a single variable, compute:
 #| label: ex2-fisher-univariate
 
 # Your code here
-
 ```
 
 *Which variable has the highest Fisher ratio? Is this the best variable for separating classes?*
@@ -142,7 +137,6 @@ Examine the coefficients (loadings) from your LDA fit. Which original variables 
 #| label: ex2-lda-coefficients
 
 # Your code here
-
 ```
 
 *Interpret the first linear discriminant in terms of the original variables.*
@@ -161,7 +155,6 @@ Use your LDA model to classify observations. Create a confusion matrix comparing
 #| label: ex3-classification
 
 # Your code here
-
 ```
 
 *What is the overall accuracy? Which classes are most often confused?*
@@ -178,7 +171,6 @@ Create a plot showing the decision boundaries. Overlay the actual observations, 
 #| label: ex3-boundaries
 
 # Your code here
-
 ```
 
 *Are the boundaries linear? Why must they be for LDA?*
@@ -186,7 +178,7 @@ Create a plot showing the decision boundaries. Overlay the actual observations, 
 
 
 ---
- 
+
 ## Exercise 4: The Equal-Covariance Assumption
 
 ### Task 4.1: Check the Assumption
@@ -197,7 +189,6 @@ LDA assumes all classes have the same covariance matrix. Compute the covariance 
 #| label: ex4-covariance-check
 
 # Your code here
-
 ```
 
 *Do the covariance matrices look similar? How would you quantify this?*
@@ -212,7 +203,6 @@ Fit a Quadratic Discriminant Analysis model using `MASS::qda()`. Compare its pre
 #| label: ex4-qda
 
 # Your code here
-
 ```
 
 *When does QDA outperform LDA? What is the cost of using QDA?*
@@ -249,4 +239,11 @@ A colleague suggests using PCA for dimension reduction before applying a classif
 
 *Your response:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

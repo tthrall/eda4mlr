@@ -1,10 +1,10 @@
 ---
-title: "Chapter 10 Workbook: Text as Data"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 10: Text as Data"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -25,28 +25,29 @@ library(tidytext)
 
 # local library
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Explain why text analysis requires converting documents into numerical representations.
-2. Apply preprocessing steps: tokenization, stop word removal, and stemming/lemmatization.
-3. Construct a document-term matrix (DTM) from a collection of documents.
-4. Calculate tf-idf scores and interpret their meaning.
-5. Compare "bag of words" approaches with sequence-aware embeddings.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> How do you convert words into numbers—and what information is preserved or lost in the process?
+> How do you convert words into numbers---and what information is preserved or lost in the process?
 
 ---
 
 ## Choosing Your Corpus
 
-For this workbook, you'll need a collection of text documents:
+For this chapter, you'll need a collection of text documents:
 
 - At least 10 documents (chapters, articles, reviews, etc.)
 - Enough text per document to yield meaningful term frequencies
@@ -54,13 +55,13 @@ For this workbook, you'll need a collection of text documents:
 
 **Built-in (no download required):**
 
-- `janeaustenr::austen_books()` — 6 novels, ~700K words (use chapters as documents)
-- `hcandersenr::hca_fairytales()` — 150+ tales, multilingual option
+- `janeaustenr::austen_books()` --- 6 novels, ~700K words (use chapters as documents)
+- `hcandersenr::hca_fairytales()` --- 150+ tales, multilingual option
 
 **Cached on first use:**
 
-- `textdata::dataset_imdb()` — 50K movie reviews with sentiment labels
-- `quanteda.corpora::data_corpus_inaugural` — US inaugural addresses
+- `textdata::dataset_imdb()` --- 50K movie reviews with sentiment labels
+- `quanteda.corpora::data_corpus_inaugural` --- US inaugural addresses
 
 **Not recommended for classwork:** `gutenbergr` requires network access and can be slow or unreliable. Use it only for independent projects where you can cache results locally.
 
@@ -74,7 +75,6 @@ For this workbook, you'll need a collection of text documents:
 # Load your text data here
 # Example using Jane Austen:
 # my_text <- janeaustenr::austen_books()
-
 ```
 
 ---
@@ -89,7 +89,6 @@ Use `tidytext::unnest_tokens()` to convert your text into a one-token-per-row fo
 #| label: ex1-tokenize
 
 # Your code here
-
 ```
 
 *How many total tokens? How many unique tokens?*
@@ -104,7 +103,6 @@ Count the frequency of each word. What are the 20 most common words?
 #| label: ex1-frequencies
 
 # Your code here
-
 ```
 
 *Are these the most "informative" words? Why or why not?*
@@ -123,7 +121,6 @@ Remove stop words using `tidytext::stop_words`. How does the list of most common
 #| label: ex2-stopwords
 
 # Your code here
-
 ```
 
 *Compare the top 20 words before and after stop word removal.*
@@ -142,7 +139,6 @@ Experiment with different preprocessing steps:
 #| label: ex2-preprocessing
 
 # Your code here
-
 ```
 
 *How do these choices affect your vocabulary size and word frequencies?*
@@ -161,7 +157,6 @@ Create a document-term matrix where rows are documents and columns are terms. Us
 #| label: ex3-dtm
 
 # Your code here
-
 ```
 
 *What are the dimensions? What does sparsity mean in this context?*
@@ -176,7 +171,6 @@ Examine a few rows (documents) of your DTM. What do the values represent?
 #| label: ex3-interpret
 
 # Your code here
-
 ```
 
 *Can you identify the "topic" of a document from its term frequencies?*
@@ -195,7 +189,6 @@ Calculate TF-IDF weights using `tidytext::bind_tf_idf()`.
 #| label: ex4-tfidf
 
 # Your code here
-
 ```
 
 *For a specific document, compare the top words by raw count vs. top words by TF-IDF.*
@@ -214,7 +207,6 @@ Find words with:
 #| label: ex4-tfidf-analysis
 
 # Your code here
-
 ```
 
 *Why might TF-IDF be more useful than raw counts for distinguishing documents?*
@@ -235,7 +227,6 @@ Choose two documents and compute their cosine similarity using their TF-IDF vect
 #| label: ex5-similarity
 
 # Your code here
-
 ```
 
 *Does the similarity score match your intuition about how related the documents are?*
@@ -262,7 +253,6 @@ N-grams (bigrams, trigrams) capture some word order. Tokenize your text into big
 #| label: practice-2
 
 # Your code here
-
 ```
 
 *Your observations:*
@@ -274,3 +264,10 @@ N-grams (bigrams, trigrams) capture some word order. Tokenize your text into big
 ## Looking Ahead
 
 The document-term matrices and TF-IDF representations you constructed here are the foundation for topic modeling in Chapter 11. There, you'll use these same representations to discover latent thematic structure in document collections.
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
+

@@ -1,10 +1,10 @@
 ---
-title: "Chapter 3 Workbook: Clustering: EDA in Higher Dimensions"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 3: Clustering: EDA in Higher Dimensions"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -20,29 +20,29 @@ execute:
 library(ggplot2)
 library(dplyr)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Explain why standardization (z-scores) is necessary before computing distances across variables with different scales.
-2. Apply K-means clustering and interpret the resulting cluster assignments.
-3. Use the elbow method to guide selection of the number of clusters.
-4. Profile clusters by examining variable means and distributions within each group.
-5. Evaluate clustering results using within-cluster sum of squares and Jaccard similarity.
-6. Distinguish between clustering for exploration versus clustering for comparison to a proposed classification.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> How do you discover natural groupings in your data—and how do you assess whether those groupings are meaningful?
+> How do you discover natural groupings in your data---and how do you assess whether those groupings are meaningful?
 
 ---
 
 ## Choosing Your Dataset
 
-For this workbook, you'll need a dataset with:
+For this chapter, you'll need a dataset with:
 
 - At least 50 observations
 - At least 3 numeric variables (for meaningful high-dimensional clustering)
@@ -51,9 +51,9 @@ For this workbook, you'll need a dataset with:
 
 **Suggested sources:**
 
-- `datasets::iris` — 4 measurements, 3 species (known labels for comparison)
-- `palmerpenguins::penguins` — bill/flipper measurements, 3 species
-- `datasets::USArrests` — 4 crime/demographic variables, 50 states
+- `datasets::iris` --- 4 measurements, 3 species (known labels for comparison)
+- `palmerpenguins::penguins` --- bill/flipper measurements, 3 species
+- `datasets::USArrests` --- 4 crime/demographic variables, 50 states
 
 **Fallback option:** `datasets::mtcars` provides 11 numeric variables across 32 cars.
 
@@ -62,7 +62,6 @@ For this workbook, you'll need a dataset with:
 
 # Load your dataset here
 # Example: my_data <- datasets::iris
-
 ```
 
 ---
@@ -77,7 +76,6 @@ Select three numeric variables with different scales (e.g., one measured in inch
 #| label: ex1-standardize
 
 # Your code here
-
 ```
 
 *How does standardization change which observations appear "close" to each other?*
@@ -92,7 +90,6 @@ Create a standardized version of your numeric variables using `scale()`.
 #| label: ex1-scale
 
 # Your code here
-
 ```
 
 ---
@@ -107,7 +104,6 @@ Apply K-means clustering with K = 3 (or another reasonable starting value). Exam
 #| label: ex2-kmeans
 
 # Your code here
-
 ```
 
 ### Task 2.2: The Elbow Method
@@ -118,7 +114,6 @@ Fit K-means for K = 1 through K = 10. Plot the total within-cluster sum of squar
 #| label: ex2-elbow
 
 # Your code here
-
 ```
 
 *What value of K would you choose, and why?*
@@ -133,7 +128,6 @@ Create a scatter plot of two variables, colored by cluster assignment. If you ha
 #| label: ex2-visualize
 
 # Your code here
-
 ```
 
 ---
@@ -148,7 +142,6 @@ For each cluster, compute the mean of each variable. Which variables most distin
 #| label: ex3-profiles
 
 # Your code here
-
 ```
 
 *Describe each cluster in substantive terms (e.g., "Cluster 1 contains observations with high X and low Y").*
@@ -165,7 +158,6 @@ If your data has known group labels (e.g., species), compare the cluster assignm
 #| label: ex3-compare
 
 # Your code here
-
 ```
 
 *How well do the clusters recover the known groups?*
@@ -195,7 +187,6 @@ Run K-means multiple times with different random seeds. Do you get the same clus
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *Your observations:*
@@ -208,4 +199,11 @@ Describe a real-world scenario where clustering would be more appropriate than p
 
 *Your response:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

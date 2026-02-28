@@ -1,10 +1,10 @@
 ---
-title: "Chapter 14 Workbook: Frequency Domain Methods"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 14: Frequency Domain Methods"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -21,44 +21,42 @@ library(ggplot2)
 library(dplyr)
 library(astsa)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Interpret the spectrum as a decomposition of variance by frequency.
-2. Compute and interpret the periodogram of a time series.
-3. Explain the relationship between the spectrum and the autocorrelation function.
-4. Apply spectral smoothing to obtain consistent spectral estimates.
-5. Identify dominant frequencies in a time series using spectral analysis.
-6. Compute coherence between two series and interpret what it reveals about shared periodicity.
-7. Describe the spectral density function of an AR(1) or MA(1) model.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> Instead of asking "how does the past predict the future?", ask "what frequencies contribute to the variation?"—a complementary view of time series structure.
+> Instead of asking "how does the past predict the future?", ask "what frequencies contribute to the variation?"---a complementary view of time series structure.
 
 ---
 
 ## Choosing Your Time Series
 
-For this workbook, select a series with clear periodic structure:
+For this chapter, select a series with clear periodic structure:
 
 **Suggested sources from `astsa` package:**
 
-- `astsa::soi` — Southern Oscillation Index (El Niño signal)
-- `astsa::rec` — recruitment (pairs well with SOI for coherence)
-- `astsa::sunspotz` — sunspot numbers (strong ~11 year cycle)
-- `astsa::EQ5` / `astsa::EXP6` — seismic data
+- `astsa::soi` --- Southern Oscillation Index (El Nino signal)
+- `astsa::rec` --- recruitment (pairs well with SOI for coherence)
+- `astsa::sunspotz` --- sunspot numbers (strong ~11 year cycle)
+- `astsa::EQ5` / `astsa::EXP6` --- seismic data
 
 ```{r}
 #| label: load-data
 
 # Load your time series here
 # Example: my_ts <- astsa::soi
-
 ```
 
 ---
@@ -73,7 +71,6 @@ The periodogram decomposes the variance of a time series across frequencies. Com
 #| label: ex1-periodogram
 
 # Your code here
-
 ```
 
 *What do you see? Are there dominant frequencies?*
@@ -88,7 +85,6 @@ Find the frequency with the highest spectral power. Convert this frequency to a 
 #| label: ex1-peaks
 
 # Your code here
-
 ```
 
 *What is the dominant period? Does this match a known cycle in your data?*
@@ -97,7 +93,7 @@ Find the frequency with the highest spectral power. Convert this frequency to a 
 
 ### Task 1.3: The Periodogram Is Inconsistent
 
-The raw periodogram is a poor estimator of the true spectral density—it fails to become more precise as sample size increases.
+The raw periodogram is a poor estimator of the true spectral density---it fails to become more precise as sample size increases.
 
 In your own words, how would you explain the necessity of smoothing to a friend?
 
@@ -117,7 +113,6 @@ Compute a smoothed spectral estimate using `astsa::mvspec()` with different span
 #| label: ex2-smoothing
 
 # Your code here
-
 ```
 
 *How does increasing the span affect the estimate?*
@@ -126,8 +121,8 @@ Compute a smoothed spectral estimate using `astsa::mvspec()` with different span
 
 ### Task 2.2: Bias-Variance Tradeoff
 
-- Wider bandwidth → smoother estimate, less variance, more bias
-- Narrower bandwidth → rougher estimate, more variance, less bias
+- Wider bandwidth --- smoother estimate, less variance, more bias
+- Narrower bandwidth --- rougher estimate, more variance, less bias
 
 Demonstrate this tradeoff by plotting spectra with different bandwidths.
 
@@ -135,7 +130,6 @@ Demonstrate this tradeoff by plotting spectra with different bandwidths.
 #| label: ex2-tradeoff
 
 # Your code here
-
 ```
 
 *If a friend had to choose a bandwidth for this data, how would you advise them?*
@@ -158,7 +152,6 @@ Simulate an AR(1) process and compare the estimated spectrum to the theoretical 
 #| label: ex3-ar1-spectrum
 
 # Your code here
-
 ```
 
 *How well does the estimated spectrum match the theory?*
@@ -177,7 +170,6 @@ Simulate an MA(1) process and compare the estimated and theoretical spectra.
 #| label: ex3-ma1-spectrum
 
 # Your code here
-
 ```
 
 *Describe the shape of the MA(1) spectrum for positive vs. negative θ.*
@@ -198,7 +190,6 @@ Plot both series and their cross-correlation function.
 #| label: ex4-two-series
 
 # Your code here
-
 ```
 
 *Do the series appear related? At what lag?*
@@ -215,7 +206,6 @@ Compute and plot the coherence using `astsa::mvspec()`.
 #| label: ex4-coherence
 
 # Your code here
-
 ```
 
 *At what frequencies are the series most strongly related?*
@@ -244,8 +234,15 @@ A colleague claims they found a 7-day cycle in their data. The spectral peak is 
 
 ### Problem 2
 
-Suppose a friend is just beginning to study time series analysis.  How would you explain to them the benefits of these two perspectives: time domain and frequency domain? What examples would you give them of a question better answered in each domain?
+Suppose a friend is just beginning to study time series analysis. How would you explain to them the benefits of these two perspectives: time domain and frequency domain? What examples would you give them of a question better answered in each domain?
 
 *Your response:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

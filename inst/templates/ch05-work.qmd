@@ -1,10 +1,10 @@
 ---
-title: "Chapter 5 Workbook: Sampling and Study Design"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 5: Sampling and Study Design"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -22,18 +22,19 @@ library(dplyr)
 library(eda4mlr)
 
 set.seed(42)  # For reproducibility
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Explain why sample size alone does not guarantee valid inference.
-2. Give an example of selection bias in an observational study and its consequences.
-3. Distinguish between observational and experimental study designs.
-4. Define a sampling frame. Explain how it affects generalizability to a target population.
-5. Define and give examples of bias, chance error, and measurement uncertainty.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
@@ -41,9 +42,9 @@ Here are the learning goals for this chapter:
 
 ---
 
-## Note on This Workbook
+## Note on This Chapter
 
-This workbook emphasizes critical thinking about data provenance rather than computation. You will analyze the design behind datasets and reason about what conclusions they can support.
+This chapter emphasizes critical thinking about data provenance rather than computation. You will analyze the design behind datasets and reason about what conclusions they can support.
 
 ---
 
@@ -65,7 +66,6 @@ Create a population of 10,000 individuals with a variable of interest (e.g., inc
 #| label: ex1-selection-bias
 
 # Your code here
-
 ```
 
 *How large would your biased sample need to be to match the accuracy of a smaller random sample?*
@@ -79,7 +79,7 @@ Create a population of 10,000 individuals with a variable of interest (e.g., inc
 ### Task 2.1: Identify the Design
 
 For each scenario below, identify whether it is observational or experimental. Explain your reasoning.
- 
+
 1. Researchers compare lung cancer rates between smokers and non-smokers.
 2. Patients are randomly assigned to receive a new drug or a placebo.
 3. A company analyzes which website design leads to more purchases by tracking user behavior.
@@ -157,7 +157,6 @@ Generate a "true" variable, then add measurement error. Compare analyses using t
 #| label: ex4-measurement-error
 
 # Your code here
-
 ```
 
 *How does measurement error affect your conclusions?*
@@ -187,4 +186,11 @@ You are designing a study to understand student satisfaction at your university.
 
 *Your study design:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

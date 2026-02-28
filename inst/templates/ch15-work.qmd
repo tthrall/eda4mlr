@@ -1,10 +1,10 @@
 ---
-title: "Chapter 15 Workbook: Graph Theory for Machine Learning"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 15: Graph Theory for Machine Learning"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -21,21 +21,19 @@ library(ggplot2)
 library(dplyr)
 library(igraph)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Define the basic vocabulary of graph theory: nodes, edges, directed/undirected, weighted/unweighted.
-2. Construct adjacency matrices and edge lists from graph descriptions.
-3. Calculate degree, betweenness, and closeness centrality measures.
-4. Interpret centrality measures in the context of real-world networks.
-5. Apply community detection algorithms and interpret the results.
-6. Explain how graph structure can be converted into features for machine learning.
-7. Analyze bipartite graphs and construct projections.
-8. Describe differences between graph analysis for understanding versus prediction.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
@@ -45,7 +43,7 @@ Here are the learning goals for this chapter:
 
 ## Choosing Your Network
 
-For this workbook, you'll need a network (graph) dataset:
+For this chapter, you'll need a network (graph) dataset:
 
 - At least 20 nodes
 - A meaningful set of edges representing relationships
@@ -53,10 +51,10 @@ For this workbook, you'll need a network (graph) dataset:
 
 **Suggested sources from `igraphdata` package:**
 
-- `igraphdata::karate` — Zachary's karate club (34 nodes, classic social network)
-- `igraphdata::UKfaculty` — friendship among UK faculty (81 nodes)
-- `igraphdata::USairports` — US airport connections (755 nodes, large)
-- `igraphdata::enron` — Enron email network (184 nodes)
+- `igraphdata::karate` --- Zachary's karate club (34 nodes, classic social network)
+- `igraphdata::UKfaculty` --- friendship among UK faculty (81 nodes)
+- `igraphdata::USairports` --- US airport connections (755 nodes, large)
+- `igraphdata::enron` --- Enron email network (184 nodes)
 
 **Note:** You may need to install `igraphdata` separately: `install.packages("igraphdata")`
 
@@ -68,7 +66,6 @@ For this workbook, you'll need a network (graph) dataset:
 # library(igraphdata)
 # data("karate")
 # my_graph <- karate
-
 ```
 
 ---
@@ -88,7 +85,6 @@ Examine your graph's basic properties:
 #| label: ex1-basics
 
 # Your code here
-
 ```
 
 *Describe your network in substantive terms (what do nodes and edges represent?).*
@@ -103,9 +99,8 @@ Create a visualization of your network using `igraph::plot()` or a similar funct
 #| label: ex1-visualize
 
 # Your code here
-
 ```
- 
+
 *What structure do you observe? Are there clusters, hubs, or isolated nodes?*
 
 
@@ -118,7 +113,6 @@ Extract the adjacency matrix. What do the entries represent?
 #| label: ex1-adjacency
 
 # Your code here
-
 ```
 
 *How sparse is the matrix? What does sparsity tell you about the network?*
@@ -137,7 +131,6 @@ Compute the degree of each node (number of connections). Who are the most connec
 #| label: ex2-degree
 
 # Your code here
-
 ```
 
 *List the top 5 nodes by degree. Do they make sense as "central" actors?*
@@ -152,7 +145,6 @@ Betweenness measures how often a node lies on the shortest path between other no
 #| label: ex2-betweenness
 
 # Your code here
-
 ```
 
 *Which nodes have high betweenness? How do they differ from high-degree nodes?*
@@ -167,7 +159,6 @@ PageRank assigns importance based on the importance of a node's neighbors (recur
 #| label: ex2-pagerank
 
 # Your code here
-
 ```
 
 *Compare the top nodes by PageRank to those by degree and betweenness.*
@@ -198,7 +189,6 @@ Apply a community detection algorithm (e.g., `igraph::cluster_louvain()`, `clust
 #| label: ex3-communities
 
 # Your code here
-
 ```
 
 *How many communities were found? How large is each?*
@@ -213,7 +203,6 @@ Modularity measures how well a community partition separates the network (higher
 #| label: ex3-modularity
 
 # Your code here
-
 ```
 
 *What is the modularity of your partition? Compare to a random partition.*
@@ -228,7 +217,6 @@ Re-plot your network, coloring nodes by community membership.
 #| label: ex3-visualize-communities
 
 # Your code here
-
 ```
 
 *Do the detected communities correspond to meaningful groups?*
@@ -241,7 +229,7 @@ Re-plot your network, coloring nodes by community membership.
 
 ### Task 4.1: Node-Level Features
 
-Select one or more node features that could be extracted from your graph and used in a machine learning model.  Consider features such as:
+Select one or more node features that could be extracted from your graph and used in a machine learning model. Consider features such as:
 
 - Degree
 - Clustering coefficient
@@ -252,7 +240,6 @@ Select one or more node features that could be extracted from your graph and use
 #| label: ex4-node-features
 
 # Your code here
-
 ```
 
 ### Task 4.2: Bipartite Projection
@@ -265,7 +252,6 @@ If your network is bipartite (two types of nodes), project it onto a derived net
 #| label: ex4-bipartite
 
 # Your code here
-
 ```
 
 *What does an edge in the projected network represent?*
@@ -295,7 +281,6 @@ The "friendship paradox" states that, on average, your friends have more friends
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *Does the paradox hold in your network?*
@@ -308,4 +293,11 @@ A colleague suggests using only degree centrality to identify important nodes. C
 
 *Your example:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

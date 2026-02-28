@@ -1,10 +1,10 @@
 ---
-title: "Chapter 12 Workbook: Time Series Data"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 12: Time Series Data"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -21,19 +21,19 @@ library(ggplot2)
 library(dplyr)
 library(astsa)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Explain why time series data violate the assumption of observational independence.
-2. Interpret the autocorrelation function (ACF) and partial autocorrelation function (PACF).
-3. Define stationarity and explain why it matters for time series analysis.
-4. Contrast time-domain and frequency-domain perspectives on time series.
-5. Identify patterns (trend, seasonality, noise) in time series plots.
-6. Define and explain the role of the time-shift operator.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
@@ -43,7 +43,7 @@ Here are the learning goals for this chapter:
 
 ## Choosing Your Time Series
 
-For this workbook, you'll need a time series with:
+For this chapter, you'll need a time series with:
 
 - At least 100 observations
 - Regular time spacing (daily, monthly, quarterly, etc.)
@@ -52,10 +52,10 @@ For this workbook, you'll need a time series with:
 
 **Suggested sources from `astsa` package:**
 
-- `astsa::jj` — Johnson & Johnson quarterly earnings (84 obs)
-- `astsa::globtemp` — global temperature deviations (142 obs)
-- `astsa::soi` — Southern Oscillation Index (453 obs)
-- `astsa::rec` — recruitment (fish population, 453 obs)
+- `astsa::jj` --- Johnson & Johnson quarterly earnings (84 obs)
+- `astsa::globtemp` --- global temperature deviations (142 obs)
+- `astsa::soi` --- Southern Oscillation Index (453 obs)
+- `astsa::rec` --- recruitment (fish population, 453 obs)
 
 **Alternative:** `datasets::AirPassengers` (144 monthly observations)
 
@@ -64,7 +64,6 @@ For this workbook, you'll need a time series with:
 
 # Load your time series here
 # Example: my_ts <- astsa::jj
-
 ```
 
 ---
@@ -79,7 +78,6 @@ Plot your time series. What features do you observe (trend, seasonality, cycles,
 #| label: ex1-plot
 
 # Your code here
-
 ```
 
 *Describe the main features you see:*
@@ -88,7 +86,7 @@ Plot your time series. What features do you observe (trend, seasonality, cycles,
 
 ### Task 1.2: Dependence Structure
 
-In standard regression, we assume observations are independent. Time series violates this. 
+In standard regression, we assume observations are independent. Time series violates this.
 
 Plot the value at time t against the value at time t-1 (a lag-1 scatter plot). Is there a relationship?
 
@@ -96,7 +94,6 @@ Plot the value at time t against the value at time t-1 (a lag-1 scatter plot). I
 #| label: ex1-lag-scatter
 
 # Your code here
-
 ```
 
 *What does this plot tell you about the dependence between consecutive observations?*
@@ -111,7 +108,6 @@ Compute and plot the autocorrelation function (ACF) using `stats::acf()` or `ast
 #| label: ex1-acf
 
 # Your code here
-
 ```
 
 *Interpret the ACF: How far back in time does the dependence extend?*
@@ -130,7 +126,6 @@ Estimate the trend by computing a moving average or fitting a smooth curve (e.g.
 #| label: ex2-trend
 
 # Your code here
-
 ```
 
 ### Task 2.2: Seasonality
@@ -141,7 +136,6 @@ If your series has seasonality, estimate the seasonal component. Plot the detren
 #| label: ex2-seasonality
 
 # Your code here
-
 ```
 
 ### Task 2.3: Classical Decomposition
@@ -152,7 +146,6 @@ Use `stats::decompose()` or `stats::stl()` to decompose your series into trend, 
 #| label: ex2-decompose
 
 # Your code here
-
 ```
 
 *How much of the variation is captured by each component?*
@@ -173,7 +166,6 @@ Examine your series: Does the mean appear constant over time? Does the variance?
 #| label: ex3-visual-check
 
 # Your code here
-
 ```
 
 *Is your series stationary? What transformations might help?*
@@ -184,8 +176,8 @@ Examine your series: Does the mean appear constant over time? Does the variance?
 
 If your series has:
 
-- Increasing variance → try a log transform
-- A trend → try differencing
+- Increasing variance --- try a log transform
+- A trend --- try differencing
 
 Apply appropriate transformations and reassess.
 
@@ -193,7 +185,6 @@ Apply appropriate transformations and reassess.
 #| label: ex3-transform
 
 # Your code here
-
 ```
 
 *Does the transformed series look more stationary?*
@@ -206,8 +197,8 @@ Apply appropriate transformations and reassess.
 
 ### Task 4.1: Two Perspectives
 
-The time domain focuses on autocorrelation—how values at different times relate.
-The frequency domain focuses on cycles—what periodic components are present.
+The time domain focuses on autocorrelation---how values at different times relate.
+The frequency domain focuses on cycles---what periodic components are present.
 
 In your own words, explain when you might prefer each perspective.
 
@@ -247,7 +238,6 @@ Find a time series that appears stationary. Verify by:
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *Your assessment:*
@@ -260,4 +250,11 @@ Explain why you cannot simply apply standard linear regression to time series da
 
 *Your explanation:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

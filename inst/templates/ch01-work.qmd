@@ -1,10 +1,10 @@
 ---
-title: "Chapter 1 Workbook: Exploratory Data Analysis"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 1: Exploratory Data Analysis"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -20,28 +20,29 @@ execute:
 library(ggplot2)
 library(dplyr)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Distinguish between exploratory and confirmatory data analysis and explain when each is appropriate.
-2. Select appropriate measures of central tendency (mean, median) and dispersion (SD, IQR) based on data characteristics.
-3. Construct basic visualizations: histograms, scatter diagrams, and box plots.
-4. Interpret scatter plots, box plots, and histograms to identify patterns, outliers, and distributional shape.
-5. Formulate questions that can initiate exploratory analysis of an unfamiliar dataset.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> Given a new dataset, how do you begin to understand what's in it—before fitting any models?
+> Given a new dataset, how do you begin to understand what's in it---before fitting any models?
 
 ---
 
 ## Choosing Your Dataset
 
-For this workbook, you'll select a dataset to explore. This mirrors real practice: EDA begins with finding data worth investigating.
+For this chapter, you'll select a dataset to explore. This mirrors real practice: EDA begins with finding data worth investigating.
 
 **Criteria for your dataset:**
 
@@ -64,7 +65,6 @@ For this workbook, you'll select a dataset to explore. This mirrors real practic
 # Load your dataset here
 # Example: my_data <- read.csv("path/to/your/data.csv")
 # Example: my_data <- palmerpenguins::penguins
-
 ```
 
 ---
@@ -81,18 +81,17 @@ Examine the dimensions and variable types. How many observations? How many varia
 #| label: ex1-structure
 
 # Your code here
-
 ```
 
 ### Task 1.2: Initial Questions
 
-Based on what you see, write down 3–5 questions you'd want to investigate. These don't need to be answerable yet—just genuine curiosities.
+Based on what you see, write down 3--5 questions you'd want to investigate. These don't need to be answerable yet---just genuine curiosities.
 
 *Your questions:*
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ### Task 1.3: Exploratory vs. Confirmatory
 
@@ -116,7 +115,6 @@ Choose one or two numeric variables. For each, compute the mean, median, SD, and
 #| label: ex2-summaries
 
 # Your code here
-
 ```
 
 *Your interpretation:*
@@ -131,7 +129,6 @@ Create histograms for the same variable(s). Do the visualizations confirm your i
 #| label: ex2-histograms
 
 # Your code here
-
 ```
 
 ### Task 2.3: Choosing Measures
@@ -158,7 +155,6 @@ Choose two numeric variables you suspect might be related. Create a scatter plot
 #| label: ex3-scatter
 
 # Your code here
-
 ```
 
 ### Task 3.2: Box Plots by Group
@@ -171,7 +167,6 @@ Choose a numeric variable and a categorical variable. Create box plots of the nu
 #| label: ex3-boxplots
 
 # Your code here
-
 ```
 
 ### Task 3.3: Outliers and Surprises
@@ -200,4 +195,11 @@ Swap datasets with a classmate (or choose a second dataset yourself). Spend 10 m
 
 *Your response:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

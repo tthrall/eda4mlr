@@ -1,10 +1,10 @@
 ---
-title: "Chapter 4 Workbook: Statistical Simulation"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 4: Statistical Simulation"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -22,19 +22,19 @@ library(dplyr)
 library(eda4mlr)
 
 set.seed(42)  # For reproducibility
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. For a given family of probability distributions, distinguish R's 4 types of function: d/p/q/r.
-2. Generate a pseudo-random sample from common families of probability distributions.
-3. Design and implement Monte Carlo simulations to estimate quantities of interest.
-4. Compare estimators (e.g., mean vs. median) by examining their sampling distributions.
-5. Apply the bootstrap to construct confidence intervals without relying on parametric formulas.
-6. Explain when and why importance sampling is needed for rare event estimation.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
@@ -44,7 +44,7 @@ Here are the learning goals for this chapter:
 
 ## Note on Datasets
 
-This workbook differs from others: simulation generates its own data. You will create synthetic datasets to explore the behavior of statistical procedures. Where relevant, you may also apply bootstrap methods to a real dataset of your choosing.
+This chapter differs from others: simulation generates its own data. You will create synthetic datasets to explore the behavior of statistical procedures. Where relevant, you may also apply bootstrap methods to a real dataset of your choosing.
 
 ---
 
@@ -54,16 +54,15 @@ This workbook differs from others: simulation generates its own data. You will c
 
 For the normal distribution, demonstrate what each function returns:
 
-- `dnorm()` — density
-- `pnorm()` — cumulative probability
-- `qnorm()` — quantile
-- `rnorm()` — random sample
+- `dnorm()` --- density
+- `pnorm()` --- cumulative probability
+- `qnorm()` --- quantile
+- `rnorm()` --- random sample
 
 ```{r}
 #| label: ex1-dpqr
 
 # Your code here
-
 ```
 
 *In your own words, explain what each function computes.*
@@ -82,7 +81,6 @@ Generate 1,000 observations from each of the following distributions and plot hi
 #| label: ex1-samples
 
 # Your code here
-
 ```
 
 *How do the shapes differ? What does the shape tell you about the underlying process?*
@@ -101,7 +99,6 @@ Use simulation to estimate P(X > 2) where X ~ Normal(0, 1). Compare your Monte C
 #| label: ex2-probability
 
 # Your code here
-
 ```
 
 *How close is your estimate? How does the accuracy change with sample size?*
@@ -116,7 +113,6 @@ Generate 1,000 samples, each of size n = 30, from an Exponential(rate = 1) distr
 #| label: ex2-estimators
 
 # Your code here
-
 ```
 
 *Which estimator has lower variance? Which is closer to the true mean (which equals 1 for Exponential(1))?*
@@ -131,7 +127,6 @@ Repeat Task 2.2 for n = 10, 30, 100, and 500. How do the sampling distributions 
 #| label: ex2-sample-size
 
 # Your code here
-
 ```
 
 *What happens to bias and variance as n increases?*
@@ -154,7 +149,6 @@ Choose a real dataset (or generate one). Compute a 95% bootstrap confidence inte
 #| label: ex3-bootstrap-ci
 
 # Your code here
-
 ```
 
 *Compare this to the classical confidence interval based on the normal approximation of the sampling distribution of the mean.*
@@ -163,13 +157,12 @@ Choose a real dataset (or generate one). Compute a 95% bootstrap confidence inte
 
 ### Task 3.2: Bootstrap for a Non-Standard Statistic
 
-Use the bootstrap to construct a confidence interval for a statistic that lacks a simple formula—for example, the ratio of two means, or the median absolute deviation.
+Use the bootstrap to construct a confidence interval for a statistic that lacks a simple formula---for example, the ratio of two means, or the median absolute deviation.
 
 ```{r}
 #| label: ex3-bootstrap-nonstandard
 
 # Your code here
-
 ```
 
 *How does this exercise change or confirm your thinking about using the bootstrap method?*
@@ -188,7 +181,6 @@ Estimate P(X > 4) where X ~ Normal(0, 1) using naive Monte Carlo. How many sampl
 #| label: ex4-rare-naive
 
 # Your code here
-
 ```
 
 *What is the exact probability? Why is naive simulation inefficient here?*
@@ -198,7 +190,7 @@ Estimate P(X > 4) where X ~ Normal(0, 1) using naive Monte Carlo. How many sampl
 ### Task 4.2: Importance Sampling (Conceptual)
 
 Importance sampling shifts the sampling distribution to make rare events more common, then reweights the results. How would you explain this in your own words to a friend?
- 
+
 *Your explanation:*
 
 
@@ -215,7 +207,6 @@ Use simulation to demonstrate the Central Limit Theorem: show that the sampling 
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *Your observations:*
@@ -230,9 +221,15 @@ A colleague claims that the median is always more robust than the mean. Design a
 #| label: practice-2
 
 # Your code here
-
 ```
 
 *How would you use your findings to respond to your colleague?*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

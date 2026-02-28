@@ -1,10 +1,10 @@
 ---
-title: "Chapter 6 Workbook: Information Theory"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 6: Information Theory"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -20,29 +20,29 @@ execute:
 library(ggplot2)
 library(dplyr)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Define, describe, and calculate entropy for finite probability distributions.
-2. Define and describe mutual information.
-3. Define and describe KL divergence.
-4. Describe how entropy is related to decision tree splitting.
-5. Give an example in which mutual information measures a nonlinear relationship that correlation does not measure.
-6. Describe the relationship between cross-entropy and KL divergence.
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> How do you measure uncertainty about the current state of a variable—and how much one variable tells you about another?
+> How do you measure uncertainty about the current state of a variable---and how much one variable tells you about another?
 
 ---
 
 ## Choosing Your Dataset
 
-For this workbook, you'll need a dataset with:
+For this chapter, you'll need a dataset with:
 
 - At least 50 observations
 - At least 1 categorical variable (for entropy calculations)
@@ -51,9 +51,9 @@ For this workbook, you'll need a dataset with:
 
 **Suggested sources:**
 
-- `datasets::Titanic` — survival, class, sex, age (categorical)
-- `datasets::HairEyeColor` — categorical cross-tabulation
-- `palmerpenguins::penguins` — species, island, numeric measurements
+- `datasets::Titanic` --- survival, class, sex, age (categorical)
+- `datasets::HairEyeColor` --- categorical cross-tabulation
+- `palmerpenguins::penguins` --- species, island, numeric measurements
 
 **Fallback option:** Create a simple categorical variable by binning a numeric variable from any dataset.
 
@@ -61,11 +61,10 @@ For this workbook, you'll need a dataset with:
 #| label: load-data
 
 # Load your dataset here
-
 ```
 
 ---
- 
+
 ## Exercise 1: Entropy
 
 ### Task 1.1: Computing Entropy
@@ -80,7 +79,6 @@ Apply it to a categorical variable from your dataset.
 #| label: ex1-entropy-function
 
 # Your code here
-
 ```
 
 *What is the entropy? What does this value tell you about the "uncertainty" in this variable?*
@@ -100,7 +98,6 @@ Verify your answers by computing entropy for both cases.
 #| label: ex1-max-min-entropy
 
 # Your code here
-
 ```
 
 *Your explanation:*
@@ -131,7 +128,6 @@ Choose two categorical variables and compute their mutual information.
 #| label: ex2-mutual-info
 
 # Your code here
-
 ```
 
 *Interpret the result: How much information does one variable provide about the other?*
@@ -151,7 +147,6 @@ Create or find an example where two variables have:
 #| label: ex2-mi-vs-corr
 
 # Your code here
-
 ```
 
 *Why does mutual information capture this relationship when correlation does not?*
@@ -177,7 +172,6 @@ Choose a categorical variable and compare its empirical distribution to:
 #| label: ex3-kl-divergence
 
 # Your code here
-
 ```
 
 *What do the KL divergence values tell you?*
@@ -198,7 +192,6 @@ Verify this relationship numerically using your distributions from Task 3.1.
 #| label: ex3-cross-entropy
 
 # Your code here
-
 ```
 
 *Why is cross-entropy used as a loss function in classification?*
@@ -219,7 +212,6 @@ If your dataset has multiple features and a target variable, compute the mutual 
 #| label: ex4-feature-ranking
 
 # Your code here
-
 ```
 
 *Which features are most informative? Does this match your intuition?*
@@ -238,7 +230,6 @@ A fair coin has entropy of 1 bit. A biased coin with P(heads) = 0.9 has lower en
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *What is the shape of this curve? What does it tell you?*
@@ -251,4 +242,11 @@ Explain in your own words why KL divergence is not symmetric: $D_{KL}(P \| Q) \n
 
 *Your explanation:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

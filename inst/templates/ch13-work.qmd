@@ -1,10 +1,10 @@
 ---
-title: "Chapter 13 Workbook: Time Domain Methods"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 13: Time Domain Methods"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -21,19 +21,19 @@ library(ggplot2)
 library(dplyr)
 library(astsa)
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Define AR(p) and MA(q) processes and identify their ACF/PACF signatures.
-2. Fit an ARIMA model and interpret its parameters.
-3. Generate forecasts from a fitted ARIMA model and explain prediction intervals.
-4. Apply differencing to achieve stationarity.
-5. Diagnose model adequacy by checking that residuals approximate white noise.
-6. Compare models using information criteria (AIC, BIC).
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
@@ -43,21 +43,20 @@ Here are the learning goals for this chapter:
 
 ## Choosing Your Time Series
 
-For this workbook, use the same series from Chapter 12, or select a new one:
+For this chapter, use the same series from Chapter 12, or select a new one:
 
 **Suggested sources from `astsa` package:**
 
-- `astsa::rec` — recruitment series (good for AR modeling)
-- `astsa::varve` — annual varve thickness (needs transformation)
-- `astsa::gnp` — US GNP (needs differencing)
-- `astsa::flu` — pneumonia/influenza deaths
+- `astsa::rec` --- recruitment series (good for AR modeling)
+- `astsa::varve` --- annual varve thickness (needs transformation)
+- `astsa::gnp` --- US GNP (needs differencing)
+- `astsa::flu` --- pneumonia/influenza deaths
 
 ```{r}
 #| label: load-data
 
 # Load your time series here
 # Example: my_ts <- astsa::rec
-
 ```
 
 ---
@@ -72,7 +71,6 @@ Plot the autocorrelation function. What pattern do you see (slow decay, cutoff, 
 #| label: ex1-acf
 
 # Your code here
-
 ```
 
 *Describe the ACF pattern:*
@@ -87,7 +85,6 @@ Plot the partial autocorrelation function using `stats::pacf()` or `astsa::acf2(
 #| label: ex1-pacf
 
 # Your code here
-
 ```
 
 *At what lag does the PACF cut off (if at all)?*
@@ -122,7 +119,6 @@ Plot the differenced series and its ACF.
 #| label: ex2-differencing
 
 # Your code here
-
 ```
 
 *Does differencing make the series stationary?*
@@ -137,7 +133,6 @@ Based on your analysis, fit an ARIMA(p, d, q) model using `stats::arima()` or `a
 #| label: ex2-fit-arima
 
 # Your code here
-
 ```
 
 *What values did you choose for p, d, and q? Why?*
@@ -152,7 +147,6 @@ Examine the fitted coefficients. For AR terms, what do the coefficients tell you
 #| label: ex2-interpret
 
 # Your code here
-
 ```
 
 *Your interpretation:*
@@ -177,7 +171,6 @@ Check:
 #| label: ex3-residuals
 
 # Your code here
-
 ```
 
 *Do the residuals look like white noise? Are there any remaining patterns?*
@@ -192,7 +185,6 @@ Apply the Ljung-Box test to formally check for remaining autocorrelation.
 #| label: ex3-ljung-box
 
 # Your code here
-
 ```
 
 *What does the test conclude?*
@@ -211,7 +203,6 @@ Fit several candidate models (varying p and q) and compare using AIC and BIC.
 #| label: ex4-model-selection
 
 # Your code here
-
 ```
 
 *Which model is selected by AIC? By BIC? Do they agree?*
@@ -220,13 +211,12 @@ Fit several candidate models (varying p and q) and compare using AIC and BIC.
 
 ### Task 4.2: Generate Forecasts
 
-Use your chosen model to forecast the next 10–20 time points. Plot the forecasts with prediction intervals.
+Use your chosen model to forecast the next 10--20 time points. Plot the forecasts with prediction intervals.
 
 ```{r}
 #| label: ex4-forecast
 
 # Your code here
-
 ```
 
 *Why do the prediction intervals widen as the forecast horizon increases?*
@@ -243,7 +233,6 @@ If possible, hold out the last portion of your series, fit the model on the trai
 #| label: ex4-evaluation
 
 # Your code here
-
 ```
 
 *How well did the model forecast the held-out observations?*
@@ -262,7 +251,6 @@ Simulate an AR(1) process with φ = 0.8 and an MA(1) process with θ = 0.8. Plot
 #| label: practice-1
 
 # Your code here
-
 ```
 
 *Your observations:*
@@ -275,4 +263,11 @@ Explain in your own words why forecasts from ARIMA models eventually converge to
 
 *Your explanation:*
 
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 

@@ -1,10 +1,10 @@
 ---
-title: "Chapter 11 Workbook: Topic Models"
-subtitle: "EDA for Machine Learning"
-author: "Your Name"
+title: "Chapter 11: Topic Models"
+author: "Student Name"
 date: today
 format:
   html:
+    code-fold: true
     toc: true
     embed-resources: true
     df-print: paged
@@ -26,29 +26,29 @@ library(topicmodels)
 
 # local library
 library(eda4mlr)
-
 ```
 
 ## Learning Objectives
 
-Here are the learning goals for this chapter:
+<!-- Review the learning objectives listed in the chapter and note them here. -->
 
-1. Describe the generative model underlying Latent Dirichlet Allocation (LDA).
-2. Interpret beta (word distributions per topic) and gamma (topic distributions per document).
-3. Fit an LDA model in R and extract topic-word and document-topic distributions.
-4. Select and justify the number of topics (K) using coherence metrics or domain knowledge.
-5. Evaluate topic quality through inspection of top words and representative documents.
-6. Distinguish Latent Dirichlet Allocation (topic model) from Linear Discriminant Analysis (classification method).
+
+
+## Reading Notes
+
+<!-- Key concepts, questions, and observations from reading the chapter. -->
+
+
 
 ## The Big Picture
 
-> Can an algorithm discover what a collection of documents is "about"—without being told in advance?
+> Can an algorithm discover what a collection of documents is "about"---without being told in advance?
 
 ---
 
 ## Choosing Your Corpus
 
-For this workbook, you'll need a collection of text documents:
+For this chapter, you'll need a collection of text documents:
 
 - At least 20 documents (more is better for topic modeling)
 - Documents with diverse content (so topics can emerge)
@@ -56,13 +56,13 @@ For this workbook, you'll need a collection of text documents:
 
 **Built-in (no download required):**
 
-- `topicmodels::AssociatedPress` — 2,246 AP news articles (pre-formatted as DTM)
-- `janeaustenr::austen_books()` — chapters from 6 novels
-- `quanteda.corpora::data_corpus_inaugural` — US inaugural addresses (good temporal span)
+- `topicmodels::AssociatedPress` --- 2,246 AP news articles (pre-formatted as DTM)
+- `janeaustenr::austen_books()` --- chapters from 6 novels
+- `quanteda.corpora::data_corpus_inaugural` --- US inaugural addresses (good temporal span)
 
 **Cached on first use:**
 
-- `textdata::dataset_ag_news()` — 120K news articles with category labels (allows comparison of discovered vs. known topics)
+- `textdata::dataset_ag_news()` --- 120K news articles with category labels (allows comparison of discovered vs. known topics)
 
 **Not recommended for classwork:** `gutenbergr` requires network access and can be slow or unreliable.
 
@@ -77,7 +77,6 @@ For this workbook, you'll need a collection of text documents:
 # Example using Associated Press data:
 # data("AssociatedPress", package = "topicmodels")
 # my_dtm <- AssociatedPress
-
 ```
 
 ---
@@ -122,7 +121,6 @@ Use `topicmodels::LDA()` to fit a topic model with K topics (start with K = 4 or
 #| label: ex2-fit-lda
 
 # Your code here
-
 ```
 
 ### Task 2.2: Extract β (Word-Topic Probabilities)
@@ -133,7 +131,6 @@ Extract the per-topic word probabilities. For each topic, list the top 10 words.
 #| label: ex2-beta
 
 # Your code here
-
 ```
 
 *Can you assign an interpretable label to each topic based on its top words?*
@@ -148,7 +145,6 @@ Extract the per-document topic probabilities. Examine a few documents.
 #| label: ex2-gamma
 
 # Your code here
-
 ```
 
 *Do the topic mixtures make sense for documents you can inspect?*
@@ -182,7 +178,6 @@ Fit topic models for K = 2, 4, 6, 8, 10. Compare using:
 #| label: ex3-choosing-k
 
 # Your code here
-
 ```
 
 *What value of K gives the best balance of fit and interpretability?*
@@ -201,7 +196,6 @@ Which topics are most common across your corpus? Create a bar plot of average to
 #| label: ex4-prevalence
 
 # Your code here
-
 ```
 
 ### Task 4.2: Topic Trends
@@ -214,7 +208,6 @@ If your documents have timestamps, examine how topic prevalence changes over tim
 #| label: ex4-trends
 
 # Your code here
-
 ```
 
 *What trends do you observe?*
@@ -229,7 +222,6 @@ Choose a document and find other documents with similar topic mixtures. Are they
 #| label: ex4-similarity
 
 # Your code here
-
 ```
 
 *Does topic-based similarity capture meaningful relationships?*
@@ -242,7 +234,7 @@ Choose a document and find other documents with similar topic mixtures. Are they
 
 ### Problem 1
 
-Topic models are unsupervised—they discover structure without labels. Describe a scenario where you would prefer topic modeling over supervised classification, and vice versa.
+Topic models are unsupervised---they discover structure without labels. Describe a scenario where you would prefer topic modeling over supervised classification, and vice versa.
 
 *Your response:*
 
@@ -253,4 +245,12 @@ Topic models are unsupervised—they discover structure without labels. Describe
 A colleague fits a 100-topic model and reports high held-out likelihood. But when you examine the topics, many are uninterpretable or redundant. How would you advise your colleague?
 
 *Your response:*
+
+
+
+---
+
+## Reflection
+
+<!-- What did you learn? What remains unclear? What would you do differently next time? -->
 
