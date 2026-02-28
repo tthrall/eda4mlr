@@ -301,41 +301,42 @@ create_project <- function(path,
     ch_dir <- file.path(path, paste0("ch", ch_num, "-", slug))
     dir.create(ch_dir)
 
-    # Work file
-    work_qmd <- c(
-      "---",
-      paste0("title: \"Chapter ", selected$chapter[i], ": ", title, "\""),
-      paste0("author: \"", student_name, "\""),
-      "date: today",
-      "format:",
-      "  html:",
-      "    code-fold: true",
-      "    toc: true",
-      "---",
-      "",
-      "## Learning Objectives",
-      "",
-      "<!-- Review the chapter's learning objectives and note them here -->",
-      "",
-      "## Reading Notes",
-      "",
-      "<!-- Key concepts, questions, and observations from reading the chapter -->",
-      "",
-      "## Exercises",
-      "",
-      "### Exercise X.X",
-      "",
-      "```{r}",
-      "# Your code here",
-      "```",
-      "",
-      "<!-- Your interpretation and discussion -->",
-      "",
-      "## Reflection",
-      "",
-      "<!-- What did you learn? What remains unclear? -->"
+    # Work file: copy pre-built template with student name injection
+    template_file <- system.file(
+      "templates", paste0("ch", ch_num, "-work.qmd"),
+      package = "eda4mlr",
+      mustWork = FALSE
     )
-    writeLines(work_qmd, file.path(ch_dir, paste0("ch", ch_num, "-work.qmd")))
+
+    work_dest <- file.path(ch_dir, paste0("ch", ch_num, "-work.qmd"))
+
+    if (template_file != "") {
+      work_content <- readLines(template_file, warn = FALSE)
+      work_content <- gsub(
+        'author: "Student Name"',
+        paste0('author: "', student_name, '"'),
+        work_content,
+        fixed = TRUE
+      )
+      writeLines(work_content, work_dest)
+    } else {
+      # Fallback: minimal stub if template not found
+      writeLines(c(
+        "---",
+        paste0('title: "Chapter ', selected$chapter[i], ": ", title, '"'),
+        paste0('author: "', student_name, '"'),
+        "date: today",
+        "---",
+        "",
+        "## Learning Objectives",
+        "",
+        "<!-- Review the chapter's learning objectives and note them here -->",
+        "",
+        "## Exercises",
+        "",
+        "<!-- Work through the chapter exercises here -->"
+      ), work_dest)
+    }
 
     # Companion log file
     companion_qmd <- c(
