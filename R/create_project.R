@@ -428,6 +428,8 @@ create_project <- function(path,
 #'   \code{slug} (character), \code{title} (character).
 #'
 #' @keywords internal
+#'
+#' @export
 get_chapter_registry <- function() {
 
   registry_path <- system.file(
