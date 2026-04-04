@@ -1,7 +1,7 @@
 #' Create a Student Project for EDA for Machine Learning
 #'
 #' Scaffolds a complete student workspace with chapter folders,
-#' workbook templates, companion logs, and (optionally) Positron IDE
+#' minimal workbook files, and (optionally) Positron IDE
 #' configuration for the EDA Companion agent.
 #'
 #' @param path Character. Path where the project should be created.
@@ -19,7 +19,9 @@
 #' The created project includes:
 #' \itemize{
 #'   \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
-#'   \item Chapter folders with work and companion log templates
+#'   \item Chapter folders, each containing a minimal `chNN-work.qmd`
+#'     for the student's notes and code, and an empty
+#'     `chNN-agent-transcript.md` for recording Companion conversations
 #'   \item A portfolio `index.qmd` with progress tracking
 #'   \item A `.gitignore` configured for R/Quarto projects
 #'   \item A `README.md` describing the portfolio (suitable for GitHub)
@@ -181,10 +183,9 @@ create_project <- function(path,
     "## About This Portfolio",
     "",
     "This portfolio documents my work through *Exploratory Data Analysis",
-    "for Machine Learning* by Tony Thrall. Each chapter folder contains my",
-    "analysis code, written responses, and a log of my conversations with",
-    "the EDA Companion, an AI-enhanced Socratic tutor designed to support",
-    "independent reasoning rather than provide direct answers.",
+    "for Machine Learning* by Tony Thrall. Each chapter folder contains",
+    "my notes, code, and developing understanding of the material. The",
+    "guiding question for each chapter is: *How would you teach this?*",
     "",
     "The portfolio is structured as a Quarto book that can be rendered to",
     "HTML for sharing with instructors, collaborators, or prospective",
@@ -192,12 +193,12 @@ create_project <- function(path,
     "",
     "## Structure",
     "",
-    "Each chapter folder contains two files:",
+    "Each chapter folder contains:",
     "",
-    "- `chNN-work.qmd`: R code, analysis, and written responses to",
-    "  exercises and discussion questions",
-    "- `chNN-companion.qmd`: A log of interactions with the EDA Companion,",
-    "  documenting the reasoning process and key insights",
+    "- `chNN-work.qmd`: Your notes, code, and analysis. This is your",
+    "  primary artifact. Use it however serves your learning best.",
+    "- `chNN-agent-transcript.md`: A place to record your conversations",
+    "  with the EDA Companion.",
     "",
     "## Chapters",
     "",
@@ -272,8 +273,8 @@ create_project <- function(path,
     "",
     "Each chapter folder contains:",
     "",
-    "- `chXX-work.qmd`: My R code, analysis, and written responses",
-    "- `chXX-companion.qmd`: Log of my interactions with the EDA Companion",
+    "- `chXX-work.qmd`: My notes, code, and analysis",
+    "- `chXX-agent-transcript.md`: Record of my EDA Companion conversations",
     "",
     "## Progress",
     "",
@@ -301,88 +302,39 @@ create_project <- function(path,
     ch_dir <- file.path(path, paste0("ch", ch_num, "-", slug))
     dir.create(ch_dir)
 
-    # Work file: copy pre-built template with student name injection
-    template_file <- system.file(
-      "templates", paste0("ch", ch_num, "-work.qmd"),
-      package = "eda4mlr",
-      mustWork = FALSE
-    )
-
-    work_dest <- file.path(ch_dir, paste0("ch", ch_num, "-work.qmd"))
-
-    if (template_file != "") {
-      work_content <- readLines(template_file, warn = FALSE)
-      work_content <- gsub(
-        'author: "Student Name"',
-        paste0('author: "', student_name, '"'),
-        work_content,
-        fixed = TRUE
-      )
-      writeLines(work_content, work_dest)
-    } else {
-      # Fallback: minimal stub if template not found
-      writeLines(c(
-        "---",
-        paste0('title: "Chapter ', selected$chapter[i], ": ", title, '"'),
-        paste0('author: "', student_name, '"'),
-        "date: today",
-        "---",
-        "",
-        "## Learning Objectives",
-        "",
-        "<!-- Review the chapter's learning objectives and note them here -->",
-        "",
-        "## Exercises",
-        "",
-        "<!-- Work through the chapter exercises here -->"
-      ), work_dest)
-    }
-
-    # Companion log file
-    companion_qmd <- c(
+    # Work file: minimal YAML + library loads + framing
+    work_qmd <- c(
       "---",
-      paste0("title: \"Chapter ", selected$chapter[i], " Companion Log\""),
-      paste0("author: \"", student_name, "\""),
+      paste0('title: "Chapter ', selected$chapter[i], ": ", title, '"'),
+      paste0('author: "', student_name, '"'),
       "date: today",
-      "format:",
-      "  html:",
-      "    toc: true",
       "---",
       "",
-      "## About This Log",
+      "```{r}",
+      "#| label: setup",
+      "#| message: false",
+      "library(tidyverse)",
+      "library(eda4mlr)",
+      "```",
       "",
-      paste0(
-        "This document records my interactions with the EDA Companion while ",
-        "working through Chapter ", selected$chapter[i], ". Each session ",
-        "captures the context, conversation, and what I learned."
-      ),
-      "",
-      "---",
-      "",
-      "## Session: YYYY-MM-DD",
-      "",
-      "### Context",
-      "",
-      "<!-- What were you working on? What prompted you to consult the Companion? -->",
-      "",
-      "### Conversation",
-      "",
-      "<!-- Paste the relevant portion of your conversation with the Companion -->",
-      "",
-      "### What I Learned",
-      "",
-      "<!-- Summarize the key insight or resolution -->",
-      "",
-      "### Open Questions",
-      "",
-      "<!-- What remains unclear or needs further exploration? -->",
-      "",
-      "---",
-      "",
-      "<!-- Copy the session template above for additional sessions -->"
+      "<!-- This file is yours. Use it to record your notes, code, and",
+      "     developing understanding of this chapter. A guiding question:",
+      "     How would you teach what you've learned here? -->"
     )
-    writeLines(companion_qmd,
-               file.path(ch_dir, paste0("ch", ch_num, "-companion.qmd")))
+    writeLines(work_qmd,
+               file.path(ch_dir, paste0("ch", ch_num, "-work.qmd")))
+
+    # Agent transcript: empty file for recording Companion conversations
+    transcript_lines <- c(
+      paste0("# Chapter ", selected$chapter[i], ": ", title),
+      paste0("## EDA Companion Transcript"),
+      "",
+      "<!-- Use this file to record conversations with the",
+      "     EDA Companion. -->"
+    )
+    writeLines(transcript_lines,
+               file.path(ch_dir, paste0("ch", ch_num,
+                                        "-agent-transcript.md")))
   }
 
 
