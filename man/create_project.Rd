@@ -31,14 +31,16 @@ Invisibly returns the path to the created project.
 }
 \description{
 Scaffolds a complete student workspace with chapter folders,
-workbook templates, companion logs, and (optionally) Positron IDE
+minimal workbook files, and (optionally) Positron IDE
 configuration for the EDA Companion agent.
 }
 \details{
 The created project includes:
 \itemize{
   \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
-  \item Chapter folders with work and companion log templates
+  \item Chapter folders, each containing a minimal `chNN-work.qmd`
+    for the student's notes and code, and an empty
+    `chNN-agent-transcript.md` for recording Companion conversations
   \item A portfolio `index.qmd` with progress tracking
   \item A `.gitignore` configured for R/Quarto projects
   \item A `README.md` describing the portfolio (suitable for GitHub)
