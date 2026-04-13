@@ -43,6 +43,7 @@ The created project includes:
     `chNN-agent-transcript.md` for recording Companion conversations
   \item A portfolio `index.qmd` with progress tracking
   \item A `.gitignore` configured for R/Quarto projects
+  \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
   \item A `README.md` describing the portfolio (suitable for GitHub)
 }
 

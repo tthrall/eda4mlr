@@ -24,6 +24,7 @@
 #'     `chNN-agent-transcript.md` for recording Companion conversations
 #'   \item A portfolio `index.qmd` with progress tracking
 #'   \item A `.gitignore` configured for R/Quarto projects
+#'   \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
 #'   \item A `README.md` describing the portfolio (suitable for GitHub)
 #' }
 #'
@@ -110,6 +111,17 @@ create_project <- function(path,
     "*_files/"
   )
   writeLines(gitignore_lines, file.path(path, ".gitignore"))
+
+
+  # --- .Rprofile -----------------------------------------------------------
+
+  rprofile_lines <- c(
+    "# Set CRAN mirror for Quarto rendering",
+    "# (Quarto starts a fresh R session that does not inherit the",
+    "# mirror setting from the interactive console.)",
+    'options(repos = c(CRAN = "https://cran.rstudio.com/"))'
+  )
+  writeLines(rprofile_lines, file.path(path, ".Rprofile"))
 
 
   # --- .Rproj file ---------------------------------------------------------
