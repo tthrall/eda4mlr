@@ -414,7 +414,7 @@ get_chapter_registry <- function() {
   registry <- utils::read.delim(registry_path, stringsAsFactors = FALSE)
 
   # Validate expected columns
-  expected <- c("chapter", "slug", "title")
+  expected <- c("chapter", "slug", "title", "has_slides")
   if (!all(expected %in% names(registry))) {
     stop(
       "Chapter registry must contain columns: ",
@@ -424,6 +424,7 @@ get_chapter_registry <- function() {
   }
 
   registry$chapter <- as.integer(registry$chapter)
+  registry$has_slides <- as.logical(registry$has_slides)
   registry <- registry[order(registry$chapter), ]
 
   registry
