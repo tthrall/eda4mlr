@@ -1,0 +1,22 @@
+idx_0	idx_1	fn_stub	n_loc	title	has_slides
+0		index	8		FALSE
+0		preface	277		FALSE
+1	1	eda	492	Exploratory Data Analysis	TRUE
+1	2	conditioning	1145	Conditional Distributions	TRUE
+1	3	clustering	1092	Clustering: EDA in Higher Dimensions	TRUE
+1	4	simulation	686	Statistical Simulation	TRUE
+1	5	study-design	721	Sampling and Study Design	TRUE
+1	6	info-theory	367	Information Theory	TRUE
+2	7	lin-reg	966	Linear Regression	TRUE
+2	8	pca	1322	Principal Component Analysis	TRUE
+2	9	lin-discr	1262	Linear Discriminant Analysis	TRUE
+3	10	text-as-data	520	Text as Data	TRUE
+3	11	topic-models	762	Topic Models	TRUE
+4	12	ts-data	900	Time Series Data	TRUE
+4	13	ts-time-domain	732	Time Domain Methods	TRUE
+4	14	ts-freq-domain	643	Frequency Domain Methods	TRUE
+5	15	graph-theory	1133	Graph Theory for Machine Learning	TRUE
+6	16	mcmc-appendix	387	MCMC: Markov Chain Monte Carlo	FALSE
+6	17	em-algorithm	568	EM: the Expectation-Maximization Algorithm	FALSE
+6	18	summary	230	Summary	FALSE
+6		references	5	References	FALSE
