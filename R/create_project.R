@@ -44,13 +44,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Create project with default chapters (1-5) and Positron support
+#' # Create project with default chapters (1:17) and Positron support
 #' eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 #'
-#' # Create project with all chapters, no Positron
+#' # Create project with just chapters 1:5, no Positron
 #' eda4mlr::create_project("~/eda4ml-portfolio",
 #'                         student_name = "Jane Doe",
-#'                         chapters = 1:15,
+#'                         chapters = 1:5,
 #'                         positron = FALSE)
 #'
 #' # Add Positron support to an existing project later
@@ -315,11 +315,23 @@ create_project <- function(path,
     dir.create(ch_dir)
 
     # Work file: minimal YAML + library loads + framing
+    slide_link <- if (isTRUE(selected$has_slides[i])) {
+      paste0("[Slides](https://tthrall.quarto.pub/",
+             "eda-for-machine-learning-slides/", slug, "-slides.html)")
+    } else {
+      "Slides: not available"
+    }
+
     work_qmd <- c(
       "---",
       paste0('title: "Chapter ', selected$chapter[i], ": ", title, '"'),
       paste0('author: "', student_name, '"'),
       "date: today",
+      "format:",
+      "  html:",
+      "    toc: true",
+      "    toc-depth: 4",
+      "    code-fold: true",
       "---",
       "",
       "```{r}",
@@ -328,6 +340,12 @@ create_project <- function(path,
       "library(tidyverse)",
       "library(eda4mlr)",
       "```",
+      "",
+      paste0("## Links to Chapter ", selected$chapter[i], ", ", title),
+      "",
+      paste0("- ", slide_link),
+      paste0("- [Chapter](https://tthrall.github.io/eda4ml/",
+             slug, ".html)"),
       "",
       "<!-- This file is yours. Use it to record your notes, code, and",
       "     developing understanding of this chapter. A guiding question:",
