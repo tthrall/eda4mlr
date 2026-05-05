@@ -33,12 +33,12 @@
 #'   \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
 #'     Companion agent configuration
 #'   \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
-#'     content knowledge files (all 15 chapters, regardless of \code{chapters})
+#'     content knowledge files (all 17 chapters, regardless of \code{chapters})
 #'   \item `.vscode/positron/instructions/learner-profile.instructions.md`:
 #'     a template for the student to describe their background and goals
 #' }
 #'
-#' Chapter metadata (number, slug, title, has_slide) is read from the registry file
+#' Chapter metadata (number, slug, title, has_slides) is read from the registry file
 #' \code{inst/templates/book-chapters.txt}, which is the single source of
 #' truth for chapter organization across the eda4ml ecosystem.
 #'
