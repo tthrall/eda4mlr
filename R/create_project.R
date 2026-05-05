@@ -7,7 +7,7 @@
 #' @param path Character. Path where the project should be created.
 #' @param student_name Character. Student's name for the portfolio index.
 #'   Defaults to "Student Name".
-#' @param chapters Integer vector. Which chapters to include. Defaults to 1:5.
+#' @param chapters Integer vector. Which chapters to include. Defaults to 1:17.
 #' @param positron Logical. Whether to include Positron IDE configuration
 #'   for the EDA Companion agent. Defaults to TRUE.
 #' @param open Logical. Whether to open the new project in RStudio/Positron.
@@ -38,7 +38,7 @@
 #'     a template for the student to describe their background and goals
 #' }
 #'
-#' Chapter metadata (numbers, slugs, titles) is read from the registry file
+#' Chapter metadata (number, slug, title, has_slide) is read from the registry file
 #' \code{inst/templates/book-chapters.txt}, which is the single source of
 #' truth for chapter organization across the eda4ml ecosystem.
 #'
@@ -63,7 +63,7 @@
 #' @export
 create_project <- function(path,
                            student_name = "Student Name",
-                           chapters = 1:5,
+                           chapters = 1:17,
                            positron = TRUE,
                            open = TRUE) {
 
@@ -389,8 +389,11 @@ create_project <- function(path,
 #' registry file. This is the single source of truth for chapter numbers,
 #' slugs, and titles across the eda4ml ecosystem.
 #'
-#' @return A data frame with columns: \code{chapter} (integer),
-#'   \code{slug} (character), \code{title} (character).
+#' @return A data frame with columns:
+#'   \code{chapter} (integer),
+#'   \code{slug} (character),
+#'   \code{title} (character),
+#'   \code{has_slides} (logical).
 #'
 #' @keywords internal
 #'
