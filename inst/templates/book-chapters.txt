@@ -1,16 +1,18 @@
-chapter	slug	title
-1	"eda"	"Exploratory Data Analysis"
-2	"conditioning"	"Conditional Distributions"
-3	"clustering"	"Clustering: EDA in Higher Dimensions"
-4	"simulation"	"Statistical Simulation"
-5	"study-design"	"Sampling and Study Design"
-6	"info-theory"	"Information Theory"
-7	"lin-reg"	"Linear Regression"
-8	"pca"	"Principal Component Analysis"
-9	"lin-discr"	"Linear Discriminant Analysis"
-10	"text-as-data"	"Text as Data"
-11	"topic-models"	"Topic Models"
-12	"ts-data"	"Time Series Data"
-13	"ts-time-domain"	"Time Domain Methods"
-14	"ts-freq-domain"	"Frequency Domain Methods"
-15	"graph-theory"	"Graph Theory for Machine Learning"
+chapter	slug	title	has_slides
+1	eda	Exploratory Data Analysis	TRUE
+2	conditioning	Conditional Distributions	TRUE
+3	clustering	Clustering: EDA in Higher Dimensions	TRUE
+4	simulation	Statistical Simulation	TRUE
+5	study-design	Sampling and Study Design	TRUE
+6	info-theory	Information Theory	TRUE
+7	lin-reg	Linear Regression	TRUE
+8	pca	Principal Component Analysis	TRUE
+9	lin-discr	Linear Discriminant Analysis	TRUE
+10	text-as-data	Text as Data	TRUE
+11	topic-models	Topic Models	TRUE
+12	ts-data	Time Series Data	TRUE
+13	ts-time-domain	Time Domain Methods	TRUE
+14	ts-freq-domain	Frequency Domain Methods	TRUE
+15	graph-theory	Graph Theory for Machine Learning	TRUE
+16	mcmc-appendix	MCMC: Markov Chain Monte Carlo	FALSE
+17	em-algorithm	EM: the Expectation-Maximization Algorithm	FALSE
