@@ -89,7 +89,9 @@ sync_packages <- function(
     }
     tibble::tibble(
       chapter = as.integer(chapter),
-      pkg     = sort(cran_pkgs)
+      # pkg     = sort(cran_pkgs)
+      # ensure case-insensitive sort regardless of locale
+      pkg     = cran_pkgs[order(tolower(cran_pkgs), method = "radix")]
     )
   }
 
