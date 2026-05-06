@@ -7,8 +7,11 @@
 get_chapter_registry()
 }
 \value{
-A data frame with columns: \code{chapter} (integer),
-  \code{slug} (character), \code{title} (character).
+A data frame with columns:
+  \code{chapter} (integer),
+  \code{slug} (character),
+  \code{title} (character),
+  \code{has_slides} (logical).
 }
 \description{
 Returns the chapter metadata table from the package's authoritative

@@ -7,7 +7,7 @@
 create_project(
   path,
   student_name = "Student Name",
-  chapters = 1:5,
+  chapters = 1:17,
   positron = TRUE,
   open = TRUE
 )
@@ -18,7 +18,7 @@ create_project(
 \item{student_name}{Character. Student's name for the portfolio index.
 Defaults to "Student Name".}
 
-\item{chapters}{Integer vector. Which chapters to include. Defaults to 1:5.}
+\item{chapters}{Integer vector. Which chapters to include. Defaults to 1:17.}
 
 \item{positron}{Logical. Whether to include Positron IDE configuration
 for the EDA Companion agent. Defaults to TRUE.}
@@ -52,24 +52,24 @@ When \code{positron = TRUE}, the project additionally includes:
   \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
     Companion agent configuration
   \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
-    content knowledge files (all 15 chapters, regardless of \code{chapters})
+    content knowledge files (all 17 chapters, regardless of \code{chapters})
   \item `.vscode/positron/instructions/learner-profile.instructions.md`:
     a template for the student to describe their background and goals
 }
 
-Chapter metadata (numbers, slugs, titles) is read from the registry file
+Chapter metadata (number, slug, title, has_slides) is read from the registry file
 \code{inst/templates/book-chapters.txt}, which is the single source of
 truth for chapter organization across the eda4ml ecosystem.
 }
 \examples{
 \dontrun{
-# Create project with default chapters (1-5) and Positron support
+# Create project with default chapters (1:17) and Positron support
 eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 
-# Create project with all chapters, no Positron
+# Create project with just chapters 1:5, no Positron
 eda4mlr::create_project("~/eda4ml-portfolio",
                         student_name = "Jane Doe",
-                        chapters = 1:15,
+                        chapters = 1:5,
                         positron = FALSE)
 
 # Add Positron support to an existing project later
