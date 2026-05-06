@@ -57,9 +57,14 @@ When \code{positron = TRUE}, the project additionally includes:
     a template for the student to describe their background and goals
 }
 
-Chapter metadata (number, slug, title, has_slides) is read from the registry file
-\code{inst/templates/book-chapters.txt}, which is the single source of
-truth for chapter organization across the eda4ml ecosystem.
+Chapter metadata (number, slug, title, has_slides) is read from
+\code{inst/templates/book-chapters.txt}, the single source of truth
+for chapter organization across the eda4ml ecosystem. Per-chapter
+package lists (chapter-specific extras beyond the four core packages
+\code{eda4mlr}, \code{here}, \code{knitr}, \code{tidyverse}) are read
+from \code{inst/templates/chpt-packages.txt}, which is regenerated
+from the source eda4ml book repo by
+\code{data-raw/regenerate-packages.R}.
 }
 \examples{
 \dontrun{

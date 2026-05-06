@@ -38,9 +38,14 @@
 #'     a template for the student to describe their background and goals
 #' }
 #'
-#' Chapter metadata (number, slug, title, has_slides) is read from the registry file
-#' \code{inst/templates/book-chapters.txt}, which is the single source of
-#' truth for chapter organization across the eda4ml ecosystem.
+#' Chapter metadata (number, slug, title, has_slides) is read from
+#' \code{inst/templates/book-chapters.txt}, the single source of truth
+#' for chapter organization across the eda4ml ecosystem. Per-chapter
+#' package lists (chapter-specific extras beyond the four core packages
+#' \code{eda4mlr}, \code{here}, \code{knitr}, \code{tidyverse}) are read
+#' from \code{inst/templates/chpt-packages.txt}, which is regenerated
+#' from the source eda4ml book repo by
+#' \code{data-raw/regenerate-packages.R}.
 #'
 #' @examples
 #' \dontrun{
@@ -71,6 +76,25 @@ create_project <- function(path,
   # --- Chapter metadata (from registry) ------------------------------------
 
   chapter_registry <- get_chapter_registry()
+
+
+  # --- Per-chapter additional packages (from registry) ---------------------
+
+  chpt_packages_path <- system.file(
+    "templates", "chpt-packages.txt",
+    package = "eda4mlr"
+  )
+  if (chpt_packages_path == "") {
+    stop(
+      "Chapter packages file not found. ",
+      "Ensure inst/templates/chpt-packages.txt exists in the package.",
+      call. = FALSE
+    )
+  }
+  chpt_packages <- utils::read.delim(
+    chpt_packages_path, stringsAsFactors = FALSE
+  )
+  chpt_packages$chapter <- as.integer(chpt_packages$chapter)
 
 
   # --- Validate inputs -----------------------------------------------------
@@ -322,6 +346,35 @@ create_project <- function(path,
       "Slides: not available"
     }
 
+    # Additional Packages section: chapter-specific packages,
+    # or fallback note if the chapter uses only core packages
+    chapter_extras <- chpt_packages$pkg[
+      chpt_packages$chapter == selected$chapter[i]
+    ]
+    if (length(chapter_extras) == 0) {
+      additional_pkgs_lines <- c(
+        "## Additional Packages",
+        "",
+        "*This chapter uses only the core packages.*",
+        ""
+      )
+    } else {
+      additional_pkgs_lines <- c("## Additional Packages", "")
+      for (pkg in chapter_extras) {
+        additional_pkgs_lines <- c(
+          additional_pkgs_lines,
+          "```{r}",
+          paste0("#| label: ", pkg, "-package"),
+          paste0('if (!requireNamespace("', pkg, '", quietly = TRUE)) {'),
+          paste0('  install.packages("', pkg, '")'),
+          "}",
+          paste0("library(", pkg, ")"),
+          "```",
+          ""
+        )
+      }
+    }
+
     work_qmd <- c(
       "---",
       paste0('title: "Chapter ', selected$chapter[i], ": ", title, '"'),
@@ -337,10 +390,10 @@ create_project <- function(path,
       "```{r}",
       "#| label: setup",
       "#| message: false",
-      "library(tidyverse)",
-      "library(eda4mlr)",
+      paste0("library(", get_core_packages(), ")"),
       "```",
       "",
+      additional_pkgs_lines,
       paste0("## Links to Chapter ", selected$chapter[i], ", ", title),
       "",
       paste0("- ", slide_link),
