@@ -11,6 +11,9 @@ Depends:
     R (>= 4.1)
 Imports:
     dplyr,
+    purrr,
+    readr,
+    stringr,
     tibble
 Suggests:
     astsa,
