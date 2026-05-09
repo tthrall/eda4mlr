@@ -20,9 +20,11 @@
 #' \itemize{
 #'   \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
 #'   \item Chapter folders, each containing a minimal `chNN-work.qmd`
-#'     for the student's notes and code, and an empty
-#'     `chNN-agent-transcript.md` for recording Companion conversations
+#'     for the student's notes and code, an empty
+#'     `chNN-agent-transcript.md` for recording Companion conversations,
+#'     and a `chNN-summary.md` for summarizing the student's learning
 #'   \item A portfolio `index.qmd` with progress tracking
+#'   \item A `course-summary.md` for cross-chapter synthesis
 #'   \item A `.gitignore` configured for R/Quarto projects
 #'   \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
 #'   \item A `README.md` describing the portfolio (suitable for GitHub)
@@ -235,6 +237,11 @@ create_project <- function(path,
     "  primary artifact. Use it however serves your learning best.",
     "- `chNN-agent-transcript.md`: A place to record your conversations",
     "  with the EDA Companion.",
+    "- `chNN-summary.md`: A place to summarize your learning for the",
+    "  chapter.",
+    "",
+    "At the project root, `course-summary.md` is a place for",
+    "cross-chapter synthesis as your understanding develops.",
     "",
     "## Chapters",
     "",
@@ -311,6 +318,10 @@ create_project <- function(path,
     "",
     "- `chXX-work.qmd`: My notes, code, and analysis",
     "- `chXX-agent-transcript.md`: Record of my EDA Companion conversations",
+    "- `chXX-summary.md`: My summary of the chapter",
+    "",
+    "At the project root, `course-summary.md` is for my cross-chapter",
+    "synthesis.",
     "",
     "## Progress",
     "",
@@ -327,6 +338,19 @@ create_project <- function(path,
   }
 
   writeLines(index_qmd, file.path(path, "index.qmd"))
+
+
+  # --- course-summary.md ---------------------------------------------------
+
+  course_summary_lines <- c(
+    "# Course Summary",
+    "",
+    "<!-- This file is where you can summarize what you've learned so far",
+    "     in this course, perhaps drawing on your summary of what you",
+    "     learned in each chapter. Feel free to revise this summary as",
+    "     you learn more, with AI support if you like. -->"
+  )
+  writeLines(course_summary_lines, file.path(path, "course-summary.md"))
 
 
   # --- Chapter folders and files -------------------------------------------
@@ -418,6 +442,20 @@ create_project <- function(path,
     writeLines(transcript_lines,
                file.path(ch_dir, paste0("ch", ch_num,
                                         "-agent-transcript.md")))
+
+    # Summary file: empty placeholder for the student's chapter summary
+    summary_lines <- c(
+      paste0("# Chapter ", selected$chapter[i], ": ", title),
+      "## Summary",
+      "",
+      "<!-- This file is where you can summarize your learning, with AI",
+      "     support if you like. The summary is primarily for your future",
+      "     self, but you might also use it to describe what you learned",
+      "     to a friend, or perhaps during an interview. Possible elements:",
+      "     key idea; example; what I learned; open questions. -->"
+    )
+    writeLines(summary_lines,
+               file.path(ch_dir, paste0("ch", ch_num, "-summary.md")))
   }
 
 

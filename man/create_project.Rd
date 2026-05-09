@@ -39,9 +39,11 @@ The created project includes:
 \itemize{
   \item An `.Rproj` file and `_quarto.yml` for a Quarto book project
   \item Chapter folders, each containing a minimal `chNN-work.qmd`
-    for the student's notes and code, and an empty
-    `chNN-agent-transcript.md` for recording Companion conversations
+    for the student's notes and code, an empty
+    `chNN-agent-transcript.md` for recording Companion conversations,
+    and a `chNN-summary.md` for summarizing the student's learning
   \item A portfolio `index.qmd` with progress tracking
+  \item A `course-summary.md` for cross-chapter synthesis
   \item A `.gitignore` configured for R/Quarto projects
   \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
   \item A `README.md` describing the portfolio (suitable for GitHub)
