@@ -26,7 +26,7 @@ vol_d_ball <- function(
   }
 
   # case where r = 1
-  vol_1 <- ( pi ^ (d/2) ) / gamma( (2*d + 1)/2 )
+  vol_1 <- ( pi ^ (d/2) ) / gamma( (d + 2)/2 )
 
   return( vol_1 * r^d )
 }
