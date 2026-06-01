@@ -11,27 +11,31 @@ LazyData: true
 Depends:
     R (>= 4.1)
 Imports:
+    assertthat,
     dplyr,
+    ggplot2,
+    MASS,
+    pracma,
     purrr,
     readr,
-    tibble
+    rlang,
+    stringr,
+    tibble,
+    tidyr,
+    tidytext
 Suggests:
     astsa,
     beans,
-    ggplot2,
     gridExtra,
     HistData,
     igraphdata,
     ISLR2,
     janeaustenr,
     knitr,
-    MASS,
     plot3D,
     quarto,
     rstudioapi,
     scales,
-    tidyr,
-    tidytext,
     topicmodels
 VignetteBuilder: quarto
 RoxygenNote: 7.3.3
