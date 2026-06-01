@@ -1,34 +1,71 @@
+##
 # wine_quality.R
-# Prepare wine quality dataset for eda4mlr package
+#   Provenance for data/wine_quality.rda (eda4mlr::wine_quality).
+#
+#   ORIGIN: red + white wine samples from the UCI Machine Learning
+#   Repository (https://archive.ics.uci.edu/ml/datasets/wine+quality).
+#   That source is no longer reachable, so the dataset is pinned to a
+#   frozen local copy, data-raw/wine_quality.csv, which is the source of
+#   record going forward. The CSV was written once from the shipped object:
+#       readr::write_csv(eda4mlr::wine_quality, "data-raw/wine_quality.csv")
+#
+#   This script rebuilds data/wine_quality.rda from that CSV, offline and
+#   deterministically. It is non-destructive by default (regenerate <-
+#   FALSE). Before any deliberate overwrite, confirm the rebuild matches
+#   what you currently ship:
+#       waldo::compare(eda4mlr::wine_quality, wine_quality)
+##
 
-library(tidyverse)
+regenerate <- FALSE  # leave FALSE to preserve the shipped .rda
 
-# UCI Machine Learning Repository URLs
-url_red   <- "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
-url_white <- "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
+if (regenerate) {
 
-# Read data (semicolon-separated)
-red   <- read_delim(url_red,   delim = ";", show_col_types = FALSE)
-white <- read_delim(url_white, delim = ";", show_col_types = FALSE)
-
-# Combine with color indicator and rename variables
-wine_quality <- bind_rows(
-  red   |> mutate(color = "red"),
-  white |> mutate(color = "white")
-) |>
-  rename(
-    fix_acidity = `fixed acidity`,
-    vol_acidity = `volatile acidity`,
-    citric_acid = `citric acid`,
-    res_sugar   = `residual sugar`,
-    free_so2    = `free sulfur dioxide`,
-    total_so2   = `total sulfur dioxide`
+  # Source of record: the frozen CSV (UCI is no longer reachable).
+  # Types are fixed explicitly so the rebuild is deterministic.
+  wine_quality <- readr::read_csv(
+    "data-raw/wine_quality.csv",
+    col_types = readr::cols(
+      color       = readr::col_character(),
+      fix_acidity = readr::col_double(),
+      vol_acidity = readr::col_double(),
+      citric_acid = readr::col_double(),
+      res_sugar   = readr::col_double(),
+      chlorides   = readr::col_double(),
+      free_so2    = readr::col_double(),
+      total_so2   = readr::col_double(),
+      density     = readr::col_double(),
+      pH          = readr::col_double(),
+      sulphates   = readr::col_double(),
+      alcohol     = readr::col_double(),
+      quality     = readr::col_double()  # if waldo flags int vs dbl, use col_integer()
+    )
   ) |>
-  relocate(color) |>
-  mutate(color = factor(color))
+    dplyr::mutate(color = factor(color, levels = c("red", "white")))
 
-# Save to package data directory
-usethis::use_data(wine_quality, overwrite = TRUE)
+  # Schema guard: a rebuild must match the documented configuration
+  # (R/wine_quality.R) before it overwrites the shipped data.
+  expected_names <- c(
+    "color", "fix_acidity", "vol_acidity", "citric_acid", "res_sugar",
+    "chlorides", "free_so2", "total_so2", "density", "pH",
+    "sulphates", "alcohol", "quality"
+  )
+  stopifnot(
+    nrow(wine_quality) == 6497L,
+    ncol(wine_quality) == 13L,
+    identical(names(wine_quality), expected_names),
+    is.factor(wine_quality$color),
+    identical(levels(wine_quality$color), c("red", "white"))
+  )
+
+  usethis::use_data(wine_quality, overwrite = TRUE)
+
+} else {
+  message(
+    "wine_quality is pinned to data-raw/wine_quality.csv; ",
+    "data/wine_quality.rda left untouched. ",
+    "Set regenerate <- TRUE to rebuild from the CSV after review."
+  )
+}
 
 ##
 #  EOF
