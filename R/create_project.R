@@ -22,9 +22,9 @@
 #'   \item Chapter folders, each containing a minimal `chNN-work.qmd`
 #'     for the student's notes and code, an empty
 #'     `chNN-agent-transcript.md` for recording Companion conversations,
-#'     and a `chNN-summary.md` for summarizing the student's learning
+#'     and a `chNN-summary.qmd` for summarizing the student's learning
 #'   \item A portfolio `index.qmd` with progress tracking
-#'   \item A `course-summary.md` for cross-chapter synthesis
+#'   \item A `course-summary.qmd` for cross-chapter synthesis
 #'   \item A `.gitignore` configured for R/Quarto projects
 #'   \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
 #'   \item A `README.md` describing the portfolio (suitable for GitHub)
@@ -42,12 +42,15 @@
 #'
 #' Chapter metadata (number, slug, title, has_slides) is read from
 #' \code{inst/templates/book-chapters.txt}, the single source of truth
-#' for chapter organization across the eda4ml ecosystem. Per-chapter
-#' package lists (chapter-specific extras beyond the four core packages
-#' \code{eda4mlr}, \code{here}, \code{knitr}, \code{tidyverse}) are read
-#' from \code{inst/templates/chpt-packages.txt}, which is regenerated
-#' from the source eda4ml book repo by
-#' \code{data-raw/regenerate-packages.R}.
+#' for chapter organization across the eda4ml ecosystem. Each chapter's
+#' full package list is read from
+#' \code{inst/templates/packages_per_chapter_tbl.txt} and emitted as bare
+#' \code{library()} calls in the work file's \code{CRAN-libraries} chunk
+#' (the book pattern: no universal-versus-chapter-specific split). The
+#' table is regenerated from the source eda4ml repo by
+#' \code{data-raw/regenerate-packages.R}. The chapter and course summary
+#' stubs are produced by filling the bundled templates
+#' \code{ch-NN-summary-template.qmd} and \code{course-summary-template.qmd}.
 #'
 #' @examples
 #' \dontrun{
@@ -82,21 +85,21 @@ create_project <- function(path,
 
   # --- Per-chapter additional packages (from registry) ---------------------
 
-  chpt_packages_path <- system.file(
-    "templates", "chpt-packages.txt",
+  pkg_tbl_path <- system.file(
+    "templates", "packages_per_chapter_tbl.txt",
     package = "eda4mlr"
   )
-  if (chpt_packages_path == "") {
+  if (pkg_tbl_path == "") {
     stop(
-      "Chapter packages file not found. ",
-      "Ensure inst/templates/chpt-packages.txt exists in the package.",
+      "Package table not found. ",
+      "Ensure inst/templates/packages_per_chapter_tbl.txt exists in the package.",
       call. = FALSE
     )
   }
-  chpt_packages <- utils::read.delim(
-    chpt_packages_path, stringsAsFactors = FALSE
+  pkg_tbl <- utils::read.delim(
+    pkg_tbl_path, stringsAsFactors = FALSE
   )
-  chpt_packages$chapter <- as.integer(chpt_packages$chapter)
+  pkg_tbl$chpt <- as.integer(pkg_tbl$chpt)
 
 
   # --- Validate inputs -----------------------------------------------------
@@ -193,9 +196,15 @@ create_project <- function(path,
     slug <- selected$slug[i]
     quarto_yml <- c(
       quarto_yml,
-      paste0("    - ch", ch_num, "-", slug, "/ch", ch_num, "-work.qmd")
+      paste0("    - ch", ch_num, "-", slug, "/ch", ch_num, "-work.qmd"),
+      paste0("    - ch", ch_num, "-", slug, "/ch", ch_num, "-summary.qmd")
     )
   }
+
+  quarto_yml <- c(
+    quarto_yml,
+    "    - course-summary.qmd"
+  )
 
   quarto_yml <- c(
     quarto_yml,
@@ -225,9 +234,9 @@ create_project <- function(path,
     "my notes, code, and developing understanding of the material. The",
     "guiding question for each chapter is: *How would you teach this?*",
     "",
-    "The portfolio is structured as a Quarto book that can be rendered to",
-    "HTML for sharing with instructors, collaborators, or prospective",
-    "employers.",
+    "This student workspace is a Quarto project (Quarto categorizes it as",
+    "a Quarto book) that renders to HTML for sharing with instructors,",
+    "collaborators, or prospective employers.",
     "",
     "## Structure",
     "",
@@ -237,10 +246,10 @@ create_project <- function(path,
     "  primary artifact. Use it however serves your learning best.",
     "- `chNN-agent-transcript.md`: A place to record your conversations",
     "  with the EDA Companion.",
-    "- `chNN-summary.md`: A place to summarize your learning for the",
+    "- `chNN-summary.qmd`: A place to summarize your learning for the",
     "  chapter.",
     "",
-    "At the project root, `course-summary.md` is a place for",
+    "At the project root, `course-summary.qmd` is a place for",
     "cross-chapter synthesis as your understanding develops.",
     "",
     "## Chapters",
@@ -257,6 +266,18 @@ create_project <- function(path,
     )
   }
 
+  # Scope the setup install to this workspace's chapters (the bare union if
+  # the workspace covers every chapter).
+  if (setequal(selected$chapter, valid_chapters)) {
+    install_call <- "eda4mlr::install_eda4ml_packages()"
+  } else {
+    install_call <- paste0(
+      "eda4mlr::install_eda4ml_packages(chapters = c(",
+      paste(sort(selected$chapter), collapse = ", "),
+      "))"
+    )
+  }
+
   readme_lines <- c(
     readme_lines,
     "",
@@ -268,6 +289,14 @@ create_project <- function(path,
     "```r",
     "# install.packages(\"pak\")",
     "pak::pak(\"tthrall/eda4mlr\")",
+    "```",
+    "",
+    "Then install the CRAN packages the chapters in this workspace use.",
+    "Doing this once at setup prevents the missing-package errors that bare",
+    "library() calls raise when you render:",
+    "",
+    "```r",
+    install_call,
     "```",
     "",
     "Open the `.Rproj` file in RStudio or Positron to begin."
@@ -318,9 +347,9 @@ create_project <- function(path,
     "",
     "- `chXX-work.qmd`: My notes, code, and analysis",
     "- `chXX-agent-transcript.md`: Record of my EDA Companion conversations",
-    "- `chXX-summary.md`: My summary of the chapter",
+    "- `chXX-summary.qmd`: My summary of the chapter",
     "",
-    "At the project root, `course-summary.md` is for my cross-chapter",
+    "At the project root, `course-summary.qmd` is for my cross-chapter",
     "synthesis.",
     "",
     "## Progress",
@@ -340,17 +369,29 @@ create_project <- function(path,
   writeLines(index_qmd, file.path(path, "index.qmd"))
 
 
-  # --- course-summary.md ---------------------------------------------------
+  # --- course-summary.qmd --------------------------------------------------
 
-  course_summary_lines <- c(
-    "# Course Summary",
-    "",
-    "<!-- This file is where you can summarize what you've learned so far",
-    "     in this course, perhaps drawing on your summary of what you",
-    "     learned in each chapter. Feel free to revise this summary as",
-    "     you learn more, with AI support if you like. -->"
+  course_template_path <- system.file(
+    "templates", "course-summary-template.qmd",
+    package = "eda4mlr"
   )
-  writeLines(course_summary_lines, file.path(path, "course-summary.md"))
+  if (course_template_path == "") {
+    stop(
+      "Course summary template not found. ",
+      "Ensure inst/templates/course-summary-template.qmd exists in the package.",
+      call. = FALSE
+    )
+  }
+  course_summary_lines <- readLines(course_template_path, warn = FALSE)
+  course_summary_lines <- sub(
+    "Course Summary: <course title>",
+    "Course Summary: Exploratory Data Analysis for Machine Learning",
+    course_summary_lines, fixed = TRUE
+  )
+  course_summary_lines <- gsub(
+    "<your name>", student_name, course_summary_lines, fixed = TRUE
+  )
+  writeLines(course_summary_lines, file.path(path, "course-summary.qmd"))
 
 
   # --- Chapter folders and files -------------------------------------------
@@ -370,33 +411,36 @@ create_project <- function(path,
       "Slides: not available"
     }
 
-    # Additional Packages section: chapter-specific packages,
-    # or fallback note if the chapter uses only core packages
-    chapter_extras <- chpt_packages$pkg[
-      chpt_packages$chapter == selected$chapter[i]
-    ]
-    if (length(chapter_extras) == 0) {
-      additional_pkgs_lines <- c(
-        "## Additional Packages",
-        "",
-        "*This chapter uses only the core packages.*",
+    # Book-pattern preamble. The chapter's CRAN packages become bare
+    # library() calls in a CRAN-libraries chunk, emitted verbatim from the
+    # package table (already case-insensitively sorted there). A
+    # conflicts-prefer chunk is scaffolded only where the chapter loads
+    # conflicted; eda4mlr loads on its own in local-libraries.
+    chapter_pkgs <- pkg_tbl$pkg[pkg_tbl$chpt == selected$chapter[i]]
+
+    cran_chunk <- c(
+      "```{r}",
+      "#| label: CRAN-libraries",
+      "#| message: false",
+      "# If a library() call below fails with \"there is no package called ...\",",
+      "# that package is not installed: run eda4mlr::install_eda4ml_packages()",
+      "# (or install.packages(\"<pkg>\")) and then re-run this code chunk.",
+      paste0("library(", chapter_pkgs, ")"),
+      "```",
+      ""
+    )
+
+    if ("conflicted" %in% chapter_pkgs) {
+      conflicts_chunk <- c(
+        "```{r}",
+        "#| label: conflicts-prefer",
+        "# Resolve package conflicts here, matching the book chapter, e.g.",
+        "# conflicted::conflicts_prefer() or tidymodels::tidymodels_prefer().",
+        "```",
         ""
       )
     } else {
-      additional_pkgs_lines <- c("## Additional Packages", "")
-      for (pkg in chapter_extras) {
-        additional_pkgs_lines <- c(
-          additional_pkgs_lines,
-          "```{r}",
-          paste0("#| label: ", pkg, "-package"),
-          paste0('if (!requireNamespace("', pkg, '", quietly = TRUE)) {'),
-          paste0('  install.packages("', pkg, '")'),
-          "}",
-          paste0("library(", pkg, ")"),
-          "```",
-          ""
-        )
-      }
+      conflicts_chunk <- character(0)
     }
 
     work_qmd <- c(
@@ -409,15 +453,26 @@ create_project <- function(path,
       "    toc: true",
       "    toc-depth: 4",
       "    code-fold: true",
+      "    theme:",
+      "      dark: darkly",
+      "      light: cosmo",
+      "    respect-user-color-scheme: true",
       "---",
       "",
       "```{r}",
       "#| label: setup",
-      "#| message: false",
-      paste0("library(", get_core_packages(), ")"),
+      "#| include: false",
+      "knitr::opts_chunk$set(echo = TRUE, error = TRUE, message = FALSE, warning = FALSE)",
       "```",
       "",
-      additional_pkgs_lines,
+      cran_chunk,
+      conflicts_chunk,
+      "```{r}",
+      "#| label: local-libraries",
+      "#| message: false",
+      "library(eda4mlr)",
+      "```",
+      "",
       paste0("## Links to Chapter ", selected$chapter[i], ", ", title),
       "",
       paste0("- ", slide_link),
@@ -443,19 +498,29 @@ create_project <- function(path,
                file.path(ch_dir, paste0("ch", ch_num,
                                         "-agent-transcript.md")))
 
-    # Summary file: empty placeholder for the student's chapter summary
-    summary_lines <- c(
-      paste0("# Chapter ", selected$chapter[i], ": ", title),
-      "## Summary",
-      "",
-      "<!-- This file is where you can summarize your learning, with AI",
-      "     support if you like. The summary is primarily for your future",
-      "     self, but you might also use it to describe what you learned",
-      "     to a friend, or perhaps during an interview. Possible elements:",
-      "     key idea; example; what I learned; open questions. -->"
+    # Summary file: read-and-fill the bundled chapter-summary template
+    summary_template_path <- system.file(
+      "templates", "ch-NN-summary-template.qmd",
+      package = "eda4mlr"
+    )
+    if (summary_template_path == "") {
+      stop(
+        "Chapter summary template not found. ",
+        "Ensure inst/templates/ch-NN-summary-template.qmd exists in the package.",
+        call. = FALSE
+      )
+    }
+    summary_lines <- readLines(summary_template_path, warn = FALSE)
+    summary_lines <- sub(
+      "Chapter NN Summary: <title>",
+      paste0("Chapter ", selected$chapter[i], " Summary: ", title),
+      summary_lines, fixed = TRUE
+    )
+    summary_lines <- gsub(
+      "<your name>", student_name, summary_lines, fixed = TRUE
     )
     writeLines(summary_lines,
-               file.path(ch_dir, paste0("ch", ch_num, "-summary.md")))
+               file.path(ch_dir, paste0("ch", ch_num, "-summary.qmd")))
   }
 
 

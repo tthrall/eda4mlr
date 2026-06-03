@@ -1,0 +1,25 @@
+---
+title: "Chapter NN Summary: <title>"
+author: "<your name>"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+
+## Chapter topics
+
+<!-- What is this chapter about, in your own words? -->
+
+## My work
+
+<!-- What did you do with this chapter? -->
+
+## What I learned
+
+<!-- What do you understand now that you didn't before, about the ideas in the chapter and about the tools you used? -->
+
+## Open questions
+
+<!-- What still puzzles you, or feels unresolved? -->

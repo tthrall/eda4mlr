@@ -41,9 +41,9 @@ The created project includes:
   \item Chapter folders, each containing a minimal `chNN-work.qmd`
     for the student's notes and code, an empty
     `chNN-agent-transcript.md` for recording Companion conversations,
-    and a `chNN-summary.md` for summarizing the student's learning
+    and a `chNN-summary.qmd` for summarizing the student's learning
   \item A portfolio `index.qmd` with progress tracking
-  \item A `course-summary.md` for cross-chapter synthesis
+  \item A `course-summary.qmd` for cross-chapter synthesis
   \item A `.gitignore` configured for R/Quarto projects
   \item An `.Rprofile` that sets a CRAN mirror for Quarto rendering
   \item A `README.md` describing the portfolio (suitable for GitHub)
@@ -61,12 +61,15 @@ When \code{positron = TRUE}, the project additionally includes:
 
 Chapter metadata (number, slug, title, has_slides) is read from
 \code{inst/templates/book-chapters.txt}, the single source of truth
-for chapter organization across the eda4ml ecosystem. Per-chapter
-package lists (chapter-specific extras beyond the four core packages
-\code{eda4mlr}, \code{here}, \code{knitr}, \code{tidyverse}) are read
-from \code{inst/templates/chpt-packages.txt}, which is regenerated
-from the source eda4ml book repo by
-\code{data-raw/regenerate-packages.R}.
+for chapter organization across the eda4ml ecosystem. Each chapter's
+full package list is read from
+\code{inst/templates/packages_per_chapter_tbl.txt} and emitted as bare
+\code{library()} calls in the work file's \code{CRAN-libraries} chunk
+(the book pattern: no universal-versus-chapter-specific split). The
+table is regenerated from the source eda4ml repo by
+\code{data-raw/regenerate-packages.R}. The chapter and course summary
+stubs are produced by filling the bundled templates
+\code{ch-NN-summary-template.qmd} and \code{course-summary-template.qmd}.
 }
 \examples{
 \dontrun{
