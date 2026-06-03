@@ -1,0 +1,23 @@
+---
+title: "Course Summary: <course title>"
+author: "<your name>"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+
+<!-- This is where you step back from the individual chapters and say what the whole course added up to for you, ending in a short abstract you could hand to someone outside the course. Your chapter summaries are the place to start. -->
+
+## Looking back across the course
+
+<!-- What stands out? The ideas, methods, or moments that mattered most to you. -->
+
+## How it fits together
+
+<!-- What chapter connections do you see? Has the way you see the subject changed from where you started? -->
+
+## The abstract
+
+<!-- In your own voice, what did you get out of this course? Write it for someone who wasn't here, in one paragraph. -->
