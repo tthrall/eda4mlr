@@ -1,15 +1,22 @@
 #' Create a Student Project for EDA for Machine Learning
 #'
 #' Scaffolds a complete student workspace with chapter folders,
-#' minimal workbook files, and (optionally) Positron IDE
-#' configuration for the EDA Companion agent.
+#' minimal workbook files, and (optionally) Posit Assistant
+#' configuration for the EDA Companion.
 #'
 #' @param path Character. Path where the project should be created.
 #' @param student_name Character. Student's name for the portfolio index.
 #'   Defaults to "Student Name".
 #' @param chapters Integer vector. Which chapters to include. Defaults to 1:17.
-#' @param positron Logical. Whether to include Positron IDE configuration
-#'   for the EDA Companion agent. Defaults to TRUE.
+#' @param profile Optional. The student's learner profile, passed to
+#'   [setup_posit_assistant()]: a path to a profile `.md` file or a
+#'   character vector of profile text. When omitted, the packaged blank
+#'   profile form is used, personalized with `student_name`, and the
+#'   student completes the Student Profile section of `AGENTS.md`.
+#' @param assistant Character. Which assistant stack to configure:
+#'   `"posit"` (the default) installs the EDA Companion's Posit
+#'   Assistant configuration via [setup_posit_assistant()]; `"none"`
+#'   skips assistant setup.
 #' @param open Logical. Whether to open the new project in RStudio/Positron.
 #'   Defaults to TRUE.
 #'
@@ -30,14 +37,16 @@
 #'   \item A `README.md` describing the portfolio (suitable for GitHub)
 #' }
 #'
-#' When \code{positron = TRUE}, the project additionally includes:
+#' When \code{assistant = "posit"}, the project additionally includes:
 #' \itemize{
-#'   \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
-#'     Companion agent configuration
-#'   \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
-#'     content knowledge files (all 17 chapters, regardless of \code{chapters})
-#'   \item `.vscode/positron/instructions/learner-profile.instructions.md`:
-#'     a template for the student to describe their background and goals
+#'   \item `AGENTS.md` at the workspace root: the EDA Companion
+#'     specification, assembled from the packaged spec template with the
+#'     student's profile inlined in its Student Profile section
+#'   \item `.posit/assistant/settings.json`: permissions, model pin,
+#'     and compaction settings
+#'   \item `.posit/assistant/skills/chNN-<slug>/SKILL.md`: per-chapter
+#'     content knowledge (all 17 chapters and appendices, regardless of
+#'     \code{chapters}, since skills load by relevance)
 #' }
 #'
 #' Chapter metadata (number, slug, title, has_slides) is read from
@@ -57,25 +66,39 @@
 #' # Create project with default chapters (1:17) and Positron support
 #' eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 #'
-#' # Create project with just chapters 1:5, no Positron
+#' # Create project with just chapters 1:5, no assistant configuration
 #' eda4mlr::create_project("~/eda4ml-portfolio",
 #'                         student_name = "Jane Doe",
 #'                         chapters = 1:5,
-#'                         positron = FALSE)
+#'                         assistant = "none")
 #'
-#' # Add Positron support to an existing project later
-#' eda4mlr::setup_positron("~/eda4ml-portfolio", student_name = "Jane Doe")
+#' # Create project with a canonical learner profile inlined
+#' eda4mlr::create_project(
+#'   "~/eda4ml-aaron",
+#'   student_name = "Aaron",
+#'   chapters = 1:5,
+#'   profile = "~/GitHub/eda4ml-positron/ec-resources/profiles/aaron.md"
+#' )
+#'
+#' # Add the assistant configuration to an existing project later
+#' eda4mlr::setup_posit_assistant("~/eda4ml-portfolio",
+#'                                student_name = "Jane Doe")
 #' }
 #'
-#' @seealso [setup_positron()] to add Positron configuration to an existing
-#'   project.
+#' @seealso [setup_posit_assistant()] to add the Posit Assistant
+#'   configuration to an existing project. [setup_positron()] configures
+#'   the deprecated Positron Assistant stack and is retained only for
+#'   the transition.
 #'
 #' @export
 create_project <- function(path,
                            student_name = "Student Name",
                            chapters = 1:17,
-                           positron = TRUE,
+                           profile = NULL,
+                           assistant = c("posit", "none"),
                            open = TRUE) {
+
+  assistant <- match.arg(assistant)
 
 
   # --- Chapter metadata (from registry) ------------------------------------
@@ -302,22 +325,22 @@ create_project <- function(path,
     "Open the `.Rproj` file in RStudio or Positron to begin."
   )
 
-  if (positron) {
+  if (assistant == "posit") {
     readme_lines <- c(
       readme_lines,
       "",
-      "## EDA Companion (Positron)",
+      "## EDA Companion (Posit Assistant)",
       "",
-      "This project includes configuration for the EDA Companion agent in",
-      "[Positron IDE](https://positron.posit.co/). The Companion provides",
-      "Socratic tutoring: it asks questions and challenges your reasoning",
-      "rather than giving direct answers. To use it, open this project in",
-      "Positron and start a conversation with the EDA Companion agent in",
-      "the assistant panel.",
+      "This project includes configuration for the EDA Companion in",
+      "[Positron IDE](https://positron.posit.co/) via Posit Assistant.",
+      "The Companion provides Socratic tutoring: it asks questions and",
+      "challenges your reasoning rather than giving direct answers. To",
+      "use it, open this project in Positron, trust the workspace when",
+      "prompted, and start a conversation in the Posit Assistant panel.",
       "",
-      "Before your first session, edit",
-      "`.vscode/positron/instructions/learner-profile.instructions.md`",
-      "to describe your background and goals. This helps the Companion",
+      "Before your first session, review the Student Profile section of",
+      "`AGENTS.md` (at the project root) and edit it to describe your",
+      "background and goals. This is what the Companion reads to",
       "calibrate its questions to your experience level."
     )
   }
@@ -524,10 +547,13 @@ create_project <- function(path,
   }
 
 
-  # --- Positron scaffolding ------------------------------------------------
+  # --- Posit Assistant scaffolding ------------------------------------------
 
-  if (positron) {
-    setup_positron(path, student_name = student_name, quiet = TRUE)
+  if (assistant == "posit") {
+    setup_posit_assistant(path,
+                          profile = profile,
+                          student_name = student_name,
+                          quiet = TRUE)
   }
 
 
@@ -536,11 +562,12 @@ create_project <- function(path,
   message("Created EDA for ML portfolio at: ", path)
   message("Chapters included: ", paste(chapters, collapse = ", "))
 
-  if (positron) {
-    message("Positron EDA Companion: configured")
+  if (assistant == "posit") {
+    message("EDA Companion (Posit Assistant): configured")
     message(
-      "  -> Edit .vscode/positron/instructions/learner-profile.instructions.md",
-      "\n     to describe your background before your first Companion session."
+      "  -> Review the Student Profile section of AGENTS.md",
+      "\n     before your first Companion session; it is what the",
+      "\n     Companion reads to calibrate to you."
     )
   }
 

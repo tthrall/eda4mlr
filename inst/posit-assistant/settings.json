@@ -1,0 +1,26 @@
+{
+  "sandbox": {
+    "enabled": true
+  },
+  "model": {
+    "id": "claude-fable-5",
+    "provider": "anthropic"
+  },
+  "permission": {
+    "read": "allow",
+    "skill": "allow",
+    "edit": "deny",
+    "write": "deny",
+    "bash": "deny",
+    "notebookCreate": "deny",
+    "notebookEdit": "deny",
+    "notebookRunCells": "deny",
+    "executeCode": "ask",
+    "webfetch": "ask",
+    "web_search": "ask"
+  },
+  "features": {
+    "microCompactTokenThreshold": 200000,
+    "microCompactKeepRecentCount": 16
+  }
+}

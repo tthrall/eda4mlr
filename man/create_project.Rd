@@ -8,7 +8,8 @@ create_project(
   path,
   student_name = "Student Name",
   chapters = 1:17,
-  positron = TRUE,
+  profile = NULL,
+  assistant = c("posit", "none"),
   open = TRUE
 )
 }
@@ -20,8 +21,16 @@ Defaults to "Student Name".}
 
 \item{chapters}{Integer vector. Which chapters to include. Defaults to 1:17.}
 
-\item{positron}{Logical. Whether to include Positron IDE configuration
-for the EDA Companion agent. Defaults to TRUE.}
+\item{profile}{Optional. The student's learner profile, passed to
+[setup_posit_assistant()]: a path to a profile `.md` file or a
+character vector of profile text. When omitted, the packaged blank
+profile form is used, personalized with `student_name`, and the
+student completes the Student Profile section of `AGENTS.md`.}
+
+\item{assistant}{Character. Which assistant stack to configure:
+`"posit"` (the default) installs the EDA Companion's Posit
+Assistant configuration via [setup_posit_assistant()]; `"none"`
+skips assistant setup.}
 
 \item{open}{Logical. Whether to open the new project in RStudio/Positron.
 Defaults to TRUE.}
@@ -31,8 +40,8 @@ Invisibly returns the path to the created project.
 }
 \description{
 Scaffolds a complete student workspace with chapter folders,
-minimal workbook files, and (optionally) Positron IDE
-configuration for the EDA Companion agent.
+minimal workbook files, and (optionally) Posit Assistant
+configuration for the EDA Companion.
 }
 \details{
 The created project includes:
@@ -49,14 +58,16 @@ The created project includes:
   \item A `README.md` describing the portfolio (suitable for GitHub)
 }
 
-When \code{positron = TRUE}, the project additionally includes:
+When \code{assistant = "posit"}, the project additionally includes:
 \itemize{
-  \item `.vscode/positron/agents/eda-companion.agent.md`: the EDA
-    Companion agent configuration
-  \item `.vscode/positron/instructions/chNN.instructions.md`: per-chapter
-    content knowledge files (all 17 chapters, regardless of \code{chapters})
-  \item `.vscode/positron/instructions/learner-profile.instructions.md`:
-    a template for the student to describe their background and goals
+  \item `AGENTS.md` at the workspace root: the EDA Companion
+    specification, assembled from the packaged spec template with the
+    student's profile inlined in its Student Profile section
+  \item `.posit/assistant/settings.json`: permissions, model pin,
+    and compaction settings
+  \item `.posit/assistant/skills/chNN-<slug>/SKILL.md`: per-chapter
+    content knowledge (all 17 chapters and appendices, regardless of
+    \code{chapters}, since skills load by relevance)
 }
 
 Chapter metadata (number, slug, title, has_slides) is read from
@@ -76,18 +87,29 @@ stubs are produced by filling the bundled templates
 # Create project with default chapters (1:17) and Positron support
 eda4mlr::create_project("~/eda4ml-portfolio", student_name = "Jane Doe")
 
-# Create project with just chapters 1:5, no Positron
+# Create project with just chapters 1:5, no assistant configuration
 eda4mlr::create_project("~/eda4ml-portfolio",
                         student_name = "Jane Doe",
                         chapters = 1:5,
-                        positron = FALSE)
+                        assistant = "none")
 
-# Add Positron support to an existing project later
-eda4mlr::setup_positron("~/eda4ml-portfolio", student_name = "Jane Doe")
+# Create project with a canonical learner profile inlined
+eda4mlr::create_project(
+  "~/eda4ml-aaron",
+  student_name = "Aaron",
+  chapters = 1:5,
+  profile = "~/GitHub/eda4ml-positron/ec-resources/profiles/aaron.md"
+)
+
+# Add the assistant configuration to an existing project later
+eda4mlr::setup_posit_assistant("~/eda4ml-portfolio",
+                               student_name = "Jane Doe")
 }
 
 }
 \seealso{
-[setup_positron()] to add Positron configuration to an existing
-  project.
+[setup_posit_assistant()] to add the Posit Assistant
+  configuration to an existing project. [setup_positron()] configures
+  the deprecated Positron Assistant stack and is retained only for
+  the transition.
 }
